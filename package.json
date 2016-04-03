@@ -1,0 +1,19 @@
+{
+  "name": "givemetime",
+  "version": "0.0.1",
+  "description": "Project to give some time to a R&D project suggested by a team member",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ericraffin/givemetime.git"
+  },
+  "author": "ericraffin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ericraffin/givemetime/issues"
+  },
+  "homepage": "https://github.com/ericraffin/givemetime#readme"
+}
