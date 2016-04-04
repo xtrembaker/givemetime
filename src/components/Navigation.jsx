@@ -30,8 +30,9 @@ export default class Navigation extends React.Component {
             onLeftIconButtonTouchTap={this.handleClose}
             isInitiallyOpen={true} 
           />
-          <MenuItem onTouchTap={this.handleClose}>Menu Item</MenuItem>
-          <MenuItem onTouchTap={this.handleClose}>Menu Item 2</MenuItem>
+          <MenuItem onTouchTap={this.handleClose}>Projects</MenuItem>
+          <MenuItem onTouchTap={this.handleClose}>Add project</MenuItem>
+          <MenuItem onTouchTap={this.handleClose}>My account</MenuItem>
         </LeftNav>
       </div>
     );
