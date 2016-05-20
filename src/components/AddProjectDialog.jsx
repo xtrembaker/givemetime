@@ -4,10 +4,13 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import {connect} from 'react-redux';
 
-export default class AddProjectDialog extends React.Component {
+class AddProjectDialog extends React.Component {
     state = {
-        open: false
+        open: false,
+        title: 'Test',
+        estimate: 123
     };
 
     handleOpen = () => {
@@ -19,7 +22,15 @@ export default class AddProjectDialog extends React.Component {
     };
 
     handleSave = () => {
-        alert('TODO : save project');
+        this.props.dispatch({
+            type: 'CREATE_PROJECT',
+            author: this.state.author,
+            id: 123,
+            estimate: this.state.estimate,
+            acquired: 0,
+            description: "",
+            title: this.state.title,
+        });
         this.setState({open: false});
     };
 
@@ -63,9 +74,9 @@ export default class AddProjectDialog extends React.Component {
                     <div>
                         <TextField hintText="Author" style={textFieldWidth} disabled={true} value="Eric Raffin"/>
                         <br/>
-                        <TextField hintText="Project Name" style={textFieldWidth}/>
+                        <TextField defaultValue={this.state.title} hintText="Project Name" style={textFieldWidth}/>
                         <br/>
-                        <TextField hintText="Estimated hours required " style={textFieldWidth}/>
+                        <TextField defaultValue={this.state.estimate} hintText="Estimated hours required " style={textFieldWidth}/>
                         <br/>
                         <TextField hintText="Project's description" multiLine={true} rows={4} style={textFieldWidth}/>
                         <br/>
@@ -75,3 +86,6 @@ export default class AddProjectDialog extends React.Component {
         );
     }
 }
+
+
+export default connect()(AddProjectDialog);

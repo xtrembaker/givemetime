@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react'
 
 import {TableRow, TableRowColumn} from 'material-ui/Table';
 import LinearProgress from 'material-ui/LinearProgress'
@@ -9,11 +9,6 @@ import GiveTimeDialog from './GiveTimeDialog.jsx';
 
 export default class ProjectTableRow extends React.Component {
     handleDiscoverClick = () => this.refs.ProjectDialog.setState({open: true});
-
-    constructor(){
-        super();
-    }
-
 
     render(){
         return <TableRow>
@@ -40,3 +35,12 @@ export default class ProjectTableRow extends React.Component {
         </TableRow>
     }
 }
+
+ProjectTableRow.propTypes = {
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    author: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    estimate: PropTypes.number.isRequired,
+    acquired: PropTypes.number.isRequired
+};

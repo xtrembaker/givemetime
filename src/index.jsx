@@ -9,7 +9,22 @@ import { createStore } from 'redux'
 let store = createStore(giveMeTimeReducers, {
     user: {
         credit: 10
-    }
+    },
+    projects: [{
+        id: 1,
+        title: "Bastion v2",
+        estimate: 24,
+        acquired: 12,
+        description: "",
+        author: "Denis Fortin",
+    },{
+        id: 2,
+        title: "Steam Learn Website",
+        estimate: 32,
+        acquired: 24,
+        description: "",
+        author: "Clément Prévost",
+    }]
 })
 
 ReactDom.render(
