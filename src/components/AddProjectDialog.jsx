@@ -5,10 +5,6 @@ import TextField from 'material-ui/TextField';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 
-const textFieldWidth = {
-    width: 500
-};
-
 export default class AddProjectDialog extends React.Component {
     state = {
         open: false
@@ -26,7 +22,6 @@ export default class AddProjectDialog extends React.Component {
         alert('TODO : save project');
         this.setState({open: false});
     };
-
 
     render() {
         const actions = [
@@ -47,6 +42,10 @@ export default class AddProjectDialog extends React.Component {
             right: 0,
             margin: 10,
             marginRight: 20,
+        };
+
+        const textFieldWidth = {
+            width: 500
         };
 
         return (

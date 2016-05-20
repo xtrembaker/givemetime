@@ -1,39 +1,38 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import Dialog from 'material-ui/dialog';
-import FlatButton from 'material-ui/flat-button';
-import TextField from 'material-ui/text-field';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
 
 const textFieldWidth = {
     width: 200
 };
 
 class GiveTimeDialog extends React.Component {
-    constructor(props) {
-        super(props);
-        //this.props = {open:false};
-        this.state = {};
-    }
+    state = {
+        open: false,
+        amount: 10
+    };
 
-    display(val) {
-        this.props.open = val;
-    }
+    handleOpen = () => {
+        this.setState({open: true});
+    };
 
+    handleClose = () => {
+        this.setState({open: false});
+    };
 
     handleSave(){
         if(this.amountValidator(this.state.amount)) {
-            //console.log('dispatch to proj '+this.props.projectId+ ' from user '+this.state.author+' for amount '+this.state.amount);
             this.props.dispatch({
                 type:'GIVE_TIME',
                 author:this.state.author,
                 projectId:this.props.projectId,
                 amount:this.state.amount
             });
-            this.props.display(false);
-            this.state = {author:this.props.user.name};
+            this.handleClose()
         }
-
-        this.props.display(false);
     }
 
     handleChange(e){
@@ -51,7 +50,9 @@ class GiveTimeDialog extends React.Component {
             this.state.errorAmount = 'Looks like a number ?';
             return false;
         } else {
-            if(value > this.props.user.credit) {
+            console.log('proper validation');
+            return true;
+            if(value > this.state.user.credit) {
                 this.state.errorAmount = 'Ahahaha';
                 return false;
             }
@@ -65,7 +66,7 @@ class GiveTimeDialog extends React.Component {
             <FlatButton
                 label="Close"
                 primary={true}
-                onTouchTap={() => this.props.display(false)}
+                onTouchTap={this.handleClose}
             />,
             <FlatButton
                 label="GIVE !"
@@ -76,24 +77,27 @@ class GiveTimeDialog extends React.Component {
 
         let title = 'Give Time to project ' + this.props.projectTitle;
         return (
-            <Dialog
-                title={title}
-                actions={actions}
-                modal={false}
-                open={this.props.open}
-                onRequestClose={() => this.display(false) }
-            >
-                <div>
-                    <TextField
-                        name="amount"
-                        hintText=""
-                        style={textFieldWidth}
-                        value={this.state.amount}
-                        errorText={this.state.errorAmount}
-                        onChange={this.handleChange.bind(this)}
-                    /> out of {this.props.user.credit}
-                </div>
-            </Dialog>
+            <span>
+                <RaisedButton label="GIVE TIME" secondary={true} onTouchTap={this.handleOpen}/>
+                <Dialog
+                    title={title}
+                    actions={actions}
+                    modal={false}
+                    open={this.state.open}
+                    onRequestClose={this.handleClose}
+                >
+                    <div>
+                        <TextField
+                            name="amount"
+                            hintText=""
+                            style={textFieldWidth}
+                            value={this.state.amount}
+                            errorText={this.state.errorAmount}
+                            onChange={this.handleChange.bind(this)}
+                        /> out of this.props.user.credit
+                    </div>
+                </Dialog>
+            </span>
         );
     }
 }

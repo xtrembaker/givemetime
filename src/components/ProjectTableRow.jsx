@@ -4,6 +4,7 @@ import {TableRow, TableRowColumn} from 'material-ui/Table';
 import LinearProgress from 'material-ui/LinearProgress'
 import RaisedButton from 'material-ui/FlatButton';
 import ProjectDialog from './ProjectDialog.jsx';
+import GiveTimeDialog from './GiveTimeDialog.jsx';
 
 
 export default class ProjectTableRow extends React.Component {
@@ -27,7 +28,7 @@ export default class ProjectTableRow extends React.Component {
             </TableRowColumn>
             <TableRowColumn>
                 <RaisedButton label="Discover" primary={true}  onTouchTap={this.handleDiscoverClick}/>
-                <RaisedButton label="GIVE TIME" secondary={true} />
+                <GiveTimeDialog />
                 <ProjectDialog
                     ref="ProjectDialog"
                     description="Lorem ipsum"
