@@ -1,5 +1,5 @@
 import React from 'react';
-import GridList from 'material-ui/lib/grid-list/grid-list';
+import GridList from 'material-ui/grid-list/grid-list';
 import ProjectCard from './ProjectCard.jsx';
 
 const styles = {
@@ -17,15 +17,15 @@ export default class ProjectsGrid extends React.Component {
     super(props);
   }
 
-  
+
   render() {
     return (
-      <div>
-        <GridList cellHeight={200} style={styles.gridList} cols={4}>
-          <ProjectCard title="Project A" author="Clement Prevost" estimate={12} acquired={4}/> 
-          <ProjectCard title="Project B" author="Denis Fortin" estimate={34} acquired={24}/> 
-        </GridList>
-      </div>
+        <div>
+          <GridList cellHeight={200} style={styles.gridList} cols={4}>
+            <ProjectCard title="Project A" author="Clement Prevost" estimate={12} acquired={4}/>
+            <ProjectCard title="Project B" author="Denis Fortin" estimate={34} acquired={24}/>
+          </GridList>
+        </div>
     );
   }
 }

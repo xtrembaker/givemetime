@@ -6,21 +6,21 @@ var path = require("path");
 module.exports =
 {
   entry: {
-    "main":"./src/index.jsx"
+    "main": ["./src/index.jsx"]
   },
   target:'web',
   devtool: 'source-map',
   output: {
     path: path.join(__dirname, "public"),
-    filename: "bundle.js",
-    publicPath: "/public/",
+    publicPath: "/",
+    filename: "bundle.js"
   },
   module: {
     loaders: [
-    {
-      test: /(\.js|\.jsx)$/,
-      loader: "babel-loader?presets[]=es2015,presets[]=react,presets[]=stage-1"
-    }
+      {
+        test: /(\.js|\.jsx)$/,
+        loader: "babel-loader?presets[]=es2015,presets[]=react,presets[]=stage-1"
+      }
     ]
   }
-}
+};
