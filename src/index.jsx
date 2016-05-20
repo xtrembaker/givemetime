@@ -24,7 +24,13 @@ let store = createStore(giveMeTimeReducers, {
         acquired: 24,
         description: "",
         author: "Clément Prévost",
-    }]
+    }],
+    addProjectDialog: {
+        open: false,
+        title: 'Test',
+        estimate: 123,
+        author: 'Toto'
+    }
 })
 
 ReactDom.render(

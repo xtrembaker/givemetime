@@ -1,37 +1,18 @@
-import React from 'react';
+import React, { PropTypes } from 'react'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import {connect} from 'react-redux';
+import {createProject, projectDialogToggle, projectFormChange} from '../actions.js';
 
-class AddProjectDialog extends React.Component {
-    state = {
-        open: false,
-        title: 'Test',
-        estimate: 123
-    };
+class AddProjectDialogComponent extends React.Component {
 
-    handleOpen = () => {
-        this.setState({open: true});
-    };
-
-    handleClose = () => {
-        this.setState({open: false});
-    };
-
-    handleSave = () => {
-        this.props.dispatch({
-            type: 'CREATE_PROJECT',
-            author: this.state.author,
-            id: 123,
-            estimate: this.state.estimate,
-            acquired: 0,
-            description: "",
-            title: this.state.title,
-        });
-        this.setState({open: false});
+    handleChange = (prop) => {
+        return (event) => {
+            this.props.onChange(prop, event.target.value);
+        };
     };
 
     render() {
@@ -39,12 +20,12 @@ class AddProjectDialog extends React.Component {
             <FlatButton
                 label="Close"
                 primary={true}
-                onTouchTap={this.handleClose}
+                onTouchTap={this.props.closeDialog}
             />,
             <FlatButton
                 label="Save"
                 secondary={true}
-                onTouchTap={this.handleSave}
+                onTouchTap={() => this.props.onCreate(this.props.author, this.props.title, this.props.estimate, this.props.description)}
             />,
         ];
 
@@ -61,24 +42,24 @@ class AddProjectDialog extends React.Component {
 
         return (
             <div>
-                <FloatingActionButton style={style} secondary={true} onTouchTap={this.handleOpen} >
+                <FloatingActionButton style={style} secondary={true} onTouchTap={this.props.openDialog} >
                     <ContentAdd />
                 </FloatingActionButton>
                 <Dialog
                     title={'Add project' }
                     actions={actions}
                     modal={false}
-                    open={this.state.open}
-                    onRequestClose={this.handleClose}
+                    open={this.props.open}
+                    onRequestClose={this.props.closeDialog}
                 >
                     <div>
-                        <TextField hintText="Author" style={textFieldWidth} disabled={true} value="Eric Raffin"/>
+                        <TextField onChange={this.handleChange('author')} value={this.props.author} hintText="Author" style={textFieldWidth} disabled={true} value="Eric Raffin"/>
                         <br/>
-                        <TextField defaultValue={this.state.title} hintText="Project Name" style={textFieldWidth}/>
+                        <TextField onChange={this.handleChange('title')} value={this.props.title} hintText="Project Name" style={textFieldWidth}/>
                         <br/>
-                        <TextField defaultValue={this.state.estimate} hintText="Estimated hours required " style={textFieldWidth}/>
+                        <TextField onChange={this.handleChange('estimate')} value={this.props.estimate} hintText="Estimated hours required " style={textFieldWidth}/>
                         <br/>
-                        <TextField hintText="Project's description" multiLine={true} rows={4} style={textFieldWidth}/>
+                        <TextField onChange={this.handleChange('description')} value={this.props.description} hintText="Project's description" multiLine={true} rows={4} style={textFieldWidth}/>
                         <br/>
                     </div>
                 </Dialog>
@@ -88,4 +69,45 @@ class AddProjectDialog extends React.Component {
 }
 
 
-export default connect()(AddProjectDialog);
+
+AddProjectDialogComponent.propTypes = {
+    open: PropTypes.bool.isRequired,
+    title: PropTypes.string.isRequired,
+    estimate: PropTypes.number.isRequired,
+    author: PropTypes.string.isRequired,
+    onCreate: PropTypes.func.isRequired,
+    openDialog: PropTypes.func.isRequired,
+    closeDialog: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => {
+    return {
+        open: state.addProjectDialog.open,
+        title: state.addProjectDialog.title,
+        estimate: state.addProjectDialog.estimate,
+        author: state.addProjectDialog.author,
+    };
+};
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onCreate: (author, title, estimate, description) => {
+            dispatch(createProject(author, title, estimate, description))
+            dispatch(projectDialogToggle(false))
+        },
+        openDialog: () => {
+            dispatch(projectDialogToggle(true))
+        },
+        closeDialog: () => {
+            dispatch(projectDialogToggle(false))
+        },
+        onChange: (prop, value) => {
+            dispatch(projectFormChange(prop, value))
+        },
+    }
+};
+
+const AddProjectDialog = connect(mapStateToProps, mapDispatchToProps)(AddProjectDialogComponent)
+
+
+export default AddProjectDialog;

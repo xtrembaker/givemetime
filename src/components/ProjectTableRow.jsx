@@ -40,7 +40,7 @@ ProjectTableRow.propTypes = {
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     author: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
+    description: PropTypes.string,
     estimate: PropTypes.number.isRequired,
     acquired: PropTypes.number.isRequired
 };

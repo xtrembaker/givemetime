@@ -1,26 +1,18 @@
 //import {Map} from 'immutable';
 
-function setState(state, newState) {
-    return newState;
-}
-
-function editEstimate(element) {
-
-}
 
 export default function (state = {}, action) {
     switch (action.type) {
-        case 'SET_STATE':
-            return setState(state, action.state);
         case 'CREATE_PROJECT' :
-            var newProjectsList = [...state.projectsList, {
+            var newProjectsList = state.projects.concat([{
                 id: action.id,
-                name: action.name,
-                time: action.time,
+                title: action.title,
+                estimate: action.estimate,
+                acquired: action.acquired,
+                description: action.description,
                 author: action.author,
-            }];
-    debugger;
-            return Object.assign({}, state, {projectsList: newProjectsList});
+            }]);
+            return Object.assign({}, state, {projects: newProjectsList});
         case 'GIVE_TIME' :
             console.log(action.amount);
             var newCredit = state.user.credit - action.amount;
@@ -35,6 +27,20 @@ export default function (state = {}, action) {
             }
 
             return Object.assign({}, state, {user: newUser});
+
+        case 'PROJECT_DIALOG_OPEN':
+            let addProjectDialogOpen = Object.assign({}, state.addProjectDialog, {open: true});
+            return Object.assign({}, state, {addProjectDialog: addProjectDialogOpen});
+
+        case 'PROJECT_DIALOG_CLOSE':
+            let addProjectDialogClosed = Object.assign({}, state.addProjectDialog, {open: false});
+            return Object.assign({}, state, {addProjectDialog: addProjectDialogClosed});
+
+        case 'PROJECT_FORM_CHANGE':
+            let newFormValues = {};
+            newFormValues[action.prop] = action.value;
+            let addProjectDialogFormChange = Object.assign({}, state.addProjectDialog, newFormValues);
+            return Object.assign({}, state, {addProjectDialog: addProjectDialogFormChange});
     };
     return state;
 }

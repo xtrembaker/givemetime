@@ -16,8 +16,9 @@ class ProjectsTableComponent extends React.Component {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {this.props.projects.map(project =>
+                    {this.props.projects.map((project, i) =>
                         <ProjectTableRow
+                            key={i}
                             id={project.id}
                             title={project.title}
                             author={project.author}
@@ -37,11 +38,12 @@ ProjectsTableComponent.propTypes = {
         id: PropTypes.number.isRequired,
         title: PropTypes.string.isRequired,
         author: PropTypes.string.isRequired,
-        description: PropTypes.string.isRequired,
+        description: PropTypes.string,
         estimate: PropTypes.number.isRequired,
         acquired: PropTypes.number.isRequired
     }).isRequired).isRequired,
 };
+
 const mapStateToProps = (state) => {
     return {
         projects: state.projects
