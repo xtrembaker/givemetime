@@ -1,10 +1,10 @@
 import React from 'react';
 
-import LinearProgress from 'material-ui/lib/linear-progress'
-import {Card,CardHeader,CardText} from 'material-ui/lib/card'
+import LinearProgress from 'material-ui/LinearProgress'
+import {Card,CardHeader,CardText} from 'material-ui/card'
 
 export default class ProjectCard extends React.Component {
-    
+
     constructor(){
         super();
     }
@@ -12,11 +12,11 @@ export default class ProjectCard extends React.Component {
 
     render(){
         return <Card expanded={null} expandable={false} initiallyExpanded={false}>
-                    <CardHeader title={this.props.title} subtitle={this.props.author}/>
-                    <CardText>
-                        <div>Estimated time : {this.props.estimate}</div>
-                        <LinearProgress max={this.props.estimate} min={0} value={this.props.acquired} mode="determinate"/>
-                    </CardText>
-                </Card>
-    }    
+            <CardHeader title={this.props.title} subtitle={this.props.author}/>
+            <CardText>
+                <div>Estimated time : {this.props.estimate}</div>
+                <LinearProgress max={this.props.estimate} min={0} value={this.props.acquired} mode="determinate"/>
+            </CardText>
+        </Card>
+    }
 }

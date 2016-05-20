@@ -1,67 +1,113 @@
-import React from 'react';
-import Dialog from 'material-ui/lib/dialog';
-import FlatButton from 'material-ui/lib/flat-button';
-import RaisedButton from 'material-ui/lib/raised-button';
-import LinearProgress from 'material-ui/lib/linear-progress';
-import TextField from 'material-ui/lib/text-field';
+import React, { PropTypes } from 'react'
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import TextField from 'material-ui/TextField';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+import {connect} from 'react-redux';
+import {createProject, projectDialogToggle, projectFormChange} from '../actions.js';
 
-const textFieldWidth = {
-  width: 500
+class AddProjectDialogComponent extends React.Component {
+
+    handleChange = (prop) => {
+        return (event) => {
+            this.props.onChange(prop, event.target.value);
+        };
+    };
+
+    render() {
+        const actions = [
+            <FlatButton
+                label="Close"
+                primary={true}
+                onTouchTap={this.props.closeDialog}
+            />,
+            <FlatButton
+                label="Save"
+                secondary={true}
+                onTouchTap={() => this.props.onCreate(this.props.author, this.props.title, this.props.estimate, this.props.description)}
+            />,
+        ];
+
+        const style = {
+            position: "absolute",
+            right: 0,
+            margin: 10,
+            marginRight: 20,
+        };
+
+        const textFieldWidth = {
+            width: 500
+        };
+
+        return (
+            <div>
+                <FloatingActionButton style={style} secondary={true} onTouchTap={this.props.openDialog} >
+                    <ContentAdd />
+                </FloatingActionButton>
+                <Dialog
+                    title={'Add project' }
+                    actions={actions}
+                    modal={false}
+                    open={this.props.open}
+                    onRequestClose={this.props.closeDialog}
+                >
+                    <div>
+                        <TextField onChange={this.handleChange('author')} value={this.props.author} hintText="Author" style={textFieldWidth} disabled={true} value="Eric Raffin"/>
+                        <br/>
+                        <TextField onChange={this.handleChange('title')} value={this.props.title} hintText="Project Name" style={textFieldWidth}/>
+                        <br/>
+                        <TextField onChange={this.handleChange('estimate')} value={this.props.estimate} hintText="Estimated hours required " style={textFieldWidth}/>
+                        <br/>
+                        <TextField onChange={this.handleChange('description')} value={this.props.description} hintText="Project's description" multiLine={true} rows={4} style={textFieldWidth}/>
+                        <br/>
+                    </div>
+                </Dialog>
+            </div>
+        );
+    }
+}
+
+
+
+AddProjectDialogComponent.propTypes = {
+    open: PropTypes.bool.isRequired,
+    title: PropTypes.string.isRequired,
+    estimate: PropTypes.number.isRequired,
+    author: PropTypes.string.isRequired,
+    onCreate: PropTypes.func.isRequired,
+    openDialog: PropTypes.func.isRequired,
+    closeDialog: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
 };
 
-export default class AddProjectDialog extends React.Component {
-  
-
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      open: false,
+const mapStateToProps = (state) => {
+    return {
+        open: state.addProjectDialog.open,
+        title: state.addProjectDialog.title,
+        estimate: state.addProjectDialog.estimate,
+        author: state.addProjectDialog.author,
     };
-  }
+};
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onCreate: (author, title, estimate, description) => {
+            dispatch(createProject(author, title, estimate, description))
+            dispatch(projectDialogToggle(false))
+        },
+        openDialog: () => {
+            dispatch(projectDialogToggle(true))
+        },
+        closeDialog: () => {
+            dispatch(projectDialogToggle(false))
+        },
+        onChange: (prop, value) => {
+            dispatch(projectFormChange(prop, value))
+        },
+    }
+};
 
-  handleSave = () => {
-    alert('TODO : save project');
-    this.setState({open: false});
-  };
+const AddProjectDialog = connect(mapStateToProps, mapDispatchToProps)(AddProjectDialogComponent)
 
-  handleClose = () => {
-    this.setState({open: false});
-  };
 
-  render() {
-    const actions = [
-      <FlatButton
-        label="Close"
-        primary={true}
-        onTouchTap={this.handleClose}
-      />,
-      <FlatButton
-        label="Save"
-        secondary={true}
-        onTouchTap={this.handleSave}
-      />,
-    ];
-
-    return (
-        <Dialog
-          title={'Add project' } 
-          actions={actions}
-          modal={false}
-          open={this.state.open}
-          onRequestClose={this.handleClose}
-        >
-        <div>
-        <TextField hintText="Author" style={textFieldWidth} disabled={true} value="Eric Raffin"/>
-        <br/>
-        <TextField hintText="Project Name" style={textFieldWidth}/>
-        <br/>
-        <TextField hintText="Estimated hours required " style={textFieldWidth}/>
-        <br/>
-        <TextField hintText="Project's description" multiLine={true} rows={4} style={textFieldWidth}/>
-        <br/>
-        </div>
-        </Dialog>
-    );
-  }
-}
+export default AddProjectDialog;

@@ -1,50 +1,56 @@
-import React from 'react';
-
-import Table from 'material-ui/lib/table/table';
-import TableHeaderColumn from 'material-ui/lib/table/table-header-column';
-import TableRow from 'material-ui/lib/table/table-row';
-import TableHeader from 'material-ui/lib/table/table-header';
-import TableRowColumn from 'material-ui/lib/table/table-row-column';
-import TableBody from 'material-ui/lib/table/table-body';
-
-import ProjectTableRow from './ProjectTableRow';
-
-const styles = {
-  projectsTable: {
-
-  },
-};
-
-export default class ProjectsTable extends React.Component {
-    
-    constructor(){
-        super();
-    }
+import React, { PropTypes } from 'react'
+import {Table, TableHeaderColumn, TableRow, TableHeader, TableBody} from 'material-ui/Table';
+import ProjectTableRow from './ProjectTableRow.jsx';
+import {connect} from 'react-redux';
 
 
+class ProjectsTableComponent extends React.Component {
     render(){
-        return <Table style={styles.projectsTable}>
+        return (
+            <Table>
                 <TableHeader displaySelectAll={false} menableSelectAll={false}>
-                  <TableRow>
-                    <TableHeaderColumn>Name</TableHeaderColumn>
-                    <TableHeaderColumn>Author</TableHeaderColumn>
-                    <TableHeaderColumn>Time</TableHeaderColumn>
-                  </TableRow>
+                    <TableRow>
+                        <TableHeaderColumn>Name</TableHeaderColumn>
+                        <TableHeaderColumn>Author</TableHeaderColumn>
+                        <TableHeaderColumn>Time</TableHeaderColumn>
+                    </TableRow>
                 </TableHeader>
                 <TableBody>
-                  <ProjectTableRow 
-                    title="Bastion v2" 
-                    author="Denis Fortin" 
-                    description="Lorem Ipsum" 
-                    estimate={24} 
-                    acquired={12}/>
-                  <ProjectTableRow 
-                    title="SteamLearn Website" 
-                    author="Clément Prévost" 
-                    description="Lorem Ipsum" 
-                    estimate={38} 
-                    acquired={2} />
+                    {this.props.projects.map((project, i) =>
+                        <ProjectTableRow
+                            key={i}
+                            id={project.id}
+                            title={project.title}
+                            author={project.author}
+                            description={project.description}
+                            estimate={project.estimate}
+                            acquired={project.acquired}
+                        />
+                    )}
                 </TableBody>
-              </Table>
-    }    
+            </Table>
+        );
+    }
 }
+
+ProjectsTableComponent.propTypes = {
+    projects: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        title: PropTypes.string.isRequired,
+        author: PropTypes.string.isRequired,
+        description: PropTypes.string,
+        estimate: PropTypes.number.isRequired,
+        acquired: PropTypes.number.isRequired
+    }).isRequired).isRequired,
+};
+
+const mapStateToProps = (state) => {
+    return {
+        projects: state.projects
+    }
+};
+
+const ProjectsTable = connect(mapStateToProps)(ProjectsTableComponent)
+
+export default ProjectsTable;
+

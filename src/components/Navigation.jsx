@@ -1,9 +1,8 @@
 import React from 'react';
-import LeftNav from 'material-ui/lib/left-nav';
-import MenuItem from 'material-ui/lib/menus/menu-item';
-import RaisedButton from 'material-ui/lib/raised-button';
+import Drawer from 'material-ui/Drawer';
+import MenuItem from 'material-ui/MenuItem';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import AppBar from 'material-ui/lib/app-bar'
+import AppBar from 'material-ui/AppBar'
 injectTapEventPlugin();
 
 export default class Navigation extends React.Component {
@@ -18,23 +17,23 @@ export default class Navigation extends React.Component {
 
   render() {
     return (
-      <div>
-        <LeftNav
-          docked={false}
-          width={300}
-          open={this.state.open}
-          onRequestChange={(open) => this.setState({open})}
-        >
-          <AppBar 
-            title="Give R&D time" 
-            onLeftIconButtonTouchTap={this.handleClose}
-            isInitiallyOpen={true} 
-          />
-          <MenuItem onTouchTap={this.handleClose}>Projects</MenuItem>
-          <MenuItem onTouchTap={this.handleClose}>Add project</MenuItem>
-          <MenuItem onTouchTap={this.handleClose}>My account</MenuItem>
-        </LeftNav>
-      </div>
+        <div>
+          <Drawer
+              docked={false}
+              width={300}
+              open={this.state.open}
+              onRequestChange={(open) => this.setState({open})}
+          >
+            <AppBar
+                title="Give R&D time"
+                onLeftIconButtonTouchTap={this.handleClose}
+                isInitiallyOpen={true}
+            />
+            <MenuItem onTouchTap={this.handleClose}>Projects</MenuItem>
+            <MenuItem onTouchTap={this.handleClose}>Add project</MenuItem>
+            <MenuItem onTouchTap={this.handleClose}>My account</MenuItem>
+          </Drawer>
+        </div>
     );
   }
 }

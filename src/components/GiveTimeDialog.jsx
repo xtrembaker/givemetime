@@ -1,103 +1,105 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import Dialog from 'material-ui/lib/dialog';
-import FlatButton from 'material-ui/lib/flat-button';
-import RaisedButton from 'material-ui/lib/raised-button';
-import LinearProgress from 'material-ui/lib/linear-progress';
-import TextField from 'material-ui/lib/text-field';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
 
 const textFieldWidth = {
-  width: 200
+    width: 200
 };
 
 class GiveTimeDialog extends React.Component {
-  constructor(props) {
-    super(props);
-    //this.props = {open:false};
-    this.state = {};
-  }
+    state = {
+        open: false,
+        amount: 10
+    };
 
-  display(val) {
-    this.props.open = val;
-  }
+    handleOpen = () => {
+        this.setState({open: true});
+    };
 
+    handleClose = () => {
+        this.setState({open: false});
+    };
 
-  handleSave(){
-  if(this.amountValidator(this.state.amount)) {
-      //console.log('dispatch to proj '+this.props.projectId+ ' from user '+this.state.author+' for amount '+this.state.amount);
-        this.props.dispatch({
-          type:'GIVE_TIME',
-          author:this.state.author,
-          projectId:this.props.projectId,
-          amount:this.state.amount
-        });
-        this.props.display(false);
-        this.state = {author:this.props.user.name};
-      }
-
-      this.props.display(false);
-  }
-
-  handleChange(e){
-    if(e.target.name == 'amount') {
-      this.amountValidator(e.target.value);
+    handleSave(){
+        if(this.amountValidator(this.state.amount)) {
+            this.props.dispatch({
+                type:'GIVE_TIME',
+                author:this.state.author,
+                projectId:this.props.projectId,
+                amount:this.state.amount
+            });
+            this.handleClose()
+        }
     }
 
-    var name = {};
-    name[e.target.name] = e.target.value;
-    this.setState(name);
-  }
-
- amountValidator(value) {
-    if(isNaN(value)) {
-        this.state.errorAmount = 'Looks like a number ?';
-        return false;
-      } else {
-        if(value > this.props.user.credit) {
-          this.state.errorAmount = 'Ahahaha';
-          return false;
+    handleChange(e){
+        if(e.target.name == 'amount') {
+            this.amountValidator(e.target.value);
         }
-        this.state.errorAmount = null;
-        return true;
-      }
-  }
 
-  render() {
-    const actions = [
-      <FlatButton
-        label="Close"
-        primary={true}
-        onTouchTap={() => this.props.display(false)}
-      />,
-      <FlatButton
-        label="GIVE !"
-        secondary={true}
-        onTouchTap={this.handleSave.bind(this)}
-      />,
-    ];
+        var name = {};
+        name[e.target.name] = e.target.value;
+        this.setState(name);
+    }
 
-    let title = 'Give Time to project ' + this.props.projectTitle;
-    return (
-        <Dialog
-          title={title} 
-          actions={actions}
-          modal={false}
-          open={this.props.open}
-          onRequestClose={() => this.display(false) }
-        >
-        <div>
-        <TextField 
-          name="amount" 
-          hintText="" 
-          style={textFieldWidth} 
-          value={this.state.amount}
-          errorText={this.state.errorAmount}
-          onChange={this.handleChange.bind(this)}
-        /> out of {this.props.user.credit}
-        </div>
-        </Dialog>
-    );
-  }
+    amountValidator(value) {
+        if(isNaN(value)) {
+            this.state.errorAmount = 'Looks like a number ?';
+            return false;
+        } else {
+            console.log('proper validation');
+            return true;
+            if(value > this.state.user.credit) {
+                this.state.errorAmount = 'Ahahaha';
+                return false;
+            }
+            this.state.errorAmount = null;
+            return true;
+        }
+    }
+
+    render() {
+        const actions = [
+            <FlatButton
+                label="Close"
+                primary={true}
+                onTouchTap={this.handleClose}
+            />,
+            <FlatButton
+                label="GIVE !"
+                secondary={true}
+                onTouchTap={this.handleSave.bind(this)}
+            />,
+        ];
+
+        let title = 'Give Time to project ' + this.props.projectTitle;
+        return (
+            <span>
+                <RaisedButton label="GIVE TIME" secondary={true} onTouchTap={this.handleOpen}/>
+                <Dialog
+                    title={title}
+                    actions={actions}
+                    modal={false}
+                    open={this.state.open}
+                    onRequestClose={this.handleClose}
+                >
+                    <div>
+                        <TextField
+                            name="amount"
+                            hintText=""
+                            style={textFieldWidth}
+                            value={this.state.amount}
+                            errorText={this.state.errorAmount}
+                            onChange={this.handleChange.bind(this)}
+                        /> out of this.props.user.credit
+                    </div>
+                </Dialog>
+            </span>
+        );
+    }
 }
 
 export default connect()(GiveTimeDialog);

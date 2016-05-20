@@ -1,44 +1,41 @@
 import React from "react"
 import ReactDom from "react-dom"
-import RaisedButton from 'material-ui/lib/raised-button';
+import { Provider } from 'react-redux'
+import giveMeTimeReducers from './reducer.js';
+import Layout from './components/Layout.jsx';
+import { createStore } from 'redux'
 
 
-
-import StarBorder from 'material-ui/lib/svg-icons/toggle/star-border';
-import IconButton from 'material-ui/lib/icon-button';
-import AppBar from 'material-ui/lib/app-bar'
-import FloatingActionButton from 'material-ui/lib/floating-action-button';
-import LeftNav from 'material-ui/lib/left-nav';
-import ContentAdd from 'material-ui/lib/svg-icons/content/add';
-
-import Navigation from './components/Navigation.jsx';
-import ProjectsGrid from './components/ProjectsGrid.jsx';
-import ProjectsTable from './components/ProjectsTable.jsx';
-
-const style = {
-  position: "absolute",
-	right: 0,
-	margin: 10,
-	marginRight: 20,
-};
-
-class Main extends React.Component {
-    handleMenuClick = () => this.refs.ProjectLeftNav.setState({open: true});
-
-    render() {
-        return <div>
-        <AppBar  
-        	title="Give R&D time" 
-        	onLeftIconButtonTouchTap={this.handleMenuClick}
-            isInitiallyOpen={true} />
-        <Navigation ref="ProjectLeftNav" open="false"/>
-        {/*<ProjectsGrid/>*/}
-        <ProjectsTable/>
-        <FloatingActionButton style={style} secondary={true}>
-        	<ContentAdd />
-        </FloatingActionButton>
-        </div>;
+let store = createStore(giveMeTimeReducers, {
+    user: {
+        credit: 10
+    },
+    projects: [{
+        id: 1,
+        title: "Bastion v2",
+        estimate: 24,
+        acquired: 12,
+        description: "",
+        author: "Denis Fortin",
+    },{
+        id: 2,
+        title: "Steam Learn Website",
+        estimate: 32,
+        acquired: 24,
+        description: "",
+        author: "Clément Prévost",
+    }],
+    addProjectDialog: {
+        open: false,
+        title: 'Test',
+        estimate: 123,
+        author: 'Toto'
     }
-}
+})
 
-ReactDom.render(<Main />, document.getElementById("main"));
+ReactDom.render(
+    <Provider store={store}>
+        <Layout />
+    </Provider>,
+    document.getElementById("main")
+)
