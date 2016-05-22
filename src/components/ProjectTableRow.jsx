@@ -2,47 +2,50 @@ import React, { PropTypes } from 'react'
 
 import {TableRow, TableRowColumn} from 'material-ui/Table';
 import LinearProgress from 'material-ui/LinearProgress'
-import RaisedButton from 'material-ui/FlatButton';
+import {Card, CardActions, CardHeader, CardTitle, CardText} from 'material-ui/Card';
 import ProjectDialog from './ProjectDialog.jsx';
 import GiveTimeDialog from './GiveTimeDialog.jsx';
 import {connect} from 'react-redux';
-import {openProjectDialog} from '../actions.js';
 
 
 class ProjectTableRowComponent extends React.Component {
-    render(){
-        return <TableRow>
-            <TableRowColumn onTouchTap={this.handleDiscoverClick}>
-                {this.props.title}
-            </TableRowColumn>
-            <TableRowColumn onTouchTap={this.handleDiscoverClick}>
-                {this.props.author}
-            </TableRowColumn>
-            <TableRowColumn onTouchTap={this.handleDiscoverClick}>
-                {this.props.description}
-            </TableRowColumn>
-            <TableRowColumn onTouchTap={this.handleDiscoverClick}>
-                <LinearProgress max={this.props.estimate} min={0} value={this.props.acquired} mode="determinate"/>
-            </TableRowColumn>
-            <TableRowColumn>
-                <RaisedButton label="Discover" primary={true}  onTouchTap={() => this.props.onTap(this.props.id)}/>
-                <GiveTimeDialog
-                  id={this.props.id}
-                  description={this.props.description}
-                  title={this.props.title}
-                  author={this.props.author}
-                  estimate={this.props.estimate}
-                  acquired={this.props.acquired} />
-                <ProjectDialog
-                    ref="ProjectDialog"
-                    id={this.props.id}
-                    description={this.props.description}
-                    title={this.props.title}
-                    author={this.props.author}
-                    estimate={this.props.estimate}
-                    acquired={this.props.acquired} />
-            </TableRowColumn>
-        </TableRow>
+    render () {
+        const style = {
+            container: {
+                width: "32%",
+                display: "inline-block",
+                margin: "3px"
+            },
+            actions: {
+                textAlign: "right"
+            }
+        };
+        return (
+          <Card style={Object.assign({}, this.props.style, style.container)} onTouchTap={this.handleDiscoverClick} expanded={null} expandable={false} initiallyExpanded={false}>
+              <CardHeader title={this.props.title} subtitle={this.props.author}/>
+              <CardText>
+                  <div>Estimated time : {this.props.estimate}</div>
+                  <LinearProgress max={this.props.estimate} min={0} value={this.props.acquired} mode="determinate"/>
+              </CardText>
+              <CardActions style={style.actions}>
+                  <ProjectDialog
+                      ref="ProjectDialog"
+                      id={this.props.id}
+                      description={this.props.description}
+                      title={this.props.title}
+                      author={this.props.author}
+                      estimate={this.props.estimate}
+                      acquired={this.props.acquired} />
+                  <GiveTimeDialog
+                      id={this.props.id}
+                      description={this.props.description}
+                      title={this.props.title}
+                      author={this.props.author}
+                      estimate={this.props.estimate}
+                      acquired={this.props.acquired} />
+              </CardActions>
+          </Card>
+        )
     }
 }
 
@@ -53,18 +56,10 @@ ProjectTableRowComponent.propTypes = {
     description: PropTypes.string,
     estimate: PropTypes.number.isRequired,
     acquired: PropTypes.number.isRequired,
-    onTap: PropTypes.func.isRequired,
+    style: PropTypes.object
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        onTap: (id) => {
-            dispatch(openProjectDialog(id))
-        },
-    }
-};
-
-const ProjectTableRow = connect(null, mapDispatchToProps)(ProjectTableRowComponent)
+const ProjectTableRow = connect()(ProjectTableRowComponent)
 
 
 export default ProjectTableRow;

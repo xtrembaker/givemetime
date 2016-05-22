@@ -3,34 +3,31 @@ import {Table, TableHeaderColumn, TableRow, TableHeader, TableBody} from 'materi
 import ProjectTableRow from './ProjectTableRow.jsx';
 import {connect} from 'react-redux';
 
-
 class ProjectsTableComponent extends React.Component {
-    render(){
+    render() {
+        const style = {
+          container: {
+            textAlign: "center"
+          },
+          element: {
+            textAlign: "left"
+          }
+        }
         return (
-            <Table>
-                <TableHeader displaySelectAll={false} menableSelectAll={false}>
-                    <TableRow>
-                        <TableHeaderColumn>Name</TableHeaderColumn>
-                        <TableHeaderColumn>Author</TableHeaderColumn>
-                        <TableHeaderColumn>Description</TableHeaderColumn>
-                        <TableHeaderColumn>Time</TableHeaderColumn>
-                        <TableHeaderColumn>Actions</TableHeaderColumn>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {this.props.projects.map((project, i) =>
-                        <ProjectTableRow
-                            key={i}
-                            id={project.id}
-                            title={project.title}
-                            author={project.author}
-                            description={project.description}
-                            estimate={project.estimate}
-                            acquired={project.acquired}
-                        />
-                    )}
-                </TableBody>
-            </Table>
+            <div style={style.container}>
+                {this.props.projects.map((project, i) =>
+                    <ProjectTableRow
+                        key={i}
+                        id={project.id}
+                        style={style.element}
+                        title={project.title}
+                        author={project.author}
+                        description={project.description}
+                        estimate={project.estimate}
+                        acquired={project.acquired}
+                    />
+                )}
+            </div>
         );
     }
 }

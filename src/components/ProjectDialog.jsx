@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/FlatButton';
 import LinearProgress from 'material-ui/LinearProgress'
 import {connect} from 'react-redux';
-import {closeProjectDialog} from '../actions.js';
+import {closeProjectDialog, openProjectDialog} from '../actions.js';
 
 class ViewProjectDialogComponent extends React.Component {
     isOpen () {
@@ -20,22 +21,25 @@ class ViewProjectDialogComponent extends React.Component {
         ];
 
         return (
-            <Dialog
-                title={this.props.title + ' by ' + this.props.author  }
-                actions={actions}
-                modal={false}
-                open={this.isOpen()}
-                onRequestClose={this.props.closeDialog}
-            >
-                <div>
-                    Time required : {this.props.acquired}/{this.props.estimate}
-                    <br/>
-                    <LinearProgress max={this.props.estimate} min={0} value={this.props.acquired} mode="determinate"/>
-                </div>
-                <p>
-                    Description : {this.props.description}
-                </p>
-            </Dialog>
+            <span>
+                <RaisedButton label="Discover" primary={true}  onTouchTap={() => this.props.onTap(this.props.id)}/>
+                <Dialog
+                    title={this.props.title + ' by ' + this.props.author  }
+                    actions={actions}
+                    modal={false}
+                    open={this.isOpen()}
+                    onRequestClose={this.props.closeDialog}
+                >
+                    <div>
+                        Time required : {this.props.acquired}/{this.props.estimate}
+                        <br/>
+                        <LinearProgress max={this.props.estimate} min={0} value={this.props.acquired} mode="determinate"/>
+                    </div>
+                    <p>
+                        Description : {this.props.description}
+                    </p>
+                </Dialog>
+            </span>
         );
     }
 }
@@ -48,6 +52,7 @@ ViewProjectDialogComponent.propTypes = {
     acquired: PropTypes.number,
     author: PropTypes.string,
     closeDialog: PropTypes.func.isRequired,
+    onTap: PropTypes.func.isRequired,
 };
 
 
@@ -60,6 +65,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         closeDialog: () => {
             dispatch(closeProjectDialog())
+        },
+        onTap: (id) => {
+            dispatch(openProjectDialog(id))
         },
     }
 };

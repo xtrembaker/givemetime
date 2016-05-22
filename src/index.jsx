@@ -25,6 +25,20 @@ let store = createStore(giveMeTimeReducers, {
         acquired: 24,
         description: "Vote",
         author: "Clément Prévost",
+    },{
+        id: 3,
+        title: "ELK",
+        estimate: 51,
+        acquired: 12,
+        description: "Logs logs logs",
+        author: "Clément Prévost",
+    },{
+        id: 4,
+        title: "Docker",
+        estimate: 51,
+        acquired: 12,
+        description: "It's all about process",
+        author: "Clément Prévost",
     }],
     addProjectDialog: {
         open: false,
