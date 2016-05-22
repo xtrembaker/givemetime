@@ -22,7 +22,7 @@ let store = createStore(giveMeTimeReducers, {
         title: "Steam Learn Website",
         estimate: 32,
         acquired: 24,
-        description: "",
+        description: "Vote",
         author: "Clément Prévost",
     }],
     addProjectDialog: {
@@ -30,6 +30,13 @@ let store = createStore(giveMeTimeReducers, {
         title: 'Test',
         estimate: 123,
         author: 'Toto'
+    },
+    viewProjectDialog: {
+      open: false,
+      /*title: 'Test',
+      estimate: 123,
+      acquired: 123,
+      author: 'Toto'*/
     }
 })
 

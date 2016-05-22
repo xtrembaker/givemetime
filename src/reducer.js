@@ -28,13 +28,21 @@ export default function (state = {}, action) {
 
             return Object.assign({}, state, {user: newUser});
 
-        case 'PROJECT_DIALOG_OPEN':
+        case 'ADD_PROJECT_DIALOG_OPEN':
             let addProjectDialogOpen = Object.assign({}, state.addProjectDialog, {open: true});
             return Object.assign({}, state, {addProjectDialog: addProjectDialogOpen});
 
-        case 'PROJECT_DIALOG_CLOSE':
+        case 'ADD_PROJECT_DIALOG_CLOSE':
             let addProjectDialogClosed = Object.assign({}, state.addProjectDialog, {open: false});
             return Object.assign({}, state, {addProjectDialog: addProjectDialogClosed});
+
+        case 'VIEW_PROJECT_DIALOG_OPEN':
+            let viewProjectDialogOpen = Object.assign({}, state.viewProjectDialog, {open: true});
+            return Object.assign({}, state, {viewProjectDialog: viewProjectDialogOpen});
+
+        case 'VIEW_PROJECT_DIALOG_CLOSE':
+            let viewProjectDialogClosed = Object.assign({}, state.viewProjectDialog, {open: false});
+            return Object.assign({}, state, {viewProjectDialog: viewProjectDialogClosed});
 
         case 'PROJECT_FORM_CHANGE':
             let newFormValues = {};

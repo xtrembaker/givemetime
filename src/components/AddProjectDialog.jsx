@@ -5,7 +5,7 @@ import TextField from 'material-ui/TextField';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import {connect} from 'react-redux';
-import {createProject, projectDialogToggle, projectFormChange} from '../actions.js';
+import {createProject, addProjectDialogToggle, projectFormChange} from '../actions.js';
 
 class AddProjectDialogComponent extends React.Component {
 
@@ -13,6 +13,9 @@ class AddProjectDialogComponent extends React.Component {
         return (event) => {
             this.props.onChange(prop, event.target.value);
         };
+    };
+    handleEstimateChange = (event) => {
+        this.props.onChange('estimate', parseInt(event.target.value) || 0);
     };
 
     render() {
@@ -57,7 +60,7 @@ class AddProjectDialogComponent extends React.Component {
                         <br/>
                         <TextField onChange={this.handleChange('title')} value={this.props.title} hintText="Project Name" style={textFieldWidth}/>
                         <br/>
-                        <TextField onChange={this.handleChange('estimate')} value={this.props.estimate} hintText="Estimated hours required " style={textFieldWidth}/>
+                        <TextField onChange={this.handleEstimateChange} value={this.props.estimate} hintText="Estimated hours required " style={textFieldWidth}/>
                         <br/>
                         <TextField onChange={this.handleChange('description')} value={this.props.description} hintText="Project's description" multiLine={true} rows={4} style={textFieldWidth}/>
                         <br/>
@@ -87,19 +90,20 @@ const mapStateToProps = (state) => {
         title: state.addProjectDialog.title,
         estimate: state.addProjectDialog.estimate,
         author: state.addProjectDialog.author,
+        description: state.addProjectDialog.description,
     };
 };
 const mapDispatchToProps = (dispatch) => {
     return {
         onCreate: (author, title, estimate, description) => {
             dispatch(createProject(author, title, estimate, description))
-            dispatch(projectDialogToggle(false))
+            dispatch(addProjectDialogToggle(false))
         },
         openDialog: () => {
-            dispatch(projectDialogToggle(true))
+            dispatch(addProjectDialogToggle(true))
         },
         closeDialog: () => {
-            dispatch(projectDialogToggle(false))
+            dispatch(addProjectDialogToggle(false))
         },
         onChange: (prop, value) => {
             dispatch(projectFormChange(prop, value))

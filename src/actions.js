@@ -12,14 +12,26 @@ export const createProject = (author, title, estimate, description) => {
     }
 }
 
-export const projectDialogToggle = (open) => {
+export const addProjectDialogToggle = (open) => {
     if (open) {
         return {
-            type: 'PROJECT_DIALOG_OPEN',
+            type: 'ADD_PROJECT_DIALOG_OPEN',
         }
     } else {
         return {
-            type: 'PROJECT_DIALOG_CLOSE',
+            type: 'ADD_PROJECT_DIALOG_CLOSE',
+        }
+    }
+}
+
+export const viewProjectDialogToggle = (open) => {
+    if (open) {
+        return {
+            type: 'VIEW_PROJECT_DIALOG_OPEN',
+        }
+    } else {
+        return {
+            type: 'VIEW_PROJECT_DIALOG_CLOSE',
         }
     }
 }

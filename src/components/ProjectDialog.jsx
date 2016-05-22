@@ -1,30 +1,17 @@
-import React from 'react';
+import React, { PropTypes } from 'react'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import LinearProgress from 'material-ui/LinearProgress'
+import {connect} from 'react-redux';
+import {viewProjectDialogToggle} from '../actions.js';
 
-export default class ProjectDialog extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            open: false,
-        };
-    }
-
-    handleOpen = () => {
-        this.setState({open: true});
-    };
-
-    handleClose = () => {
-        this.setState({open: false});
-    };
-
+class ViewProjectDialogComponent extends React.Component {
     render() {
         const actions = [
             <FlatButton
                 label="Close"
                 primary={true}
-                onTouchTap={this.handleClose}
+                onTouchTap={this.props.closeDialog}
             />,
         ];
 
@@ -33,8 +20,8 @@ export default class ProjectDialog extends React.Component {
                 title={this.props.title + ' by ' + this.props.author  }
                 actions={actions}
                 modal={false}
-                open={this.state.open}
-                onRequestClose={this.handleClose}
+                open={this.props.open}
+                onRequestClose={this.props.closeDialog}
             >
                 <div>
                     Time required : {this.props.acquired}/{this.props.estimate}
@@ -48,3 +35,31 @@ export default class ProjectDialog extends React.Component {
         );
     }
 }
+
+ViewProjectDialogComponent.propTypes = {
+    open: PropTypes.bool.isRequired,
+    title: PropTypes.string,
+    estimate: PropTypes.number,
+    acquired: PropTypes.number,
+    author: PropTypes.string,
+    closeDialog: PropTypes.func.isRequired,
+};
+
+
+const mapStateToProps = (state) => {
+    return {
+        open: state.viewProjectDialog.open
+    };
+};
+const mapDispatchToProps = (dispatch) => {
+    return {
+        closeDialog: () => {
+            dispatch(viewProjectDialogToggle(false))
+        },
+    }
+};
+
+const ProjectDialog = connect(mapStateToProps, mapDispatchToProps)(ViewProjectDialogComponent)
+
+
+export default ProjectDialog;

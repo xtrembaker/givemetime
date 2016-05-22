@@ -12,6 +12,7 @@ class ProjectsTableComponent extends React.Component {
                     <TableRow>
                         <TableHeaderColumn>Name</TableHeaderColumn>
                         <TableHeaderColumn>Author</TableHeaderColumn>
+                        <TableHeaderColumn>Description</TableHeaderColumn>
                         <TableHeaderColumn>Time</TableHeaderColumn>
                     </TableRow>
                 </TableHeader>
@@ -53,4 +54,3 @@ const mapStateToProps = (state) => {
 const ProjectsTable = connect(mapStateToProps)(ProjectsTableComponent)
 
 export default ProjectsTable;
-
