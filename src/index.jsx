@@ -32,11 +32,7 @@ let store = createStore(giveMeTimeReducers, {
         author: 'Toto'
     },
     viewProjectDialog: {
-      open: false,
-      /*title: 'Test',
-      estimate: 123,
-      acquired: 123,
-      author: 'Toto'*/
+      openId: null
     }
 })
 

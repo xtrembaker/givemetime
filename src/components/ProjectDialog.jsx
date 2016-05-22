@@ -3,9 +3,13 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import LinearProgress from 'material-ui/LinearProgress'
 import {connect} from 'react-redux';
-import {viewProjectDialogToggle} from '../actions.js';
+import {closeProjectDialog} from '../actions.js';
 
 class ViewProjectDialogComponent extends React.Component {
+    isOpen () {
+        return this.props.openId === this.props.id
+    }
+
     render() {
         const actions = [
             <FlatButton
@@ -20,7 +24,7 @@ class ViewProjectDialogComponent extends React.Component {
                 title={this.props.title + ' by ' + this.props.author  }
                 actions={actions}
                 modal={false}
-                open={this.props.open}
+                open={this.isOpen()}
                 onRequestClose={this.props.closeDialog}
             >
                 <div>
@@ -37,7 +41,8 @@ class ViewProjectDialogComponent extends React.Component {
 }
 
 ViewProjectDialogComponent.propTypes = {
-    open: PropTypes.bool.isRequired,
+    openId: PropTypes.number,
+    id: PropTypes.number.isRequired,
     title: PropTypes.string,
     estimate: PropTypes.number,
     acquired: PropTypes.number,
@@ -48,13 +53,13 @@ ViewProjectDialogComponent.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        open: state.viewProjectDialog.open
+        openId: state.viewProjectDialog.openId
     };
 };
 const mapDispatchToProps = (dispatch) => {
     return {
         closeDialog: () => {
-            dispatch(viewProjectDialogToggle(false))
+            dispatch(closeProjectDialog())
         },
     }
 };

@@ -6,7 +6,7 @@ import RaisedButton from 'material-ui/FlatButton';
 import ProjectDialog from './ProjectDialog.jsx';
 import GiveTimeDialog from './GiveTimeDialog.jsx';
 import {connect} from 'react-redux';
-import {viewProjectDialogToggle} from '../actions.js';
+import {openProjectDialog} from '../actions.js';
 
 
 class ProjectTableRowComponent extends React.Component {
@@ -25,10 +25,11 @@ class ProjectTableRowComponent extends React.Component {
                 <LinearProgress max={this.props.estimate} min={0} value={this.props.acquired} mode="determinate"/>
             </TableRowColumn>
             <TableRowColumn>
-                <RaisedButton label="Discover" primary={true}  onTouchTap={this.props.onTap}/>
+                <RaisedButton label="Discover" primary={true}  onTouchTap={() => this.props.onTap(this.props.id)}/>
                 <GiveTimeDialog />
                 <ProjectDialog
                     ref="ProjectDialog"
+                    id={this.props.id}
                     description={this.props.description}
                     title={this.props.title}
                     author={this.props.author}
@@ -51,8 +52,8 @@ ProjectTableRowComponent.propTypes = {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onTap: () => {
-            dispatch(viewProjectDialogToggle(true))
+        onTap: (id) => {
+            dispatch(openProjectDialog(id))
         },
     }
 };

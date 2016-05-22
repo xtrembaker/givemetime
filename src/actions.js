@@ -24,15 +24,15 @@ export const addProjectDialogToggle = (open) => {
     }
 }
 
-export const viewProjectDialogToggle = (open) => {
-    if (open) {
-        return {
-            type: 'VIEW_PROJECT_DIALOG_OPEN',
-        }
-    } else {
-        return {
-            type: 'VIEW_PROJECT_DIALOG_CLOSE',
-        }
+export const closeProjectDialog = () => {
+    return {
+        type: 'VIEW_PROJECT_DIALOG_CLOSE',
+    }
+}
+export const openProjectDialog = (id) => {
+    return {
+        type: 'VIEW_PROJECT_DIALOG_OPEN',
+        id: id
     }
 }
 
