@@ -26,7 +26,13 @@ class ProjectTableRowComponent extends React.Component {
             </TableRowColumn>
             <TableRowColumn>
                 <RaisedButton label="Discover" primary={true}  onTouchTap={() => this.props.onTap(this.props.id)}/>
-                <GiveTimeDialog />
+                <GiveTimeDialog
+                  id={this.props.id}
+                  description={this.props.description}
+                  title={this.props.title}
+                  author={this.props.author}
+                  estimate={this.props.estimate}
+                  acquired={this.props.acquired} />
                 <ProjectDialog
                     ref="ProjectDialog"
                     id={this.props.id}

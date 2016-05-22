@@ -13,20 +13,6 @@ export default function (state = {}, action) {
                 author: action.author,
             }]);
             return Object.assign({}, state, {projects: newProjectsList});
-        case 'GIVE_TIME' :
-            console.log(action.amount);
-            var newCredit = state.user.credit - action.amount;
-            var newUser = {name: state.user.name, credit: newCredit};
-            var newProjectList = [];
-            console.log(state.projectsList);
-            for (var project in state.projectsList) {
-                console.log(project);
-                if (project.id == action.projectId) {
-                    console.log('found');
-                }
-            }
-
-            return Object.assign({}, state, {user: newUser});
 
         case 'ADD_PROJECT_DIALOG_OPEN':
             let addProjectDialogOpen = Object.assign({}, state.addProjectDialog, {open: true});
@@ -43,6 +29,41 @@ export default function (state = {}, action) {
         case 'VIEW_PROJECT_DIALOG_CLOSE':
             let viewProjectDialogClosed = Object.assign({}, state.viewProjectDialog, {openId: null});
             return Object.assign({}, state, {viewProjectDialog: viewProjectDialogClosed});
+
+        case 'GIVE_TIME_DIALOG_OPEN':
+            let defaultAmount = state.projects.reduce((agg, project) => {
+                return project.id === action.id ? Math.min(agg, project.estimate - project.acquired) : agg
+            }, state.user.credit)
+            let giveTimeDialogOpen = Object.assign({}, state.giveTimeDialog, {
+                openId: action.id,
+                userCredit: state.user.credit,
+                amount: defaultAmount
+            });
+            return Object.assign({}, state, {giveTimeDialog: giveTimeDialogOpen});
+
+        case 'GIVE_TIME_DIALOG_CLOSE':
+            let giveTimeDialogClose = Object.assign({}, state.giveTimeDialog, {openId: null, projectId: null});
+            return Object.assign({}, state, {giveTimeDialog: giveTimeDialogClose});
+
+        case 'GIVE_TIME':
+            let projects = state.projects.map(project => {
+                if (project.id === action.id) {
+                    return Object.assign({}, project, {acquired: project.acquired + action.amount});
+                } else {
+                    return project;
+                }
+            })
+            let user = Object.assign({}, state.user, {credit: state.user.credit - action.amount});
+            return Object.assign({}, state, {projects: projects, user: user});
+
+        case 'GIVE_TIME_FORM_CHANGE':
+            let amount = state.projects.reduce((agg, project) => {
+                return project.id === action.id ? Math.min(agg, project.estimate - project.acquired) : agg
+            }, Math.min(action.amount, state.user.credit))
+            let giveTimeFormChange = Object.assign({}, state.giveTimeDialog, {
+                amount: Math.max(0, amount)
+            });
+            return Object.assign({}, state, {giveTimeDialog: giveTimeFormChange});
 
         case 'PROJECT_FORM_CHANGE':
             let newFormValues = {};

@@ -36,6 +36,33 @@ export const openProjectDialog = (id) => {
     }
 }
 
+
+export const closeGiveTimeDialog = () => {
+    return {
+        type: 'GIVE_TIME_DIALOG_CLOSE',
+    }
+}
+export const openGiveTimeDialog = (id) => {
+    return {
+        type: 'GIVE_TIME_DIALOG_OPEN',
+        id: id
+    }
+}
+export const giveTime = (amount, projectId) => {
+    return {
+        type: 'GIVE_TIME',
+        amount: amount,
+        id: projectId
+    }
+}
+export const giveTimeFormChange = (amount, projectId) => {
+    return {
+        type: 'GIVE_TIME_FORM_CHANGE',
+        amount: amount,
+        id: projectId
+    }
+}
+
 // create dependency between store structure and redux connector but small amount of code :)
 export const projectFormChange = (prop, value) => {
     return {

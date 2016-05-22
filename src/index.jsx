@@ -8,7 +8,8 @@ import { createStore } from 'redux'
 
 let store = createStore(giveMeTimeReducers, {
     user: {
-        credit: 10
+        id: 12,
+        credit: 20
     },
     projects: [{
         id: 1,
@@ -33,6 +34,11 @@ let store = createStore(giveMeTimeReducers, {
     },
     viewProjectDialog: {
       openId: null
+    },
+    giveTimeDialog: {
+      openId: null,
+      userCredit: 1,
+      amount: 10
     }
 })
 

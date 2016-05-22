@@ -14,6 +14,7 @@ class ProjectsTableComponent extends React.Component {
                         <TableHeaderColumn>Author</TableHeaderColumn>
                         <TableHeaderColumn>Description</TableHeaderColumn>
                         <TableHeaderColumn>Time</TableHeaderColumn>
+                        <TableHeaderColumn>Actions</TableHeaderColumn>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
