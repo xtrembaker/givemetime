@@ -13,7 +13,7 @@ class GiveTimeDialogComponent extends React.Component {
 
     render() {
         const textFieldWidth = {
-            width: 200
+            width: "30px"
         };
         const actions = [
             <FlatButton
@@ -28,7 +28,7 @@ class GiveTimeDialogComponent extends React.Component {
             />,
         ];
 
-        let title = 'Give Time to project ' + this.props.title;
+        let title = 'Give Time to project ' + this.props.title + ' (' + this.props.acquired + '/' + this.props.estimate + ')';
         return (
             <span>
                 <RaisedButton label="GIVE TIME" secondary={true} onTouchTap={() => this.props.openDialog(this.props.id)}/>
@@ -38,16 +38,16 @@ class GiveTimeDialogComponent extends React.Component {
                     modal={false}
                     open={this.isOpen()}
                     onRequestClose={this.props.closeDialog}
+                    autoScrollBodyContent={true}
                 >
                     <div>
                         <TextField
                             name="amount"
-                            hintText=""
                             style={textFieldWidth}
                             value={this.props.amount}
                             errorText={this.props.errorAmount}
                             onChange={(e) => this.props.onChange(parseInt(e.target.value) || 0, this.props.id)}
-                        /> out of {this.props.userCredit}
+                        /> out of {this.props.userCredit} credits.
                     </div>
                 </Dialog>
             </span>

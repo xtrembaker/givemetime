@@ -6,20 +6,28 @@ var path = require("path");
 module.exports =
 {
     entry: {
-        "main": ["./src/index.jsx"]
+        "js": ["./src/index.jsx"],
+        "css": [
+            "./node_modules/react-grid-layout/css/styles.css",
+            "./node_modules/react-resizable/css/styles.css"
+        ]
     },
     target: 'web',
-    devtool: 'source-map',
     output: {
         path: path.join(__dirname, "public"),
         publicPath: "/public/",
-        filename: "bundle.js"
+        filename: "[name].bundle.js",
+        chunkFilename: "[id].bundle.js"
     },
     module: {
         loaders: [
             {
                 test: /(\.js|\.jsx)$/,
                 loader: "babel-loader?presets[]=es2015,presets[]=react,presets[]=stage-1"
+            },
+            {
+                test: /\.css$/,
+                loader: "style-loader!css-loader"
             }
         ]
     }

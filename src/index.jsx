@@ -42,9 +42,9 @@ let store = createStore(giveMeTimeReducers, {
     }],
     addProjectDialog: {
         open: false,
-        title: 'Test',
-        estimate: 123,
-        author: 'Toto'
+        title: '',
+        estimate: null,
+        author: 'Eric Raffin'
     },
     viewProjectDialog: {
       openId: null

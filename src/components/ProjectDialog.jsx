@@ -29,6 +29,7 @@ class ViewProjectDialogComponent extends React.Component {
                     modal={false}
                     open={this.isOpen()}
                     onRequestClose={this.props.closeDialog}
+                    autoScrollBodyContent={true}
                 >
                     <div>
                         Time required : {this.props.acquired}/{this.props.estimate}

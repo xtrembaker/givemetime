@@ -2,32 +2,44 @@ import React, { PropTypes } from 'react'
 import {Table, TableHeaderColumn, TableRow, TableHeader, TableBody} from 'material-ui/Table';
 import ProjectTableRow from './ProjectTableRow.jsx';
 import {connect} from 'react-redux';
+import {Responsive, WidthProvider} from 'react-grid-layout';
+const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 class ProjectsTableComponent extends React.Component {
     render() {
-        const style = {
-          container: {
-            textAlign: "center"
-          },
-          element: {
-            textAlign: "left"
-          }
-        }
+        const layout = this.props.projects.map((project, i) => {
+            return {
+                i: ''+i,
+                x: i % 3,
+                y: Math.floor(i / 3),
+                w: 1,
+                h: 1,
+                static: true
+            }
+        })
+
         return (
-            <div style={style.container}>
+            <ResponsiveReactGridLayout
+                className="layout"
+                layouts={{lg: layout, md: layout, sm: layout}}
+                breakpoints={{lg: 1200, md: 480, sm: 0}}
+                cols={{lg: 3, md: 2, sm: 1}}
+                rowHeight={170}
+                autoSize={true}
+              >
                 {this.props.projects.map((project, i) =>
-                    <ProjectTableRow
-                        key={i}
-                        id={project.id}
-                        style={style.element}
-                        title={project.title}
-                        author={project.author}
-                        description={project.description}
-                        estimate={project.estimate}
-                        acquired={project.acquired}
-                    />
+                    <div key={i}>
+                        <ProjectTableRow
+                            id={project.id}
+                            title={project.title}
+                            author={project.author}
+                            description={project.description}
+                            estimate={project.estimate}
+                            acquired={project.acquired}
+                        />
+                    </div>
                 )}
-            </div>
+            </ResponsiveReactGridLayout>
         );
     }
 }

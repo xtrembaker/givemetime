@@ -33,14 +33,15 @@ class AddProjectDialogComponent extends React.Component {
         ];
 
         const style = {
-            position: "absolute",
+            position: "fixed",
             right: 0,
+            bottom: 0,
             margin: 10,
             marginRight: 20,
         };
 
         const textFieldWidth = {
-            width: 500
+            width: "100%"
         };
 
         return (
@@ -54,15 +55,16 @@ class AddProjectDialogComponent extends React.Component {
                     modal={false}
                     open={this.props.open}
                     onRequestClose={this.props.closeDialog}
+                    autoScrollBodyContent={true}
                 >
                     <div>
-                        <TextField onChange={this.handleChange('author')} value={this.props.author} hintText="Author" style={textFieldWidth} disabled={true} value="Eric Raffin"/>
+                        <TextField onChange={this.handleChange('author')} value={this.props.author} floatingLabelText="Author" style={textFieldWidth} disabled={true} value="Eric Raffin"/>
                         <br/>
-                        <TextField onChange={this.handleChange('title')} value={this.props.title} hintText="Project Name" style={textFieldWidth}/>
+                        <TextField onChange={this.handleChange('title')} value={this.props.title} floatingLabelText="Project Name" style={textFieldWidth}/>
                         <br/>
-                        <TextField onChange={this.handleEstimateChange} value={this.props.estimate} hintText="Estimated hours required " style={textFieldWidth}/>
+                        <TextField onChange={this.handleEstimateChange} value={this.props.estimate} floatingLabelText="Estimated hours required " style={textFieldWidth}/>
                         <br/>
-                        <TextField onChange={this.handleChange('description')} value={this.props.description} hintText="Project's description" multiLine={true} rows={4} style={textFieldWidth}/>
+                        <TextField onChange={this.handleChange('description')} value={this.props.description} floatingLabelText="Project's description" multiLine={true} rows={4} style={textFieldWidth}/>
                         <br/>
                     </div>
                 </Dialog>
@@ -76,7 +78,7 @@ class AddProjectDialogComponent extends React.Component {
 AddProjectDialogComponent.propTypes = {
     open: PropTypes.bool.isRequired,
     title: PropTypes.string.isRequired,
-    estimate: PropTypes.number.isRequired,
+    estimate: PropTypes.number,
     author: PropTypes.string.isRequired,
     onCreate: PropTypes.func.isRequired,
     openDialog: PropTypes.func.isRequired,

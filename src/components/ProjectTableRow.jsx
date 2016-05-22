@@ -10,24 +10,14 @@ import {connect} from 'react-redux';
 
 class ProjectTableRowComponent extends React.Component {
     render () {
-        const style = {
-            container: {
-                width: "32%",
-                display: "inline-block",
-                margin: "3px"
-            },
-            actions: {
-                textAlign: "right"
-            }
-        };
         return (
-          <Card style={Object.assign({}, this.props.style, style.container)} onTouchTap={this.handleDiscoverClick} expanded={null} expandable={false} initiallyExpanded={false}>
+          <Card onTouchTap={this.handleDiscoverClick} expanded={null} expandable={false} initiallyExpanded={false}>
               <CardHeader title={this.props.title} subtitle={this.props.author}/>
               <CardText>
                   <div>Estimated time : {this.props.estimate}</div>
                   <LinearProgress max={this.props.estimate} min={0} value={this.props.acquired} mode="determinate"/>
               </CardText>
-              <CardActions style={style.actions}>
+              <CardActions>
                   <ProjectDialog
                       ref="ProjectDialog"
                       id={this.props.id}
@@ -56,7 +46,6 @@ ProjectTableRowComponent.propTypes = {
     description: PropTypes.string,
     estimate: PropTypes.number.isRequired,
     acquired: PropTypes.number.isRequired,
-    style: PropTypes.object
 };
 
 const ProjectTableRow = connect()(ProjectTableRowComponent)
