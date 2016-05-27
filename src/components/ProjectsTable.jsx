@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import ProjectTableRow from './ProjectTableRow.jsx';
-import { connect, silentCatchToDefault } from '../lib/apollo-reindex';
+import { connect } from 'react-apollo';
 import gql from 'apollo-client/gql';
 import {Responsive, WidthProvider} from 'react-grid-layout';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
@@ -55,6 +55,8 @@ ProjectsTableComponent.propTypes = {
     }).isRequired).isRequired,
 };
 
+
+
 const mapQueriesToProps = ({ ownProps, state }) => {
     return {
         projects: {
@@ -82,18 +84,22 @@ const mapQueriesToProps = ({ ownProps, state }) => {
     };
 }
 
-const mapResultToProps = (result) => {
-    return {
-        projects: silentCatchToDefault([], (result) => {
-            return result.projects.viewer.allProjects.edges.map((edge) => {
-                return edge.node;
-            })
-        }, result)
+class ProjectsTableComponentWithData extends React.Component {
+    render() {
+        if (this.props.projects.loading) {
+            return (<div>Data is loading</div>)
+        } else if (this.props.projects.errors) {
+            throw this.props.projects.errors;
+        } else {
+            return (<ProjectsTableComponent {...{
+                projects: this.props.projects.viewer.allProjects.edges.map((edge) => {
+                    return edge.node;
+                })
+            }}/>)
+        }
     }
 }
-const ProjectsTable = connect({
-    mapQueriesToProps,
-    mapResultToProps
-})(ProjectsTableComponent)
+
+const ProjectsTable = connect({ mapQueriesToProps })(ProjectsTableComponentWithData)
 
 export default ProjectsTable;
