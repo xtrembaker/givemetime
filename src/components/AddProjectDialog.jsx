@@ -4,7 +4,8 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import {connect} from 'react-redux';
+import { connect } from 'react-apollo';
+import gql from 'apollo-client/gql';
 import {createProject, addProjectDialogToggle, projectFormChange} from '../actions.js';
 
 class AddProjectDialogComponent extends React.Component {
@@ -18,6 +19,13 @@ class AddProjectDialogComponent extends React.Component {
         this.props.onChange('estimate', parseInt(event.target.value) || 0);
     };
 
+    handleSave = () => {
+        this.props.closeDialog();
+        this.props.mutations.createProject(this.props.author, this.props.title, this.props.estimate, this.props.description)
+            .then(() => this.props.closeDialog())
+            .catch(() => this.props.openDialog())
+    };
+
     render() {
         const actions = [
             <FlatButton
@@ -28,7 +36,7 @@ class AddProjectDialogComponent extends React.Component {
             <FlatButton
                 label="Save"
                 secondary={true}
-                onTouchTap={() => this.props.onCreate(this.props.author, this.props.title, this.props.estimate, this.props.description)}
+                onTouchTap={this.handleSave}
             />,
         ];
 
@@ -43,7 +51,7 @@ class AddProjectDialogComponent extends React.Component {
         const textFieldWidth = {
             width: "100%"
         };
-        
+
         return (
             <div>
                 <FloatingActionButton style={style} secondary={true} onTouchTap={this.props.openDialog} >
@@ -80,7 +88,9 @@ AddProjectDialogComponent.propTypes = {
     title: PropTypes.string.isRequired,
     estimate: PropTypes.number,
     author: PropTypes.string.isRequired,
-    onCreate: PropTypes.func.isRequired,
+    mutations: PropTypes.shape({
+        createProject: PropTypes.func.isRequired,
+    }).isRequired,
     openDialog: PropTypes.func.isRequired,
     closeDialog: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
@@ -95,12 +105,8 @@ const mapStateToProps = (state) => {
         description: state.global.addProjectDialog.description,
     };
 };
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        onCreate: (author, title, estimate, description) => {
-            dispatch(createProject(author, title, estimate, description))
-            dispatch(addProjectDialogToggle(false))
-        },
         openDialog: () => {
             dispatch(addProjectDialogToggle(true))
         },
@@ -113,7 +119,48 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-const AddProjectDialog = connect(mapStateToProps, mapDispatchToProps)(AddProjectDialogComponent)
+function mapMutationsToProps({ ownProps, state }) {
+    return {
+        createProject: (author, title, estimate, description) => ({
+            mutation: gql`
+                mutation createProject(
+                      $title: String!,
+                      $estimate: Int!,
+                      $acquired: Int!,
+                      $description: String
+                  ){
+                  createProject(input: {
+                      title: $title,
+                      estimate: $estimate,
+                      acquired: $acquired,
+                      description: $description
+                  }) {
+                      id,
+                      changedProject {
+                          title,
+                          estimate,
+                          acquired,
+                          description 
+                      }
+                  }
+                }
+            `,
+            variables: {
+                title: title,
+                estimate: estimate,
+                description: description,
+                acquired: 0
+            },
+        }),
+    };
+};
+
+const AddProjectDialog = connect({
+    mapStateToProps,
+    mapDispatchToProps,
+    mapMutationsToProps
+})(AddProjectDialogComponent)
+
 
 
 export default AddProjectDialog;

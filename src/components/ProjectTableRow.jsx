@@ -1,11 +1,12 @@
 import React, { PropTypes } from 'react'
-
-import {TableRow, TableRowColumn} from 'material-ui/Table';
+import IconButton from 'material-ui/IconButton';
+import ActionDelete from 'material-ui/svg-icons/action/delete';
 import LinearProgress from 'material-ui/LinearProgress'
-import {Card, CardActions, CardHeader, CardTitle, CardText} from 'material-ui/Card';
+import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import ProjectDialog from './ProjectDialog.jsx';
 import GiveTimeDialog from './GiveTimeDialog.jsx';
-import {connect} from 'react-redux';
+import { connect } from 'react-apollo';
+import gql from 'apollo-client/gql';
 
 
 class ProjectTableRowComponent extends React.Component {
@@ -33,6 +34,9 @@ class ProjectTableRowComponent extends React.Component {
                       author={this.props.author}
                       estimate={this.props.estimate}
                       acquired={this.props.acquired} />
+                  <IconButton onTouchTap={() => this.props.mutations.deleteProject(this.props.id)}>
+                      <ActionDelete />
+                  </IconButton>
               </CardActions>
           </Card>
         )
@@ -48,7 +52,29 @@ ProjectTableRowComponent.propTypes = {
     acquired: PropTypes.number.isRequired,
 };
 
-const ProjectTableRow = connect()(ProjectTableRowComponent)
+
+function mapMutationsToProps({ ownProps, state }) {
+    return {
+        deleteProject: (id) => ({
+            mutation: gql`
+                mutation deleteProject(
+                  $id: ID!
+                ) {
+                    deleteProject(input: {
+                        id: $id
+                    }) {
+                        id
+                    }
+                }
+            `,
+            variables: {
+                id: id
+            },
+        }),
+    };
+};
+
+const ProjectTableRow = connect({mapMutationsToProps})(ProjectTableRowComponent)
 
 
 export default ProjectTableRow;

@@ -62,24 +62,24 @@ const mapQueriesToProps = ({ ownProps, state }) => {
         projects: {
             query: gql`
                query {
-                 viewer {
-                   allProjects {
-                     edges {
-                       node {
-                         id,
-                         title,
-                         estimate,
-                         acquired,
-                         description,
-                         author {
-                           fullname
-                         }
-                       }
-                     }
-                   }
-                 }
+                  viewer {
+                    allProjects {
+                      nodes {
+                        id,
+                        title,
+                        estimate,
+                        acquired,
+                        description,
+                        author {
+                          id,
+                          fullname,
+                          credit
+                        }
+                      }
+                    }
+                  }
                }
-          `,
+            `,
         },
     };
 }
@@ -91,11 +91,7 @@ class ProjectsTableComponentWithData extends React.Component {
         } else if (this.props.projects.errors) {
             throw this.props.projects.errors;
         } else {
-            return (<ProjectsTableComponent {...{
-                projects: this.props.projects.viewer.allProjects.edges.map((edge) => {
-                    return edge.node;
-                })
-            }}/>)
+            return (<ProjectsTableComponent projects={this.props.projects.viewer.allProjects.nodes} />)
         }
     }
 }

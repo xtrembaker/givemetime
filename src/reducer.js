@@ -3,6 +3,10 @@
 
 export default function (state = {}, action) {
     switch (action.type) {
+        /*case 'APOLLO_MUTATION_INIT':
+        case 'APOLLO_MUTATION_RESULT':
+            return state;*/
+
         case 'CREATE_PROJECT' :
             var newProjectsList = state.projects.concat([{
                 id: action.id,
