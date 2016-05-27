@@ -17,6 +17,17 @@ export default function (state = {}, action) {
                 author: action.author,
             }]);
             return Object.assign({}, state, {projects: newProjectsList});
+        case 'PROJECT_CREATED' :
+            debugger;
+            var newProjectsList = state.projects.concat([{
+                id: action.id,
+                title: action.title,
+                estimate: action.estimate,
+                acquired: action.acquired,
+                description: action.description,
+                author: action.author,
+            }]);
+            return Object.assign({}, state, {projects: newProjectsList});
 
         case 'ADD_PROJECT_DIALOG_OPEN':
             let addProjectDialogOpen = Object.assign({}, state.addProjectDialog, {open: true});

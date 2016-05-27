@@ -1,12 +1,11 @@
 
 
-export const createProject = (author, title, estimate, description) => {
+export const projectCreated = (id, acquired, estimate, title, description) => {
     return {
-        type: 'CREATE_PROJECT',
-        author: author,
-        id: 123,
+        type: 'PROJECT_CREATED',
+        id: id,
         estimate: estimate,
-        acquired: 0,
+        acquired: acquired,
         description: description,
         title: title,
     }

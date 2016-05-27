@@ -6,7 +6,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { connect } from 'react-apollo';
 import gql from 'apollo-client/gql';
-import {createProject, addProjectDialogToggle, projectFormChange} from '../actions.js';
+import {projectCreated, addProjectDialogToggle, projectFormChange} from '../actions.js';
 
 class AddProjectDialogComponent extends React.Component {
 
@@ -23,6 +23,7 @@ class AddProjectDialogComponent extends React.Component {
         this.props.closeDialog();
         this.props.mutations.createProject(this.props.author, this.props.title, this.props.estimate, this.props.description)
             .then(() => this.props.closeDialog())
+            .then(() => this.props.projectCreated(this.props.createProject.createProject))
             .catch(() => this.props.openDialog())
     };
 
@@ -107,6 +108,15 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
+        projectCreated: (project) => {
+            dispatch(projectCreated(
+                project.id,
+                project.changedProject.acquired,
+                project.changedProject.estimate,
+                project.changedProject.title,
+                project.changedProject.description
+            ))
+        },
         openDialog: () => {
             dispatch(addProjectDialogToggle(true))
         },
