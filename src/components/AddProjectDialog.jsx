@@ -43,7 +43,7 @@ class AddProjectDialogComponent extends React.Component {
         const textFieldWidth = {
             width: "100%"
         };
-
+        
         return (
             <div>
                 <FloatingActionButton style={style} secondary={true} onTouchTap={this.props.openDialog} >
@@ -88,11 +88,11 @@ AddProjectDialogComponent.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        open: state.addProjectDialog.open,
-        title: state.addProjectDialog.title,
-        estimate: state.addProjectDialog.estimate,
-        author: state.addProjectDialog.author,
-        description: state.addProjectDialog.description,
+        open: state.global.addProjectDialog.open,
+        title: state.global.addProjectDialog.title,
+        estimate: state.global.addProjectDialog.estimate,
+        author: state.global.addProjectDialog.author,
+        description: state.global.addProjectDialog.description,
     };
 };
 const mapDispatchToProps = (dispatch) => {

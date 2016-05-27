@@ -8,14 +8,9 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 export default class Layout extends React.Component {
-    //handleMenuClick = () => this.refs.ProjectLeftNav.setState({open: true});
+    handleMenuClick = () => this.refs.ProjectLeftNav.setState({open: true});
 
     render() {
-        return (
-            <MuiThemeProvider muiTheme={getMuiTheme()}>
-                <ProjectsTable/>
-            </MuiThemeProvider>
-        )
         return (
             <div>
                 <MuiThemeProvider muiTheme={getMuiTheme()}>

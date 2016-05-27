@@ -13,40 +13,11 @@ const initialState = {
         id: 12,
         credit: 20
     },
-    projects: [{
-        id: 1,
-        title: "Bastion v2",
-        estimate: 24,
-        acquired: 12,
-        description: "",
-        author: "Denis Fortin",
-    },{
-        id: 2,
-        title: "Steam Learn Website",
-        estimate: 32,
-        acquired: 24,
-        description: "Vote",
-        author: "Clément Prévost",
-    },{
-        id: 3,
-        title: "ELK",
-        estimate: 51,
-        acquired: 12,
-        description: "Logs logs logs",
-        author: "Clément Prévost",
-    },{
-        id: 4,
-        title: "Docker",
-        estimate: 51,
-        acquired: 12,
-        description: "It's all about process",
-        author: "Clément Prévost",
-    }],
     addProjectDialog: {
         open: false,
         title: '',
-        estimate: null,
-        author: 'Eric Raffin'
+        estimate: 0,
+        author: ''
     },
     viewProjectDialog: {
         openId: null
