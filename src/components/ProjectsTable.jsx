@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
-import {Table, TableHeaderColumn, TableRow, TableHeader, TableBody} from 'material-ui/Table';
 import ProjectTableRow from './ProjectTableRow.jsx';
-import {connect} from 'react-redux';
+import { connect, silentCatchToDefault } from '../lib/apollo-reindex';
+import gql from 'apollo-client/gql';
 import {Responsive, WidthProvider} from 'react-grid-layout';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
@@ -27,7 +27,7 @@ class ProjectsTableComponent extends React.Component {
                 rowHeight={170}
                 autoSize={true}
               >
-                {this.props.projects.map((project, i) =>
+                 {this.props.projects.map((project, i) =>
                     <div key={i}>
                         <ProjectTableRow
                             id={project.id}
@@ -46,21 +46,54 @@ class ProjectsTableComponent extends React.Component {
 
 ProjectsTableComponent.propTypes = {
     projects: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number.isRequired,
+        id: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
-        author: PropTypes.string.isRequired,
+        author: PropTypes.string,
         description: PropTypes.string,
         estimate: PropTypes.number.isRequired,
         acquired: PropTypes.number.isRequired
     }).isRequired).isRequired,
 };
 
-const mapStateToProps = (state) => {
+const mapQueriesToProps = ({ ownProps, state }) => {
     return {
-        projects: state.projects
-    }
-};
+        projects: {
+            query: gql`
+               query {
+                 viewer {
+                   allProjects {
+                     edges {
+                       node {
+                         id,
+                         title,
+                         estimate,
+                         acquired,
+                         description,
+                         author {
+                           fullname
+                         }
+                       }
+                     }
+                   }
+                 }
+               }
+          `,
+        },
+    };
+}
 
-const ProjectsTable = connect(mapStateToProps)(ProjectsTableComponent)
+const mapResultToProps = (result) => {
+    return {
+        projects: silentCatchToDefault([], (result) => {
+            return result.projects.viewer.allProjects.edges.map((edge) => {
+                return edge.node;
+            })
+        }, result)
+    }
+}
+const ProjectsTable = connect({
+    mapQueriesToProps,
+    mapResultToProps
+})(ProjectsTableComponent)
 
 export default ProjectsTable;

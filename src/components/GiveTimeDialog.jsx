@@ -57,9 +57,9 @@ class GiveTimeDialogComponent extends React.Component {
 
 
 GiveTimeDialogComponent.propTypes = {
-    openId: PropTypes.number,
+    openId: PropTypes.string,
     amount: PropTypes.number.isRequired,
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     estimate: PropTypes.number.isRequired,
     userCredit: PropTypes.number.isRequired,
@@ -72,9 +72,9 @@ GiveTimeDialogComponent.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        openId: state.giveTimeDialog.openId,
-        amount: state.giveTimeDialog.amount,
-        userCredit: state.giveTimeDialog.userCredit,
+        openId: state.global.giveTimeDialog.openId,
+        amount: state.global.giveTimeDialog.amount,
+        userCredit: state.global.giveTimeDialog.userCredit,
     };
 };
 const mapDispatchToProps = (dispatch) => {

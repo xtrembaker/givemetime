@@ -46,8 +46,8 @@ class ViewProjectDialogComponent extends React.Component {
 }
 
 ViewProjectDialogComponent.propTypes = {
-    openId: PropTypes.number,
-    id: PropTypes.number.isRequired,
+    openId: PropTypes.string,
+    id: PropTypes.string.isRequired,
     title: PropTypes.string,
     estimate: PropTypes.number,
     acquired: PropTypes.number,
@@ -59,7 +59,7 @@ ViewProjectDialogComponent.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        openId: state.viewProjectDialog.openId
+        openId: state.global.viewProjectDialog.openId
     };
 };
 const mapDispatchToProps = (dispatch) => {

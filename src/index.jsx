@@ -1,12 +1,14 @@
 import React from "react"
 import ReactDom from "react-dom"
-import { Provider } from 'react-redux'
 import giveMeTimeReducers from './reducer.js';
 import Layout from './components/Layout.jsx';
-import { createStore } from 'redux'
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import { ApolloProvider } from 'react-apollo';
+import ApolloClient, { createNetworkInterface } from 'apollo-client';
 
+const networkInterface = createNetworkInterface('https://enriched-fluorine-353.myreindex.com/graphql');
 
-let store = createStore(giveMeTimeReducers, {
+const initialState = {
     user: {
         id: 12,
         credit: 20
@@ -47,18 +49,30 @@ let store = createStore(giveMeTimeReducers, {
         author: 'Eric Raffin'
     },
     viewProjectDialog: {
-      openId: null
+        openId: null
     },
     giveTimeDialog: {
-      openId: null,
-      userCredit: 1,
-      amount: 10
+        openId: null,
+        userCredit: 1,
+        amount: 10
     }
-})
+};
+
+const client = new ApolloClient({ networkInterface });
+const store = createStore(
+    combineReducers({
+        global: giveMeTimeReducers,
+        apollo: client.reducer(),
+    }),
+    {
+        global: initialState
+    },
+    applyMiddleware(client.middleware())
+)
 
 ReactDom.render(
-    <Provider store={store}>
+    <ApolloProvider store={store} client={client}>
         <Layout />
-    </Provider>,
+    </ApolloProvider>,
     document.getElementById("main")
 )
