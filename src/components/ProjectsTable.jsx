@@ -1,11 +1,15 @@
 import React, { PropTypes } from 'react'
 import ProjectTableRow from './ProjectTableRow.jsx';
-import { connect } from 'react-apollo';
-import gql from 'apollo-client/gql';
-import {Responsive, WidthProvider} from 'react-grid-layout';
+import { connect } from 'react-redux';
+import { fetchProjects } from '../actions.js';
+import { Responsive, WidthProvider } from 'react-grid-layout';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 class ProjectsTableComponent extends React.Component {
+
+    componentDidMount() {
+        this.props.loadProjects();
+    }
     render() {
         const layout = this.props.projects.map((project, i) => {
             return {
@@ -17,7 +21,6 @@ class ProjectsTableComponent extends React.Component {
                 static: true
             }
         })
-
         return (
             <ResponsiveReactGridLayout
                 className="layout"
@@ -53,49 +56,21 @@ ProjectsTableComponent.propTypes = {
         estimate: PropTypes.number.isRequired,
         acquired: PropTypes.number.isRequired
     }).isRequired).isRequired,
+    loadProjects: PropTypes.func.isRequired
 };
 
-
-
-const mapQueriesToProps = ({ ownProps, state }) => {
+const mapStateToProps = (state) => {
     return {
-        projects: {
-            query: gql`
-               query {
-                  viewer {
-                    allProjects {
-                      nodes {
-                        id,
-                        title,
-                        estimate,
-                        acquired,
-                        description,
-                        author {
-                          id,
-                          fullname,
-                          credit
-                        }
-                      }
-                    }
-                  }
-               }
-            `,
-        },
+        projects: state.projects,
     };
-}
+};
 
-class ProjectsTableComponentWithData extends React.Component {
-    render() {
-        if (this.props.projects.loading) {
-            return (<div>Data is loading</div>)
-        } else if (this.props.projects.errors) {
-            throw this.props.projects.errors;
-        } else {
-            return (<ProjectsTableComponent projects={this.props.projects.viewer.allProjects.nodes} />)
-        }
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        loadProjects: () => dispatch(fetchProjects()),
     }
-}
+};
 
-const ProjectsTable = connect({ mapQueriesToProps })(ProjectsTableComponentWithData)
+const ProjectsTable = connect(mapStateToProps, mapDispatchToProps)(ProjectsTableComponent)
 
 export default ProjectsTable;

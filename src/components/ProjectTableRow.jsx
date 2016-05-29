@@ -5,8 +5,8 @@ import LinearProgress from 'material-ui/LinearProgress'
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import ProjectDialog from './ProjectDialog.jsx';
 import GiveTimeDialog from './GiveTimeDialog.jsx';
-import { connect } from 'react-apollo';
-import gql from 'apollo-client/gql';
+import { connect } from 'react-redux';
+import { getGraphQL, fetchProjects } from '../actions.js';
 
 
 class ProjectTableRowComponent extends React.Component {
@@ -34,7 +34,7 @@ class ProjectTableRowComponent extends React.Component {
                       author={this.props.author}
                       estimate={this.props.estimate}
                       acquired={this.props.acquired} />
-                  <IconButton onTouchTap={() => this.props.mutations.deleteProject(this.props.id)}>
+                    <IconButton onTouchTap={() => this.props.onDelete.call(this, this.props.id)}>
                       <ActionDelete />
                   </IconButton>
               </CardActions>
@@ -50,31 +50,32 @@ ProjectTableRowComponent.propTypes = {
     description: PropTypes.string,
     estimate: PropTypes.number.isRequired,
     acquired: PropTypes.number.isRequired,
+    onDelete: PropTypes.func.isRequired,
 };
 
 
-function mapMutationsToProps({ ownProps, state }) {
+const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        deleteProject: (id) => ({
-            mutation: gql`
-                mutation deleteProject(
-                  $id: ID!
-                ) {
-                    deleteProject(input: {
-                        id: $id
-                    }) {
-                        id
-                    }
-                }
-            `,
-            variables: {
-                id: id
-            },
-        }),
-    };
+        onDelete: (id) => {
+          dispatch(getGraphQL(`
+              mutation deleteProject(
+                $id: ID!
+              ) {
+                  deleteProject(input: {
+                      id: $id
+                  }) {
+                      id
+                  }
+              }
+          `, {
+            id: id
+          },
+          reponse => fetchProjects()
+        ))
+        },
+    }
 };
 
-const ProjectTableRow = connect({mapMutationsToProps})(ProjectTableRowComponent)
-
+const ProjectTableRow = connect(null, mapDispatchToProps)(ProjectTableRowComponent)
 
 export default ProjectTableRow;

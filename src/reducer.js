@@ -1,26 +1,23 @@
-//import {Map} from 'immutable';
-
 
 export default function (state = {}, action) {
     switch (action.type) {
-        /*case 'APOLLO_MUTATION_INIT':
-        case 'APOLLO_MUTATION_RESULT':
-            return state;*/
-
-        case 'CREATE_PROJECT' :
-            var newProjectsList = state.projects.concat([{
-                id: action.id,
-                title: action.title,
-                estimate: action.estimate,
-                acquired: action.acquired,
-                description: action.description,
-                author: action.author,
-            }]);
-            return Object.assign({}, state, {projects: newProjectsList});
-        case 'PROJECT_CREATED' :
+        case "STARTING_REQUEST":
+        case "FINISHED_REQUEST":
+        case 'CREATE_PROJECT':
+        case 'DELETE_PROJECT':
+            // only store that something happened
             debugger;
-            var newProjectsList = state.projects.concat([{
+            const newMutations = Object.assign({}, state.mutations, {project: {
                 id: action.id,
+            }});
+            return Object.assign({}, state, {mutations: newMutations});
+
+        case 'PROJECT_CREATED':
+        case 'PROJECT_FETCHED':
+            const newProjectsList = state.projects.concat([{
+                id: action.id,
+                name: action.name,
+                time: action.time,
                 title: action.title,
                 estimate: action.estimate,
                 acquired: action.acquired,

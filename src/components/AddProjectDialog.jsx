@@ -4,27 +4,18 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import { connect } from 'react-apollo';
-import gql from 'apollo-client/gql';
-import {projectCreated, addProjectDialogToggle, projectFormChange} from '../actions.js';
+import { connect } from 'react-redux';
+import {getGraphQL, fetchProjects, projectCreated, addProjectDialogToggle, projectFormChange} from '../actions.js';
 
 class AddProjectDialogComponent extends React.Component {
 
-    handleChange = (prop) => {
+    handleChange(prop) {
         return (event) => {
             this.props.onChange(prop, event.target.value);
         };
     };
-    handleEstimateChange = (event) => {
+    handleEstimateChange(event) {
         this.props.onChange('estimate', parseInt(event.target.value) || 0);
-    };
-
-    handleSave = () => {
-        this.props.closeDialog();
-        this.props.mutations.createProject(this.props.author, this.props.title, this.props.estimate, this.props.description)
-            .then(() => this.props.closeDialog())
-            .then(() => this.props.projectCreated(this.props.createProject.createProject))
-            .catch(() => this.props.openDialog())
     };
 
     render() {
@@ -37,7 +28,7 @@ class AddProjectDialogComponent extends React.Component {
             <FlatButton
                 label="Save"
                 secondary={true}
-                onTouchTap={this.handleSave}
+                onTouchTap={() => this.props.onSave.call(this, this.props.author, this.props.title, this.props.estimate, this.props.description)}
             />,
         ];
 
@@ -89,9 +80,7 @@ AddProjectDialogComponent.propTypes = {
     title: PropTypes.string.isRequired,
     estimate: PropTypes.number,
     author: PropTypes.string.isRequired,
-    mutations: PropTypes.shape({
-        createProject: PropTypes.func.isRequired,
-    }).isRequired,
+    onSave: PropTypes.func.isRequired,
     openDialog: PropTypes.func.isRequired,
     closeDialog: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
@@ -99,24 +88,16 @@ AddProjectDialogComponent.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        open: state.global.addProjectDialog.open,
-        title: state.global.addProjectDialog.title,
-        estimate: state.global.addProjectDialog.estimate,
-        author: state.global.addProjectDialog.author,
-        description: state.global.addProjectDialog.description,
+        open: state.addProjectDialog.open,
+        title: state.addProjectDialog.title,
+        estimate: state.addProjectDialog.estimate,
+        author: state.addProjectDialog.author,
+        description: state.addProjectDialog.description,
     };
 };
+
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        projectCreated: (project) => {
-            dispatch(projectCreated(
-                project.id,
-                project.changedProject.acquired,
-                project.changedProject.estimate,
-                project.changedProject.title,
-                project.changedProject.description
-            ))
-        },
         openDialog: () => {
             dispatch(addProjectDialogToggle(true))
         },
@@ -126,51 +107,59 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         onChange: (prop, value) => {
             dispatch(projectFormChange(prop, value))
         },
+        onSave: (author, title, estimate, description) => {
+          dispatch(getGraphQL(`
+              mutation createProject(
+                    $title: String!,
+                    $estimate: Int!,
+                    $acquired: Int!,
+                    $description: String
+                ){
+                createProject(input: {
+                    title: $title,
+                    estimate: $estimate,
+                    acquired: $acquired,
+                    description: $description
+                }) {
+                    id,
+                    changedProject {
+                        title,
+                        estimate,
+                        acquired,
+                        description,
+                        author {
+                          fullname
+                        }
+                    }
+                }
+              }
+          `, {
+              title: title,
+              estimate: estimate,
+              description: description,
+              acquired: 0
+          },
+            response =>
+              dispatch => {
+                dispatch(projectCreated(
+                  response.createProject.id,
+                  response.createProject.changedProject.title,
+                  response.createProject.changedProject.estimate,
+                  response.createProject.changedProject.acquired,
+                  response.createProject.changedProject.description,
+                  response.createProject.changedProject.author
+                    ? response.createProject.changedProject.author.fullname
+                    : null))
+                dispatch(addProjectDialogToggle(false))
+                dispatch(fetchProjects())
+              }
+            ,
+            (response) => apologize(response)
+          ))
+        },
     }
 };
 
-function mapMutationsToProps({ ownProps, state }) {
-    return {
-        createProject: (author, title, estimate, description) => ({
-            mutation: gql`
-                mutation createProject(
-                      $title: String!,
-                      $estimate: Int!,
-                      $acquired: Int!,
-                      $description: String
-                  ){
-                  createProject(input: {
-                      title: $title,
-                      estimate: $estimate,
-                      acquired: $acquired,
-                      description: $description
-                  }) {
-                      id,
-                      changedProject {
-                          title,
-                          estimate,
-                          acquired,
-                          description 
-                      }
-                  }
-                }
-            `,
-            variables: {
-                title: title,
-                estimate: estimate,
-                description: description,
-                acquired: 0
-            },
-        }),
-    };
-};
-
-const AddProjectDialog = connect({
-    mapStateToProps,
-    mapDispatchToProps,
-    mapMutationsToProps
-})(AddProjectDialogComponent)
-
-
+const AddProjectDialog = connect(mapStateToProps, mapDispatchToProps)(AddProjectDialogComponent)
 
 export default AddProjectDialog;
