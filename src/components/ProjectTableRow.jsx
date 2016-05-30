@@ -6,7 +6,7 @@ import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import ProjectDialog from './ProjectDialog.jsx';
 import GiveTimeDialog from './GiveTimeDialog.jsx';
 import { connect } from 'react-redux';
-import { getGraphQL, fetchProjects } from '../actions.js';
+import { getGraphQL, projectDeleted } from '../actions.js';
 
 
 class ProjectTableRowComponent extends React.Component {
@@ -70,7 +70,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           `, {
             id: id
           },
-          reponse => fetchProjects()
+          response => projectDeleted(response.deleteProject.id)
         ))
         },
     }

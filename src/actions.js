@@ -1,6 +1,6 @@
 export const getGraphQL = (payload, variables, payloadToAction, errorToAction) => {
   payloadToAction = payloadToAction || (a => a);
-  errorToAction = errorToAction || (a => a);
+  errorToAction = errorToAction || (a => apologize(a));
   errorToAction = variables || "";
   return dispatch => {
     return new Promise(function(resolve, reject) {
@@ -18,35 +18,6 @@ export const getGraphQL = (payload, variables, payloadToAction, errorToAction) =
     .then(response => dispatch(payloadToAction(JSON.parse(response).data)))
   }
 }
-
-export const fetchProjects = () =>
-    getGraphQL(`
-       query { viewer { allProjects { nodes {
-          id,
-          title,
-          estimate,
-          acquired,
-          description,
-          author {
-            id,
-            fullname,
-            credit
-          } } } } }
-      `,
-      {},
-      (response) =>
-          dispatch => response.viewer.allProjects.nodes
-            .map(node => dispatch(projectFetched(
-              node.id,
-              node.title,
-              node.estimate,
-              node.acquired,
-              node.description,
-              node.author ? node.author.fullname : null
-            ))),
-      (response) => apologize(response)
-    )
-;
 
 export const projectFetched = (id, title, estimate, acquired, description, author) => {
   return {
@@ -68,22 +39,13 @@ export const projectCreated = (id, title, estimate, acquired, description, autho
     title: title,
   }
 }
+export const projectDeleted = (id) => {
+    return {
+        type: 'PROJECT_DELETED',
+        id: id
+    }
+}
 
-export const createProject = (acquired, estimate, title, description) => {
-    return {
-        type: 'CREATE_PROJECT',
-        estimate: estimate,
-        acquired: acquired,
-        description: description,
-        title: title,
-    }
-}
-export const deleteProject = (id) => {
-    return {
-        type: 'DELETE_PROJECT',
-        id: id,
-    }
-}
 export const apologize = (msg) => {
     return {
         type: 'APOLOGIZE',

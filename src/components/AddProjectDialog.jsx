@@ -5,7 +5,7 @@ import TextField from 'material-ui/TextField';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { connect } from 'react-redux';
-import {getGraphQL, fetchProjects, projectCreated, addProjectDialogToggle, projectFormChange} from '../actions.js';
+import {getGraphQL, projectCreated, addProjectDialogToggle, projectFormChange} from '../actions.js';
 
 class AddProjectDialogComponent extends React.Component {
 
@@ -151,7 +151,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                     ? response.createProject.changedProject.author.fullname
                     : null))
                 dispatch(addProjectDialogToggle(false))
-                dispatch(fetchProjects())
               }
             ,
             (response) => apologize(response)

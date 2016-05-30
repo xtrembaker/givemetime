@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import ProjectTableRow from './ProjectTableRow.jsx';
 import { connect } from 'react-redux';
-import { fetchProjects } from '../actions.js';
+import { getGraphQL, projectFetched } from '../actions.js';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
@@ -67,7 +67,32 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        loadProjects: () => dispatch(fetchProjects()),
+        loadProjects: () => dispatch(getGraphQL(`
+           query { viewer { allProjects { nodes {
+              id,
+              title,
+              estimate,
+              acquired,
+              description,
+              author {
+                id,
+                fullname,
+                credit
+              } } } } }
+          `,
+                {},
+                (response) =>
+                    dispatch => response.viewer.allProjects.nodes
+                        .map(node => dispatch(projectFetched(
+                            node.id,
+                            node.title,
+                            node.estimate,
+                            node.acquired,
+                            node.description,
+                            node.author ? node.author.fullname : null
+                        ))),
+                (response) => apologize(response)
+            )),
     }
 };
 

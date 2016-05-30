@@ -1,16 +1,9 @@
 
 export default function (state = {}, action) {
     switch (action.type) {
-        case "STARTING_REQUEST":
-        case "FINISHED_REQUEST":
-        case 'CREATE_PROJECT':
-        case 'DELETE_PROJECT':
-            // only store that something happened
-            debugger;
-            const newMutations = Object.assign({}, state.mutations, {project: {
-                id: action.id,
-            }});
-            return Object.assign({}, state, {mutations: newMutations});
+        case 'PROJECT_DELETED':
+            const deletedProjectsList = state.projects.filter(project => project.id !== action.id);
+            return Object.assign({}, state, {projects: deletedProjectsList});
 
         case 'PROJECT_CREATED':
         case 'PROJECT_FETCHED':
