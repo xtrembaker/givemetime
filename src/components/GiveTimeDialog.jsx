@@ -79,7 +79,30 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
     return {
-        onSave: (amount, projectId) => {
+        onSave: (amount, projectId, userId) => {
+            dispatch(getGraphQL(`
+               mutation test(
+                  $projectId: ID!,
+                  $acquired: Int!,
+                  $userId: ID!,
+                  $credit: Int!
+                ) {
+                  updateProject(input: {id: $projectId, acquired: $acquired}) {
+                    id
+                  }
+                  updateUser(input: {id: $userId, credit: $credit}) {
+                    id
+                  }
+                }
+              `,
+                {
+                    "projectId": "UHJvamVjdDo1NzRjNmJmODMyMDc1YjAzMDBjYzY0ZmM",
+                    "acquired": 12,
+                    "userId": "VXNlcjo1NzRjNzBjMDZmZWU2YTAzMDAxOWU0YjQ",
+                    "credit": 12
+                },
+                (response) => null
+            )),
             dispatch(giveTime(amount, projectId))
             dispatch(closeGiveTimeDialog())
         },
