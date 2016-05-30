@@ -1,100 +1,53 @@
-import React from 'react';
-import {connect} from 'react-redux';
+import React, { PropTypes } from 'react'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import {connect} from 'react-redux';
+import {giveTime, giveTimeFormChange, openGiveTimeDialog, closeGiveTimeDialog} from '../actions.js';
 
-const textFieldWidth = {
-    width: 200
-};
-
-class GiveTimeDialog extends React.Component {
-    state = {
-        open: false,
-        amount: 10
-    };
-
-    handleOpen = () => {
-        this.setState({open: true});
-    };
-
-    handleClose = () => {
-        this.setState({open: false});
-    };
-
-    handleSave(){
-        if(this.amountValidator(this.state.amount)) {
-            this.props.dispatch({
-                type:'GIVE_TIME',
-                author:this.state.author,
-                projectId:this.props.projectId,
-                amount:this.state.amount
-            });
-            this.handleClose()
-        }
-    }
-
-    handleChange(e){
-        if(e.target.name == 'amount') {
-            this.amountValidator(e.target.value);
-        }
-
-        var name = {};
-        name[e.target.name] = e.target.value;
-        this.setState(name);
-    }
-
-    amountValidator(value) {
-        if(isNaN(value)) {
-            this.state.errorAmount = 'Looks like a number ?';
-            return false;
-        } else {
-            console.log('proper validation');
-            return true;
-            if(value > this.state.user.credit) {
-                this.state.errorAmount = 'Ahahaha';
-                return false;
-            }
-            this.state.errorAmount = null;
-            return true;
-        }
+class GiveTimeDialogComponent extends React.Component {
+    isOpen () {
+        return this.props.openId === this.props.id
     }
 
     render() {
+        const textFieldWidth = {
+            width: "30px"
+        };
         const actions = [
             <FlatButton
                 label="Close"
                 primary={true}
-                onTouchTap={this.handleClose}
+                onTouchTap={this.props.closeDialog}
             />,
             <FlatButton
                 label="GIVE !"
                 secondary={true}
-                onTouchTap={this.handleSave.bind(this)}
+                onTouchTap={() => this.props.onSave(this.props.amount, this.props.id)}
             />,
         ];
 
-        let title = 'Give Time to project ' + this.props.projectTitle;
+        let title = 'Give Time to project ' + this.props.title + ' (' + this.props.acquired + '/' + this.props.estimate + ')';
         return (
             <span>
-                <RaisedButton label="GIVE TIME" secondary={true} onTouchTap={this.handleOpen}/>
+                <RaisedButton label="GIVE TIME" secondary={true} onTouchTap={() => this.props.openDialog(this.props.id)}/>
                 <Dialog
                     title={title}
                     actions={actions}
                     modal={false}
-                    open={this.state.open}
-                    onRequestClose={this.handleClose}
+                    open={this.isOpen()}
+                    onRequestClose={this.props.closeDialog}
+                    autoScrollBodyContent={true}
                 >
                     <div>
                         <TextField
                             name="amount"
-                            hintText=""
                             style={textFieldWidth}
-                            value={this.state.amount}
-                            errorText={this.state.errorAmount}
-                            onChange={this.handleChange.bind(this)}
-                        /> out of this.props.user.credit
+                            value={this.props.amount}
+                            errorText={this.props.errorAmount}
+                            onChange={(e) => this.props.onChange(parseInt(e.target.value) || 0, this.props.id)}
+                        /> out of {this.props.userCredit} credits.
                     </div>
                 </Dialog>
             </span>
@@ -102,4 +55,47 @@ class GiveTimeDialog extends React.Component {
     }
 }
 
-export default connect()(GiveTimeDialog);
+
+GiveTimeDialogComponent.propTypes = {
+    openId: PropTypes.string,
+    amount: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    estimate: PropTypes.number.isRequired,
+    userCredit: PropTypes.number.isRequired,
+    errorAmount: PropTypes.string,
+    onChange: PropTypes.func.isRequired,
+    closeDialog: PropTypes.func.isRequired,
+    openDialog: PropTypes.func.isRequired,
+    onSave: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => {
+    return {
+        openId: state.global.giveTimeDialog.openId,
+        amount: state.global.giveTimeDialog.amount,
+        userCredit: state.global.giveTimeDialog.userCredit,
+    };
+};
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onSave: (amount, projectId) => {
+            dispatch(giveTime(amount, projectId))
+            dispatch(closeGiveTimeDialog())
+        },
+        openDialog: (id) => {
+            dispatch(openGiveTimeDialog(id))
+        },
+        closeDialog: () => {
+            dispatch(closeGiveTimeDialog())
+        },
+        onChange: (amount, projectId) => {
+            dispatch(giveTimeFormChange(amount, projectId))
+        },
+    }
+};
+
+const GiveTimeDialog = connect(mapStateToProps, mapDispatchToProps)(GiveTimeDialogComponent)
+
+
+export default GiveTimeDialog;

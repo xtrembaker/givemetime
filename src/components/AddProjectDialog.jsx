@@ -4,8 +4,9 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import {connect} from 'react-redux';
-import {createProject, projectDialogToggle, projectFormChange} from '../actions.js';
+import { connect } from 'react-apollo';
+import gql from 'apollo-client/gql';
+import {createProject, addProjectDialogToggle, projectFormChange} from '../actions.js';
 
 class AddProjectDialogComponent extends React.Component {
 
@@ -13,6 +14,16 @@ class AddProjectDialogComponent extends React.Component {
         return (event) => {
             this.props.onChange(prop, event.target.value);
         };
+    };
+    handleEstimateChange = (event) => {
+        this.props.onChange('estimate', parseInt(event.target.value) || 0);
+    };
+
+    handleSave = () => {
+        this.props.closeDialog();
+        this.props.mutations.createProject(this.props.author, this.props.title, this.props.estimate, this.props.description)
+            .then(() => this.props.closeDialog())
+            .catch(() => this.props.openDialog())
     };
 
     render() {
@@ -25,19 +36,20 @@ class AddProjectDialogComponent extends React.Component {
             <FlatButton
                 label="Save"
                 secondary={true}
-                onTouchTap={() => this.props.onCreate(this.props.author, this.props.title, this.props.estimate, this.props.description)}
+                onTouchTap={this.handleSave}
             />,
         ];
 
         const style = {
-            position: "absolute",
+            position: "fixed",
             right: 0,
+            bottom: 0,
             margin: 10,
             marginRight: 20,
         };
 
         const textFieldWidth = {
-            width: 500
+            width: "100%"
         };
 
         return (
@@ -51,15 +63,16 @@ class AddProjectDialogComponent extends React.Component {
                     modal={false}
                     open={this.props.open}
                     onRequestClose={this.props.closeDialog}
+                    autoScrollBodyContent={true}
                 >
                     <div>
-                        <TextField onChange={this.handleChange('author')} value={this.props.author} hintText="Author" style={textFieldWidth} disabled={true} value="Eric Raffin"/>
+                        <TextField onChange={this.handleChange('author')} value={this.props.author} floatingLabelText="Author" style={textFieldWidth} disabled={true} value="Eric Raffin"/>
                         <br/>
-                        <TextField onChange={this.handleChange('title')} value={this.props.title} hintText="Project Name" style={textFieldWidth}/>
+                        <TextField onChange={this.handleChange('title')} value={this.props.title} floatingLabelText="Project Name" style={textFieldWidth}/>
                         <br/>
-                        <TextField onChange={this.handleChange('estimate')} value={this.props.estimate} hintText="Estimated hours required " style={textFieldWidth}/>
+                        <TextField onChange={this.handleEstimateChange} value={this.props.estimate} floatingLabelText="Estimated hours required " style={textFieldWidth}/>
                         <br/>
-                        <TextField onChange={this.handleChange('description')} value={this.props.description} hintText="Project's description" multiLine={true} rows={4} style={textFieldWidth}/>
+                        <TextField onChange={this.handleChange('description')} value={this.props.description} floatingLabelText="Project's description" multiLine={true} rows={4} style={textFieldWidth}/>
                         <br/>
                     </div>
                 </Dialog>
@@ -73,9 +86,11 @@ class AddProjectDialogComponent extends React.Component {
 AddProjectDialogComponent.propTypes = {
     open: PropTypes.bool.isRequired,
     title: PropTypes.string.isRequired,
-    estimate: PropTypes.number.isRequired,
+    estimate: PropTypes.number,
     author: PropTypes.string.isRequired,
-    onCreate: PropTypes.func.isRequired,
+    mutations: PropTypes.shape({
+        createProject: PropTypes.func.isRequired,
+    }).isRequired,
     openDialog: PropTypes.func.isRequired,
     closeDialog: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
@@ -83,23 +98,20 @@ AddProjectDialogComponent.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        open: state.addProjectDialog.open,
-        title: state.addProjectDialog.title,
-        estimate: state.addProjectDialog.estimate,
-        author: state.addProjectDialog.author,
+        open: state.global.addProjectDialog.open,
+        title: state.global.addProjectDialog.title,
+        estimate: state.global.addProjectDialog.estimate,
+        author: state.global.addProjectDialog.author,
+        description: state.global.addProjectDialog.description,
     };
 };
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        onCreate: (author, title, estimate, description) => {
-            dispatch(createProject(author, title, estimate, description))
-            dispatch(projectDialogToggle(false))
-        },
         openDialog: () => {
-            dispatch(projectDialogToggle(true))
+            dispatch(addProjectDialogToggle(true))
         },
         closeDialog: () => {
-            dispatch(projectDialogToggle(false))
+            dispatch(addProjectDialogToggle(false))
         },
         onChange: (prop, value) => {
             dispatch(projectFormChange(prop, value))
@@ -107,7 +119,48 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-const AddProjectDialog = connect(mapStateToProps, mapDispatchToProps)(AddProjectDialogComponent)
+function mapMutationsToProps({ ownProps, state }) {
+    return {
+        createProject: (author, title, estimate, description) => ({
+            mutation: gql`
+                mutation createProject(
+                      $title: String!,
+                      $estimate: Int!,
+                      $acquired: Int!,
+                      $description: String
+                  ){
+                  createProject(input: {
+                      title: $title,
+                      estimate: $estimate,
+                      acquired: $acquired,
+                      description: $description
+                  }) {
+                      id,
+                      changedProject {
+                          title,
+                          estimate,
+                          acquired,
+                          description 
+                      }
+                  }
+                }
+            `,
+            variables: {
+                title: title,
+                estimate: estimate,
+                description: description,
+                acquired: 0
+            },
+        }),
+    };
+};
+
+const AddProjectDialog = connect({
+    mapStateToProps,
+    mapDispatchToProps,
+    mapMutationsToProps
+})(AddProjectDialogComponent)
+
 
 
 export default AddProjectDialog;

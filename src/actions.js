@@ -12,15 +12,54 @@ export const createProject = (author, title, estimate, description) => {
     }
 }
 
-export const projectDialogToggle = (open) => {
+export const addProjectDialogToggle = (open) => {
     if (open) {
         return {
-            type: 'PROJECT_DIALOG_OPEN',
+            type: 'ADD_PROJECT_DIALOG_OPEN',
         }
     } else {
         return {
-            type: 'PROJECT_DIALOG_CLOSE',
+            type: 'ADD_PROJECT_DIALOG_CLOSE',
         }
+    }
+}
+
+export const closeProjectDialog = () => {
+    return {
+        type: 'VIEW_PROJECT_DIALOG_CLOSE',
+    }
+}
+export const openProjectDialog = (id) => {
+    return {
+        type: 'VIEW_PROJECT_DIALOG_OPEN',
+        id: id
+    }
+}
+
+
+export const closeGiveTimeDialog = () => {
+    return {
+        type: 'GIVE_TIME_DIALOG_CLOSE',
+    }
+}
+export const openGiveTimeDialog = (id) => {
+    return {
+        type: 'GIVE_TIME_DIALOG_OPEN',
+        id: id
+    }
+}
+export const giveTime = (amount, projectId) => {
+    return {
+        type: 'GIVE_TIME',
+        amount: amount,
+        id: projectId
+    }
+}
+export const giveTimeFormChange = (amount, projectId) => {
+    return {
+        type: 'GIVE_TIME_FORM_CHANGE',
+        amount: amount,
+        id: projectId
     }
 }
 

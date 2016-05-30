@@ -1,0 +1,67 @@
+[
+  {
+    name: "User",
+    kind: "OBJECT",
+    interfaces: [
+      "Node"
+    ],
+    fields: [
+      {
+        name: "id",
+        type: "ID",
+        nonNull: true,
+        unique: true
+      },
+      {
+        name: "fullname",
+        type: "String"
+      },
+      {
+        name: "credit",
+        type: "Int"
+      },
+      {
+        name: "projects",
+        type: "Connection",
+        ofType: "Project",
+        reverseName: "author"
+      },
+    ]
+  },
+  {
+    name: "Project",
+    kind: "OBJECT",
+    interfaces: [
+      "Node"
+    ],
+    fields: [
+      {
+        name: "id",
+        type: "ID",
+        nonNull: true,
+        unique: true
+      },
+      {
+        name: "title",
+        type: "String"
+      },
+      {
+        name: "estimate",
+        type: "Int"
+      },
+      {
+        name: "acquired",
+        type: "Int"
+      },
+      {
+        name: "description",
+        type: "String"
+      },
+      {
+        name: "author",
+        type: "User",
+        reverseName: "projects"
+      }
+    ]
+  }
+]

@@ -25,8 +25,6 @@ export default class Layout extends React.Component {
                     <Navigation ref="ProjectLeftNav" open="false"/>
                 </MuiThemeProvider>
 
-                {/*<ProjectsGrid/>*/}
-
                 <MuiThemeProvider muiTheme={getMuiTheme()}>
                     <ProjectsTable/>
                 </MuiThemeProvider>

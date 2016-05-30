@@ -1,50 +1,79 @@
-import React from 'react';
+import React, { PropTypes } from 'react'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/FlatButton';
 import LinearProgress from 'material-ui/LinearProgress'
+import {connect} from 'react-redux';
+import {closeProjectDialog, openProjectDialog} from '../actions.js';
 
-export default class ProjectDialog extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            open: false,
-        };
+class ViewProjectDialogComponent extends React.Component {
+    isOpen () {
+        return this.props.openId === this.props.id
     }
-
-    handleOpen = () => {
-        this.setState({open: true});
-    };
-
-    handleClose = () => {
-        this.setState({open: false});
-    };
 
     render() {
         const actions = [
             <FlatButton
                 label="Close"
                 primary={true}
-                onTouchTap={this.handleClose}
+                onTouchTap={this.props.closeDialog}
             />,
         ];
 
         return (
-            <Dialog
-                title={this.props.title + ' by ' + this.props.author  }
-                actions={actions}
-                modal={false}
-                open={this.state.open}
-                onRequestClose={this.handleClose}
-            >
-                <div>
-                    Time required : {this.props.acquired}/{this.props.estimate}
-                    <br/>
-                    <LinearProgress max={this.props.estimate} min={0} value={this.props.acquired} mode="determinate"/>
-                </div>
-                <p>
-                    Description : {this.props.description}
-                </p>
-            </Dialog>
+            <span>
+                <RaisedButton label="Discover" primary={true}  onTouchTap={() => this.props.onTap(this.props.id)}/>
+                <Dialog
+                    title={this.props.title + ' by ' + this.props.author  }
+                    actions={actions}
+                    modal={false}
+                    open={this.isOpen()}
+                    onRequestClose={this.props.closeDialog}
+                    autoScrollBodyContent={true}
+                >
+                    <div>
+                        Time required : {this.props.acquired}/{this.props.estimate}
+                        <br/>
+                        <LinearProgress max={this.props.estimate} min={0} value={this.props.acquired} mode="determinate"/>
+                    </div>
+                    <p>
+                        Description : {this.props.description}
+                    </p>
+                </Dialog>
+            </span>
         );
     }
 }
+
+ViewProjectDialogComponent.propTypes = {
+    openId: PropTypes.string,
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string,
+    estimate: PropTypes.number,
+    acquired: PropTypes.number,
+    author: PropTypes.string,
+    closeDialog: PropTypes.func.isRequired,
+    onTap: PropTypes.func.isRequired,
+};
+
+
+const mapStateToProps = (state) => {
+    return {
+        openId: state.global.viewProjectDialog.openId
+    };
+};
+const mapDispatchToProps = (dispatch) => {
+    return {
+        closeDialog: () => {
+            dispatch(closeProjectDialog())
+        },
+        onTap: (id) => {
+            dispatch(openProjectDialog(id))
+        },
+    }
+};
+
+const ProjectDialog = connect(mapStateToProps, mapDispatchToProps)(ViewProjectDialogComponent)
+
+
+export default ProjectDialog;
