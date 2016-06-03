@@ -19,10 +19,11 @@ export const getGraphQL = (payload, variables, payloadToAction, errorToAction) =
   }
 }
 
-export const userLoggedIn = (id, fullname, credit) => {
+export const userLoggedIn = (id, rowId, fullname, credit) => {
   return {
     type: 'USER_LOGGED_IN',
     id: id,
+    rowId: rowId,
     fullname: fullname,
     credit : credit
   }
@@ -31,25 +32,28 @@ export const userLoggedOut = () => {
   return {
     type: 'USER_LOGGED_OUT',
     id: null,
+    rowId: null,
     fullname: null,
     credit : null,
     projects : []
   }
 }
-export const projectFetched = (id, title, estimate, acquired, description, author) => {
+export const projectFetched = (id, row_id, title, estimate, acquired, description, author) => {
   return {
     type: 'PROJECT_FETCHED',
     id: id,
+    rowId: row_id,
     estimate: estimate,
     acquired: acquired,
     description: description,
     title: title,
   }
 }
-export const projectCreated = (id, title, estimate, acquired, description, author) => {
+export const projectCreated = (id, row_id, title, estimate, acquired, description, author) => {
   return {
     type: 'PROJECT_CREATED',
     id: id,
+    rowId: row_id,
     estimate: estimate,
     acquired: acquired,
     description: description,

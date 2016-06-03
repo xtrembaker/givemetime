@@ -4,7 +4,7 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import {connect} from 'react-redux';
-import {giveTime, giveTimeFormChange, openGiveTimeDialog, closeGiveTimeDialog} from '../actions.js';
+import {giveTime, giveTimeFormChange, openGiveTimeDialog, getGraphQL, closeGiveTimeDialog} from '../actions.js';
 
 class GiveTimeDialogComponent extends React.Component {
     isOpen () {
@@ -24,7 +24,13 @@ class GiveTimeDialogComponent extends React.Component {
             <FlatButton
                 label="GIVE !"
                 secondary={true}
-                onTouchTap={() => this.props.onSave(this.props.amount, this.props.id)}
+                onTouchTap={() => this.props.onSave(
+                  this.props.amount,
+                  this.props.id,
+                  this.props.userRowId,
+                  this.props.acquired,
+                  this.props.userCredit,
+                  this.props.rowId)}
             />,
         ];
 
@@ -75,31 +81,37 @@ const mapStateToProps = (state) => {
         openId: state.giveTimeDialog.openId,
         amount: state.giveTimeDialog.amount,
         userCredit: state.giveTimeDialog.userCredit,
+        userId: state.user.id,
+        userRowId: state.user.rowId
     };
 };
 const mapDispatchToProps = (dispatch) => {
     return {
-        onSave: (amount, projectId, userId) => {
+        onSave: (amount, projectId, userRowId, acquired, userCredit, projectRowId) => {
             dispatch(getGraphQL(`
                mutation test(
-                  $projectId: ID!,
                   $acquired: Int!,
-                  $userId: ID!,
-                  $credit: Int!
+                  $userRowId: Int!,
+                  $credit: Int!,
+                  $projectRowId: Int!
                 ) {
-                  updateProject(input: {id: $projectId, acquired: $acquired}) {
-                    id
+                  updateProject(input: {newAcquired: $acquired, rowId: $projectRowId}) {
+                    project {
+                      acquired
+                    }
                   }
-                  updateUser(input: {id: $userId, credit: $credit}) {
-                    id
+                  updatePerson(input: {rowId: $userRowId, newCredit: $credit}) {
+                    person {
+                      credit
+                    }
                   }
                 }
               `,
                 {
-                    "projectId": "UHJvamVjdDo1NzRjNmJmODMyMDc1YjAzMDBjYzY0ZmM",
-                    "acquired": 12,
-                    "userId": "VXNlcjo1NzRjNzBjMDZmZWU2YTAzMDAxOWU0YjQ",
-                    "credit": 12
+                    "acquired": acquired + amount,
+                    "userRowId": userRowId,
+                    "credit": userCredit - amount,
+                    "projectRowId": projectRowId
                 },
                 (response) => null
             )),

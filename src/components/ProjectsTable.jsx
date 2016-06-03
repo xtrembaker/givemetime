@@ -34,6 +34,7 @@ class ProjectsTableComponent extends React.Component {
                     <div key={i}>
                         <ProjectTableRow
                             id={project.id}
+                            rowId={project.rowId}
                             title={project.title}
                             author={project.author}
                             description={project.description}
@@ -73,6 +74,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 projectNodes {
                   nodes {
                     id,
+                    rowId,
                     title,
                     estimate,
                     acquired,
@@ -92,6 +94,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                     dispatch => response.viewer.projectNodes.nodes
                         .map(node => dispatch(projectFetched(
                             node.id,
+                            node.rowId,
                             node.title,
                             node.estimate,
                             node.acquired,

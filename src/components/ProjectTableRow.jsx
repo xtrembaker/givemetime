@@ -29,6 +29,7 @@ class ProjectTableRowComponent extends React.Component {
                       acquired={this.props.acquired} />
                   <GiveTimeDialog
                       id={this.props.id}
+                      rowId={this.props.rowId}
                       description={this.props.description}
                       title={this.props.title}
                       author={this.props.author}
@@ -45,6 +46,7 @@ class ProjectTableRowComponent extends React.Component {
 
 ProjectTableRowComponent.propTypes = {
     id: PropTypes.string.isRequired,
+    rowId: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     author: PropTypes.string,
     description: PropTypes.string,

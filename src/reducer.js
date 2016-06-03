@@ -8,6 +8,7 @@ export default function (state = {}, action) {
         case 'USER_LOGGED_IN':
           return Object.assign({}, state, {user: {
             id : action.id,
+            rowId: action.rowId,
             credit: action.credit,
             fullname: action.fullname
           }});
@@ -15,6 +16,7 @@ export default function (state = {}, action) {
         case 'USER_LOGGED_OUT':
           return Object.assign({}, state, {user: {
             id : action.id,
+            rowId: action.rowId,
             credit: action.credit,
             fullname: action.fullname,
           }, projects: []});
@@ -23,6 +25,7 @@ export default function (state = {}, action) {
         case 'PROJECT_FETCHED':
             const newProjectsList = state.projects.concat([{
                 id: action.id,
+                rowId: action.rowId,
                 name: action.name,
                 time: action.time,
                 title: action.title,
