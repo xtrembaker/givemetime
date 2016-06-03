@@ -6,11 +6,15 @@ import AddProjectDialog from './AddProjectDialog.jsx';
 import LoginButton from './LoginButton.jsx';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { connect } from 'react-redux';
 
-export default class Layout extends React.Component {
+class LayoutComponent extends React.Component {
     handleMenuClick = () => this.refs.ProjectLeftNav.setState({open: true});
 
+    //componentDidMount = () => this.props.getUser();
+
     render() {
+      if (this.props.user.id) {
         return (
             <div>
                 <MuiThemeProvider muiTheme={getMuiTheme()}>
@@ -34,5 +38,34 @@ export default class Layout extends React.Component {
                 </MuiThemeProvider>
             </div>
         );
+      } else {
+        return (
+            <div>
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                    <AppBar
+                        title="Give R&D time"
+                        onLeftIconButtonTouchTap={this.handleMenuClick}
+                        isInitiallyOpen={true}
+                        iconElementRight={<LoginButton />}
+                    />
+                </MuiThemeProvider>
+            </div>
+        );
+      }
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        user: state.user
+    };
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+  };
+};
+
+const Layout = connect(mapStateToProps, mapDispatchToProps)(LayoutComponent)
+
+export default Layout;

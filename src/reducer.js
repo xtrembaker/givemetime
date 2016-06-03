@@ -5,6 +5,20 @@ export default function (state = {}, action) {
             const deletedProjectsList = state.projects.filter(project => project.id !== action.id);
             return Object.assign({}, state, {projects: deletedProjectsList});
 
+        case 'USER_LOGGED_IN':
+          return Object.assign({}, state, {user: {
+            id : action.id,
+            credit: action.credit,
+            fullname: action.fullname
+          }});
+
+        case 'USER_LOGGED_OUT':
+          return Object.assign({}, state, {user: {
+            id : action.id,
+            credit: action.credit,
+            fullname: action.fullname,
+          }, projects: []});
+
         case 'PROJECT_CREATED':
         case 'PROJECT_FETCHED':
             const newProjectsList = state.projects.concat([{
