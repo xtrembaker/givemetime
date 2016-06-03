@@ -5,7 +5,7 @@ export const getGraphQL = (payload, variables, payloadToAction, errorToAction) =
   return dispatch => {
     return new Promise(function(resolve, reject) {
       let request=new XMLHttpRequest();
-      request.open("POST", "https://enriched-fluorine-353.myreindex.com/graphql", true);
+      request.open("POST", "/graphql", true);
       request.setRequestHeader("Content-Type", "application/json");
       request.send(JSON.stringify({query: payload, variables: variables}));
       request.onreadystatechange = () => {

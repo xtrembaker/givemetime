@@ -30,5 +30,19 @@ module.exports =
                 loader: "style-loader!css-loader"
             }
         ]
+    },
+    devServer: {
+        proxy: {
+            "/graphql": {
+                "target": {
+                    "host": "localhost",
+                    "protocol": 'http:',
+                    "port": 3000
+                },
+                ignorePath: true,
+                changeOrigin: true,
+                secure: false
+            }
+        }
     }
 };

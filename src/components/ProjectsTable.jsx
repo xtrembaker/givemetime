@@ -68,28 +68,35 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         loadProjects: () => dispatch(getGraphQL(`
-           query { viewer { allProjects { nodes {
-              id,
-              title,
-              estimate,
-              acquired,
-              description,
-              author {
-                id,
-                fullname,
-                credit
-              } } } } }
+           query {
+              viewer {
+                projectNodes {
+                  nodes {
+                    id,
+                    title,
+                    estimate,
+                    acquired,
+                    description,
+                    personByAuthorId {
+                      id,
+                      fullname,
+                      credit
+                    }
+                  }
+                }
+              }
+            }
           `,
                 {},
                 (response) =>
-                    dispatch => response.viewer.allProjects.nodes
+                    dispatch => response.viewer.projectNodes.nodes
                         .map(node => dispatch(projectFetched(
                             node.id,
                             node.title,
                             node.estimate,
                             node.acquired,
                             node.description,
-                            node.author ? node.author.fullname : null
+                            node.personByAuthorId ? node.personByAuthorId.fullname : null
                         ))),
                 (response) => apologize(response)
             )),
