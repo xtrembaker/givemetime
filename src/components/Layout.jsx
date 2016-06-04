@@ -49,6 +49,7 @@ class LayoutComponent extends React.Component {
                         iconElementRight={<LoginButton />}
                     />
                 </MuiThemeProvider>
+                Login to view projects
             </div>
         );
       }

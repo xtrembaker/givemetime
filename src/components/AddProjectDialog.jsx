@@ -28,7 +28,7 @@ class AddProjectDialogComponent extends React.Component {
             <FlatButton
                 label="Save"
                 secondary={true}
-                onTouchTap={() => this.props.onSave.call(this, this.props.author, this.props.title, this.props.estimate, this.props.description)}
+                onTouchTap={() => this.props.onSave.call(this, this.props.userRowId, this.props.title, this.props.estimate, this.props.description)}
             />,
         ];
 
@@ -58,11 +58,11 @@ class AddProjectDialogComponent extends React.Component {
                     autoScrollBodyContent={true}
                 >
                     <div>
-                        <TextField onChange={this.handleChange('author')} value={this.props.author} floatingLabelText="Author" style={textFieldWidth} disabled={true} value="Eric Raffin"/>
+                        <TextField onChange={this.handleChange('author')} value={this.props.author} floatingLabelText="Author" style={textFieldWidth} disabled={true} />
                         <br/>
                         <TextField onChange={this.handleChange('title')} value={this.props.title} floatingLabelText="Project Name" style={textFieldWidth}/>
                         <br/>
-                        <TextField onChange={this.handleEstimateChange} value={this.props.estimate} floatingLabelText="Estimated hours required " style={textFieldWidth}/>
+                        <TextField onChange={this.handleEstimateChange.bind(this)} value={this.props.estimate} floatingLabelText="Estimated hours required " style={textFieldWidth}/>
                         <br/>
                         <TextField onChange={this.handleChange('description')} value={this.props.description} floatingLabelText="Project's description" multiLine={true} rows={4} style={textFieldWidth}/>
                         <br/>
@@ -84,6 +84,7 @@ AddProjectDialogComponent.propTypes = {
     openDialog: PropTypes.func.isRequired,
     closeDialog: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
+    userRowId: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -91,8 +92,9 @@ const mapStateToProps = (state) => {
         open: state.addProjectDialog.open,
         title: state.addProjectDialog.title,
         estimate: state.addProjectDialog.estimate,
-        author: state.addProjectDialog.author,
+        author: state.user.fullname,
         description: state.addProjectDialog.description,
+        userRowId: state.user.rowId
     };
 };
 
@@ -107,49 +109,55 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         onChange: (prop, value) => {
             dispatch(projectFormChange(prop, value))
         },
-        onSave: (author, title, estimate, description) => {
+        onSave: (authorId, title, estimate, description) => {
           dispatch(getGraphQL(`
               mutation createProject(
-                    $title: String!,
-                    $estimate: Int!,
-                    $acquired: Int!,
-                    $description: String
-                ){
-                createProject(input: {
-                    title: $title,
-                    estimate: $estimate,
-                    acquired: $acquired,
-                    description: $description
-                }) {
+                  $title: String!,
+                  $estimate: Int!,
+                  $acquired: Int!,
+                  $description: String,
+                  $authorId: Int!
+              ){
+              insertProject(input: {
+                  title: $title,
+                  estimate: $estimate,
+                  acquired: $acquired,
+                  description: $description,
+                  authorId: $authorId
+              }) {
+                  project {
                     id,
-                    changedProject {
-                        title,
-                        estimate,
-                        acquired,
-                        description,
-                        author {
-                          fullname
-                        }
+                    rowId,
+                    title,
+                    estimate,
+                    acquired,
+                    description,
+                    personByAuthorId {
+                      id,
+                      fullname,
+                      credit
                     }
-                }
+                  }
               }
+            }
           `, {
               title: title,
               estimate: estimate,
               description: description,
-              acquired: 0
+              acquired: 0,
+              authorId: authorId
           },
             response =>
               dispatch => {
                 dispatch(projectCreated(
-                  response.createProject.id,
-                  response.createProject.changedProject.title,
-                  response.createProject.changedProject.estimate,
-                  response.createProject.changedProject.acquired,
-                  response.createProject.changedProject.description,
-                  response.createProject.changedProject.author
-                    ? response.createProject.changedProject.author.fullname
-                    : null))
+                    response.insertProject.project.id,
+                    response.insertProject.project.rowId,
+                    response.insertProject.project.title,
+                    response.insertProject.project.estimate,
+                    response.insertProject.project.acquired,
+                    response.insertProject.project.description,
+                    response.insertProject.project.personByAuthorId.fullname
+                ))
                 dispatch(addProjectDialogToggle(false))
               }
             ,

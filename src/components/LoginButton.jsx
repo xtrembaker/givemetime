@@ -8,7 +8,6 @@ class LoginButtonComponent extends React.Component {
 
     handleGoogleResponse = (response) => {
         this.props.createUserIfNotExists(response);
-        console.log(response);
     };
 
     render() {
@@ -44,19 +43,24 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       createUserIfNotExists: (response) => {
         let fullname = response.getBasicProfile().getName();
         dispatch(getGraphQL(`
-          {
-            viewer {personNodes(fullname: "${fullname}") {nodes {
-             id,
-             rowId,
-             fullname,
-             credit
-           } } }
+          query getPersonByFullname($fullname: String!){
+            viewer {
+                personNodes(fullname: $fullname) {
+                    nodes {
+                     id,
+                     rowId,
+                     fullname,
+                     credit
+                    } 
+                } 
+            }
           }
           `,
-          {},
+          {
+              fullname: fullname
+          },
           (ExistingResponse) =>
             dispatch => {
-            console.log(ExistingResponse);
               if (!ExistingResponse.viewer.personNodes.nodes.length) {
                 createUser(dispatch, response);
               } else {
@@ -78,11 +82,15 @@ const createUser = (dispatch, response) => {
   var fullname = response.getBasicProfile().getName();
   var email = response.getBasicProfile().getEmail();
   dispatch(getGraphQL(`
-    mutation {
+    mutation registerPerson(
+        $fullname: String!,
+        $email: String!,
+        $password: String!
+    ) {
       personRegister(input: {
-        fullname: "${fullname}",
-        email: "${email}",
-        password: "password"
+        fullname: $fullname,
+        email: $email,
+        password: $password
       }) {
         output {
           id,
@@ -93,7 +101,11 @@ const createUser = (dispatch, response) => {
       }
     }
     `,
-    {},
+    {
+        fullname: fullname,
+        email: email,
+        password: "password"
+    },
     (createUserResponse) =>
       dispatch => {
         if (createUserResponse.personRegister) {

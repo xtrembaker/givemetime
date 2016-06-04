@@ -39,8 +39,8 @@ create table project (
   author_id        int not null references person(id),
   title            character varying not null,
   description      text,
-  estimate         integer check (estimate > 0),
-  acquired         integer check (acquired >= 0 and acquired <= estimate) default 0,
+  estimate         integer not null check (estimate > 0),
+  acquired         integer not null check (acquired >= 0 and acquired <= estimate) default 0,
   created_at       timestamp with time zone,
   updated_at       timestamp with time zone
 );

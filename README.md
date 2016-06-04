@@ -1,23 +1,36 @@
-# install node dependencies 
+# install node dependencies
 
 npm install
 
-# install postgresql for your distribution 
+# install docker for your distribution
 
-- https://help.ubuntu.com/community/PostgreSQL
-- https://www.postgresql.org/download/macosx/
- 
-# install project database
+- https://docs.docker.com/engine/installation/linux/
+- https://docs.docker.com/engine/installation/mac/
 
-psql -h localhost -p 5435 -U postgres -c "create user give_me_time with encrypted password 'give_me_time'";
-psql -h localhost -p 5435 -U postgres -c "create database give_me_time with owner give_me_time";
-psql -h localhost -p 5435 -U postgres -f server/superuser.sql give_me_time
-psql -h localhost -p 5435 -U give_me_time -f server/schema.sql give_me_time
+Be sure that $PGHOST and $PGPORT environment variables are set
 
-# start project 
+- Mac:
 
-npm run server
-http://localhost:3000
+    export PGHOST=$(docker-machine inspect --format '{{ .Driver.IPAddress }}' default)
+    export PGPORT=5430
+    export PGUSER=give_me_time
+    export PGPASSWORD=give_me_time
+    export PGDATABASE=give_me_time
 
-npm run client
-http://localhost:8080
+- Linux:
+
+    export PGHOST=127.0.0.1
+    export PGPORT=5430
+    export PGUSER=give_me_time
+    export PGPASSWORD=give_me_time
+    export PGDATABASE=give_me_time
+
+# start project
+
+    npm run db
+
+    npm run server
+    # graphiql interface located at http://localhost:3000
+
+    npm run client
+    # project located at http://localhost:8080

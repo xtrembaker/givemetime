@@ -5,8 +5,10 @@
   "main": "src/index.jsx",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "db": "docker-compose -f server/docker-compose.yml up",
+    "db:rm": "docker-compose -f server/docker-compose.yml rm",
     "client": "./node_modules/.bin/webpack-dev-server --host localhost --open",
-    "server": "./node_modules/.bin/postgraphql postgres://give_me_time:give_me_time@localhost:5435/give_me_time --schema give_me_time --development",
+    "server": "./node_modules/.bin/postgraphql postgres://$PGUSER:$PGPASSWORD@$PGHOST:$PGPORT/$PGDATABASE --schema give_me_time --development",
     "build": "./node_modules/.bin/webpack ./webpack.config.js"
   },
   "repository": {
