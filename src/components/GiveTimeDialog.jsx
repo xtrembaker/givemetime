@@ -34,7 +34,7 @@ class GiveTimeDialogComponent extends React.Component {
             />,
         ];
 
-        let title = 'Give Time to project ' + this.props.title + ' (' + this.props.acquired + '/' + this.props.estimate + ')';
+        const title = 'Give Time to project ' + this.props.title + ' (' + this.props.acquired + '/' + this.props.estimate + ')';
         return (
             <span>
                 <RaisedButton label="GIVE TIME" secondary={true} onTouchTap={() => this.props.openDialog(this.props.id)}/>

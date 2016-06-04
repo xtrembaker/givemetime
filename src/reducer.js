@@ -37,26 +37,26 @@ export default function (state = {}, action) {
             return Object.assign({}, state, {projects: newProjectsList});
 
         case 'ADD_PROJECT_DIALOG_OPEN':
-            let addProjectDialogOpen = Object.assign({}, state.addProjectDialog, {open: true});
+            const addProjectDialogOpen = Object.assign({}, state.addProjectDialog, {open: true});
             return Object.assign({}, state, {addProjectDialog: addProjectDialogOpen});
 
         case 'ADD_PROJECT_DIALOG_CLOSE':
-            let addProjectDialogClosed = Object.assign({}, state.addProjectDialog, {open: false});
+            const addProjectDialogClosed = Object.assign({}, state.addProjectDialog, {open: false});
             return Object.assign({}, state, {addProjectDialog: addProjectDialogClosed});
 
         case 'VIEW_PROJECT_DIALOG_OPEN':
-            let viewProjectDialogOpen = Object.assign({}, state.viewProjectDialog, {openId: action.id});
+            const viewProjectDialogOpen = Object.assign({}, state.viewProjectDialog, {openId: action.id});
             return Object.assign({}, state, {viewProjectDialog: viewProjectDialogOpen});
 
         case 'VIEW_PROJECT_DIALOG_CLOSE':
-            let viewProjectDialogClosed = Object.assign({}, state.viewProjectDialog, {openId: null});
+            const viewProjectDialogClosed = Object.assign({}, state.viewProjectDialog, {openId: null});
             return Object.assign({}, state, {viewProjectDialog: viewProjectDialogClosed});
 
         case 'GIVE_TIME_DIALOG_OPEN':
-            let defaultAmount = state.projects.reduce((agg, project) => {
+            const defaultAmount = state.projects.reduce((agg, project) => {
                 return project.id === action.id ? Math.min(agg, project.estimate - project.acquired) : agg
             }, state.user.credit)
-            let giveTimeDialogOpen = Object.assign({}, state.giveTimeDialog, {
+            const giveTimeDialogOpen = Object.assign({}, state.giveTimeDialog, {
                 openId: action.id,
                 userCredit: state.user.credit,
                 amount: defaultAmount
@@ -64,33 +64,33 @@ export default function (state = {}, action) {
             return Object.assign({}, state, {giveTimeDialog: giveTimeDialogOpen});
 
         case 'GIVE_TIME_DIALOG_CLOSE':
-            let giveTimeDialogClose = Object.assign({}, state.giveTimeDialog, {openId: null, projectId: null});
+            const giveTimeDialogClose = Object.assign({}, state.giveTimeDialog, {openId: null, projectId: null});
             return Object.assign({}, state, {giveTimeDialog: giveTimeDialogClose});
 
         case 'GIVE_TIME':
-            let projects = state.projects.map(project => {
+            const projects = state.projects.map(project => {
                 if (project.id === action.id) {
                     return Object.assign({}, project, {acquired: project.acquired + action.amount});
                 } else {
                     return project;
                 }
-            })
-            let user = Object.assign({}, state.user, {credit: state.user.credit - action.amount});
+            });
+            const user = Object.assign({}, state.user, {credit: state.user.credit - action.amount});
             return Object.assign({}, state, {projects: projects, user: user});
 
         case 'GIVE_TIME_FORM_CHANGE':
-            let amount = state.projects.reduce((agg, project) => {
+            const amount = state.projects.reduce((agg, project) => {
                 return project.id === action.id ? Math.min(agg, project.estimate - project.acquired) : agg
-            }, Math.min(action.amount, state.user.credit))
-            let giveTimeFormChange = Object.assign({}, state.giveTimeDialog, {
+            }, Math.min(action.amount, state.user.credit));
+            const giveTimeFormChange = Object.assign({}, state.giveTimeDialog, {
                 amount: Math.max(0, amount)
             });
             return Object.assign({}, state, {giveTimeDialog: giveTimeFormChange});
 
         case 'PROJECT_FORM_CHANGE':
-            let newFormValues = {};
+            const newFormValues = {};
             newFormValues[action.prop] = action.value;
-            let addProjectDialogFormChange = Object.assign({}, state.addProjectDialog, newFormValues);
+            const addProjectDialogFormChange = Object.assign({}, state.addProjectDialog, newFormValues);
             return Object.assign({}, state, {addProjectDialog: addProjectDialogFormChange});
     };
     return state;

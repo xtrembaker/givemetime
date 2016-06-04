@@ -73,40 +73,52 @@ comment on column person_account.pass_hash is 'An opaque hash of the person’s 
 -- A procedure to search the headline and body of all posts using a given
 -- search term.
 create function project_search(search varchar) returns setof project as $$
-  select * from project where title ilike ('%' || search || '%') or description ilike ('%' || search || '%')
-$$ language sql
-stable
-set search_path from current;
+  select *
+  from project
+  where title ilike ('%' || search || '%')
+        or description ilike ('%' || search || '%')
+$$ language sql stable set search_path from current;
 
 comment on function project_search(varchar) is 'Returns projects containing a given search term.';
+
+-- Find a person by email
+create function person_search_by_email_and_password(search_email varchar, search_password varchar) returns person as $$
+  select person.*
+  from person join person_account on person.id = person_account.person_id
+  where
+    lower(trim(both from email)) = lower(trim(both from search_email))
+    and pass_hash = crypt(search_password, pass_hash)
+  limit 1
+$$ language sql stable set search_path from current;
+
+comment on function project_search(varchar) is 'Returns true if a person exists with a given email.';
 
 -------------------------------------------------------------------------------
 -- Mutation Procedures
 
--- Registers a person  with a few key parameters creating a
--- `person` row and an associated `person_account` row.
-create function person_register(
-  fullname varchar,
-  email varchar,
-  password varchar
-) returns person as $$
+-- Registers a person with a few key parameters creating a `person` row and an associated `person_account` row.
+-- If the person already exists by email and password means, just returns it
+create or replace function person_register_or_retrieve(fullname varchar, email varchar, password varchar) returns person as $$
 declare
   row person;
 begin
+  -- check if person provided proper credentials
+  select * from person_search_by_email_and_password(email, password) into row;
+  if (row.id is not null) then
+    return row;
+  end if;
+
   -- Insert the person’s public profile data.
-  insert into person (fullname, credit) values
-    (fullname, 20 /* default to 20 credits */)
-    returning * into row;
+  insert into person (fullname, credit) values (fullname, 20 /* default to 20 credits */)
+  returning * into row;
 
   -- Insert the person’s private account data.
   insert into person_account (person_id, email, pass_hash) values
-    (row.id, email, crypt(password, gen_salt('bf')));
+    (row.id, trim(both from lower(email)), crypt(password, gen_salt('bf')));
 
   return row;
 end;
-$$ language plpgsql
-strict
-set search_path from current;
+$$ language plpgsql strict set search_path from current;
 
 comment on function person_register(varchar, varchar, varchar) is 'Register a person.';
 

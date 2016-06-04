@@ -11,24 +11,24 @@ class LoginButtonComponent extends React.Component {
     };
 
     render() {
-      if (this.props.user.id) {
-        return (
-            <div>
-               {this.props.user.fullname}<br/> Crédits : {this.props.user.credit}<br/>
-             <button onClick={this.props.handleLogout}>Logout</button>
-            </div>
-        );
-      } else {
-        return (
-            <GoogleLogin
-                clientId="673157831962-gcgp4mj9mgadau0nh9pbaikhbmqkl04d.apps.googleusercontent.com"
-                buttonText="Login"
-                callback={this.handleGoogleResponse}>
-                <script></script>
-                Login
-            </GoogleLogin>
-        );
-      }
+        if (this.props.user.id) {
+            return (
+                <div>
+                    {this.props.user.fullname}<br/> Crédits : {this.props.user.credit}<br/>
+                    <button onClick={this.props.handleLogout}>Logout</button>
+                </div>
+            );
+        } else {
+            return (
+                <GoogleLogin
+                    clientId="673157831962-gcgp4mj9mgadau0nh9pbaikhbmqkl04d.apps.googleusercontent.com"
+                    buttonText="Login"
+                    callback={this.handleGoogleResponse}>
+                    <script></script>
+                    Login
+                </GoogleLogin>
+            );
+        }
     }
 }
 
@@ -39,85 +39,53 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-      createUserIfNotExists: (response) => {
-        let fullname = response.getBasicProfile().getName();
-        dispatch(getGraphQL(`
-          query getPersonByFullname($fullname: String!){
-            viewer {
-                personNodes(fullname: $fullname) {
-                    nodes {
-                     id,
-                     rowId,
-                     fullname,
-                     credit
-                    } 
-                } 
-            }
-          }
-          `,
-          {
-              fullname: fullname
-          },
-          (ExistingResponse) =>
-            dispatch => {
-              if (!ExistingResponse.viewer.personNodes.nodes.length) {
-                createUser(dispatch, response);
-              } else {
-                let user = ExistingResponse.viewer.personNodes.nodes[0];
-                dispatch(userLoggedIn(user.id, user.rowId, user.fullname, user.credit));
-              }
-          },
-          (response) => apologize(response)
-        ))
-      },
-      handleLogout : () => {
-        dispatch(userLoggedOut());
-      }
+    return {
+        createUserIfNotExists: (response) => {
+            const id = response.getBasicProfile().getId();
+            const fullname = response.getBasicProfile().getName();
+            const email = response.getBasicProfile().getEmail();
+            dispatch(getGraphQL(`
+                    mutation registerPerson(
+                        $fullname: String!,
+                        $email: String!,
+                        $password: String!
+                    ) {
+                      personRegisterOrRetrieve(input: {
+                        fullname: $fullname,
+                        email: $email,
+                        password: $password
+                      }) {
+                        output {
+                          id,
+                          rowId,
+                          fullname,
+                          credit
+                        }
+                      }
+                    }
+                `,
+                {
+                    fullname: fullname,
+                    email: email,
+                    password: "password"
+                },
+                (createUserResponse) =>
+                    dispatch => {
+                        if (createUserResponse.personRegisterOrRetrieve) {
+                            const user = createUserResponse.personRegisterOrRetrieve.output;
+                            dispatch(userLoggedIn(user.id, user.rowId, user.fullname, user.credit));
+                        } else {
+                            dispatch(apologize({message: "Impossible de créer l'utilisateur"}));
+                        }
+                    },
+                (response) => apologize(response)
+            ))
+        },
+        handleLogout : () => {
+            dispatch(userLoggedOut());
+        }
     }
 };
-
-const createUser = (dispatch, response) => {
-  var id = response.getBasicProfile().getId();
-  var fullname = response.getBasicProfile().getName();
-  var email = response.getBasicProfile().getEmail();
-  dispatch(getGraphQL(`
-    mutation registerPerson(
-        $fullname: String!,
-        $email: String!,
-        $password: String!
-    ) {
-      personRegister(input: {
-        fullname: $fullname,
-        email: $email,
-        password: $password
-      }) {
-        output {
-          id,
-          rowId,
-          fullname,
-          credit
-        }
-      }
-    }
-    `,
-    {
-        fullname: fullname,
-        email: email,
-        password: "password"
-    },
-    (createUserResponse) =>
-      dispatch => {
-        if (createUserResponse.personRegister) {
-          let user = createUserResponse.personRegister.output;
-          dispatch(userLoggedIn(user.id, user.rowId, user.fullname, user.credit));
-        } else {
-          dispatch(apologize({message: "Impossible de créer l'utilisateur"}));
-        }
-      },
-    (response) => apologize(response)
-  ))
-}
 
 const LoginButton = connect(mapStateToProps, mapDispatchToProps)(LoginButtonComponent)
 
