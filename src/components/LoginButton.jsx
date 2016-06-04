@@ -47,6 +47,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           {
             viewer {personNodes(fullname: "${fullname}") {nodes {
              id,
+             rowId,
              fullname,
              credit
            } } }
@@ -60,14 +61,14 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 createUser(dispatch, response);
               } else {
                 let user = ExistingResponse.viewer.personNodes.nodes[0];
-                dispatch(userLoggedIn(user.id, user.fullname, user.credit));
+                dispatch(userLoggedIn(user.id, user.rowId, user.fullname, user.credit));
               }
           },
           (response) => apologize(response)
         ))
       },
       handleLogout : () => {
-        dispatch(userLoggedOut(null, null, null));
+        dispatch(userLoggedOut());
       }
     }
 };
@@ -85,6 +86,7 @@ const createUser = (dispatch, response) => {
       }) {
         output {
           id,
+          rowId,
           fullname,
           credit
         }
@@ -96,7 +98,7 @@ const createUser = (dispatch, response) => {
       dispatch => {
         if (createUserResponse.personRegister) {
           let user = createUserResponse.personRegister.output;
-          dispatch(userLoggedIn(user.id, user.fullname, user.credit));
+          dispatch(userLoggedIn(user.id, user.rowId, user.fullname, user.credit));
         } else {
           dispatch(apologize({message: "Impossible de créer l'utilisateur"}));
         }
