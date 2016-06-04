@@ -7,10 +7,7 @@ import { Provider } from "react-redux";
 import thunkMiddleware from 'redux-thunk';
 
 const initialState = {
-    user: {
-        id: 12,
-        credit: 20
-    },
+    user: {},
     addProjectDialog: {
         open: false,
         title: '',

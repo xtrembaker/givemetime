@@ -19,6 +19,23 @@ export const getGraphQL = (payload, variables, payloadToAction, errorToAction) =
   }
 }
 
+export const userLoggedIn = (id, fullname, credit) => {
+  return {
+    type: 'USER_LOGGED_IN',
+    id: id,
+    fullname: fullname,
+    credit : credit
+  }
+}
+export const userLoggedOut = () => {
+  return {
+    type: 'USER_LOGGED_OUT',
+    id: null,
+    fullname: null,
+    credit : null,
+    projects : []
+  }
+}
 export const projectFetched = (id, title, estimate, acquired, description, author) => {
   return {
     type: 'PROJECT_FETCHED',
