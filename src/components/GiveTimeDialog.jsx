@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+import React, {PropTypes} from 'react'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
@@ -7,7 +7,7 @@ import {connect} from 'react-redux';
 import {giveTime, giveTimeFormChange, openGiveTimeDialog, getGraphQL, closeGiveTimeDialog} from '../actions.js';
 
 class GiveTimeDialogComponent extends React.Component {
-    isOpen () {
+    isOpen() {
         return this.props.openId === this.props.id
     }
 
@@ -24,20 +24,15 @@ class GiveTimeDialogComponent extends React.Component {
             <FlatButton
                 label="GIVE !"
                 secondary={true}
-                onTouchTap={() => this.props.onSave(
-                  this.props.amount,
-                  this.props.id,
-                  this.props.userRowId,
-                  this.props.acquired,
-                  this.props.userCredit,
-                  this.props.rowId)}
+                onTouchTap={() => this.props.onSave(this.props.amount, this.props.rowId, this.props.userRowId)}
             />,
         ];
 
         const title = 'Give Time to project ' + this.props.title + ' (' + this.props.acquired + '/' + this.props.estimate + ')';
         return (
             <span>
-                <RaisedButton label="GIVE TIME" secondary={true} onTouchTap={() => this.props.openDialog(this.props.id)}/>
+                <RaisedButton label="GIVE TIME" secondary={true}
+                              onTouchTap={() => this.props.openDialog(this.props.id)}/>
                 <Dialog
                     title={title}
                     actions={actions}
@@ -66,6 +61,7 @@ GiveTimeDialogComponent.propTypes = {
     openId: PropTypes.string,
     amount: PropTypes.number.isRequired,
     id: PropTypes.string.isRequired,
+    rowId: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     estimate: PropTypes.number.isRequired,
     userCredit: PropTypes.number.isRequired,
@@ -87,50 +83,49 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
     return {
-        onSave: (amount, projectId, userRowId, acquired, userCredit, projectRowId) => {
+        onSave: (amount, projectRowId, userRowId) => {
             dispatch(getGraphQL(`
-               mutation test(
-                  $acquired: Int!,
+               mutation giveTime(
+                  $projectRowId: Int!,
                   $userRowId: Int!,
-                  $credit: Int!,
-                  $projectRowId: Int!
-                ) {
-                  updateProject(input: {newAcquired: $acquired, rowId: $projectRowId}) {
-                    project {
+                  $credit: Int!
+                ){
+                  projectGiveTime(input: {
+                    personId: $userRowId,
+                    projectId: $projectRowId,
+                    amount: $credit
+                  }) {
+                    output {
+                      rowId,
                       acquired
-                    }
-                  }
-                  updatePerson(input: {rowId: $userRowId, newCredit: $credit}) {
-                    person {
-                      credit
                     }
                   }
                 }
               `,
                 {
-                    "acquired": acquired + amount,
+                    "credit": amount,
                     "userRowId": userRowId,
-                    "credit": userCredit - amount,
                     "projectRowId": projectRowId
                 },
-                (response) => null
-            )),
-            dispatch(giveTime(amount, projectId))
-            dispatch(closeGiveTimeDialog())
+                response => {
+                    dispatch(giveTime(amount, projectRowId));
+                    dispatch(closeGiveTimeDialog());
+                }
+            ));
         },
         openDialog: (id) => {
-            dispatch(openGiveTimeDialog(id))
+            dispatch(openGiveTimeDialog(id));
         },
         closeDialog: () => {
-            dispatch(closeGiveTimeDialog())
+            dispatch(closeGiveTimeDialog());
         },
         onChange: (amount, projectId) => {
-            dispatch(giveTimeFormChange(amount, projectId))
+            dispatch(giveTimeFormChange(amount, projectId));
         },
     }
 };
 
-const GiveTimeDialog = connect(mapStateToProps, mapDispatchToProps)(GiveTimeDialogComponent)
+const GiveTimeDialog = connect(mapStateToProps, mapDispatchToProps)(GiveTimeDialogComponent);
 
 
 export default GiveTimeDialog;

@@ -157,7 +157,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                     response.insertProject.project.acquired,
                     response.insertProject.project.description,
                     response.insertProject.project.personByAuthorId.fullname
-                ))
+                ));
                 dispatch(addProjectDialogToggle(false))
               }
             ,

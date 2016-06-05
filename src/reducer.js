@@ -92,6 +92,10 @@ export default function (state = {}, action) {
             newFormValues[action.prop] = action.value;
             const addProjectDialogFormChange = Object.assign({}, state.addProjectDialog, newFormValues);
             return Object.assign({}, state, {addProjectDialog: addProjectDialogFormChange});
+
+        case 'APOLOGIZE':
+            console.error(action.msg);
+            return state;
     };
     return state;
 }

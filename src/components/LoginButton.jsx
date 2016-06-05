@@ -69,16 +69,14 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                     email: email,
                     password: "password"
                 },
-                (createUserResponse) =>
-                    dispatch => {
-                        if (createUserResponse.personRegisterOrRetrieve) {
-                            const user = createUserResponse.personRegisterOrRetrieve.output;
-                            dispatch(userLoggedIn(user.id, user.rowId, user.fullname, user.credit));
-                        } else {
-                            dispatch(apologize({message: "Impossible de créer l'utilisateur"}));
-                        }
-                    },
-                (response) => apologize(response)
+                (createUserResponse) => {
+                    if (createUserResponse.personRegisterOrRetrieve) {
+                        const user = createUserResponse.personRegisterOrRetrieve.output;
+                        dispatch(userLoggedIn(user.id, user.rowId, user.fullname, user.credit));
+                    } else {
+                        dispatch(apologize({message: "Impossible de créer l'utilisateur"}));
+                    }
+                }
             ))
         },
         handleLogout : () => {

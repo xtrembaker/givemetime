@@ -72,7 +72,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           `, {
             id: id
           },
-          response => projectDeleted(response.deleteProject.id)
+          response => dispatch(projectDeleted(response.deleteProject.id))
         ))
         },
     }

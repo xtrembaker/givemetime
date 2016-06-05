@@ -1,7 +1,6 @@
-export const getGraphQL = (payload, variables, payloadToAction, errorToAction) => {
-  payloadToAction = payloadToAction || (a => a);
-  errorToAction = errorToAction || (a => apologize(a));
-  errorToAction = variables || "";
+export const getGraphQL = (payload, variables, onSuccess, onError) => {
+  onSuccess = onSuccess || (a => a);
+  onError = onError || (a => apologize(a));
   return dispatch => {
     return new Promise(function(resolve, reject) {
       let request=new XMLHttpRequest();
@@ -14,8 +13,8 @@ export const getGraphQL = (payload, variables, payloadToAction, errorToAction) =
         }
       }
     })
-    .catch(response => dispatch(errorToAction(JSON.parse(response))))
-    .then(response => dispatch(payloadToAction(JSON.parse(response).data)))
+    .catch(response => onError(JSON.parse(response)))
+    .then(response => onSuccess(JSON.parse(response).data))
   }
 }
 

@@ -90,18 +90,16 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             }
           `,
             {},
-            (response) =>
-                dispatch => response.viewer.projectNodes.nodes
-                    .map(node => dispatch(projectFetched(
-                        node.id,
-                        node.rowId,
-                        node.title,
-                        node.estimate,
-                        node.acquired,
-                        node.description,
-                        node.personByAuthorId ? node.personByAuthorId.fullname : null
-                    ))),
-            (response) => apologize(response)
+            (response) => response.viewer.projectNodes.nodes
+                .map(node => dispatch(projectFetched(
+                    node.id,
+                    node.rowId,
+                    node.title,
+                    node.estimate,
+                    node.acquired,
+                    node.description,
+                    node.personByAuthorId ? node.personByAuthorId.fullname : null
+                )))
         )),
     }
 };
