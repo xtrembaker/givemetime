@@ -1,7 +1,7 @@
 export const getGraphQL = (payload, variables, onSuccess, onError) => {
     onSuccess = onSuccess || ((a) => a)
-    onError = onError || ((a) => apologize(a))
-    return () => {
+    return (dispatch) => {
+        onError = onError || ((a) => dispatch(apologize(a)))
         return new Promise((resolve) => {
             let request = new XMLHttpRequest()
             request.open('POST', '/graphql', true)
@@ -14,7 +14,14 @@ export const getGraphQL = (payload, variables, onSuccess, onError) => {
             }
         })
         .catch((response) => onError(JSON.parse(response)))
-        .then((response) => onSuccess(JSON.parse(response).data))
+        .then((response) => {
+            response = JSON.parse(response)
+            if (response.errors) {
+                onError(response)
+            } else {
+                onSuccess(response.data)
+            }
+        })
     }
 }
 

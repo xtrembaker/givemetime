@@ -58,7 +58,7 @@ class LayoutComponent extends React.Component {
 
 LayoutComponent.propTypes = {
     user: PropTypes.shape({
-        id: PropTypes.string.isRequired,
+        id: PropTypes.string,
     }).isRequired,
 }
 

@@ -23,7 +23,7 @@ class LoginButtonComponent extends React.Component {
                 <GoogleLogin
                     clientId="673157831962-gcgp4mj9mgadau0nh9pbaikhbmqkl04d.apps.googleusercontent.com"
                     buttonText="Login"
-                    callback={this.handleGoogleResponse}>
+                    callback={this.handleGoogleResponse.bind(this)}>
                     <script></script>
                     Login
                 </GoogleLogin>
@@ -35,9 +35,9 @@ class LoginButtonComponent extends React.Component {
 LoginButtonComponent.propTypes = {
     createUserIfNotExists: PropTypes.func.isRequired,
     user: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        fullname: PropTypes.string.isRequired,
-        credit: PropTypes.number.isRequired,
+        id: PropTypes.string,
+        fullname: PropTypes.string,
+        credit: PropTypes.number,
     }).isRequired,
     handleLogout: PropTypes.func.isRequired,
 }
@@ -83,7 +83,7 @@ const mapDispatchToProps = (dispatch) => {
                         const user = createUserResponse.personRegisterOrRetrieve.output
                         dispatch(userLoggedIn(user.id, user.rowId, user.fullname, user.credit))
                     } else {
-                        dispatch(apologize({ message: 'Cannot create user' }))
+                        dispatch(apologize('Cannot create user'))
                     }
                 }
             ))

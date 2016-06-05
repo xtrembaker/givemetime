@@ -104,7 +104,7 @@ export default function (state, action) {
         })
 
     case 'APOLOGIZE':
-        console.error(action.msg) // eslint-disable-line no-console
+        console.error(action.message) // eslint-disable-line no-console
         return state
     }
     return state
