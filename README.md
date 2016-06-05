@@ -49,5 +49,10 @@ Be sure that $PGHOST and $PGPORT environment variables are set
     sqitch config --user user.email my@email.com
     
     sqitch add appschema -n "Adds a new schema" 
-    sqitch deploy db:pg://$PGUSER:$PGPASSWORD@$PGHOST:$PGPORT/$PGDATABASE
+    sqitch deploy db:pg://$PGUSER:$PGPASSWORD@$PGHOST:$PGPORT/$PGDATABASE --verify
     sqitch verify db:pg://$PGUSER:$PGPASSWORD@$PGHOST:$PGPORT/$PGDATABASE
+    
+    alias sqitch="docker run --rm      \
+        -v $(pwd)/project:/test       \
+        digit/pg-prove                 \
+        -h $PGHOST -p $PGPORT -u $PGUSER -w $PGPASSWORD -d $PGDATABASE -t '/test/db/*.sql'"
