@@ -1,68 +1,68 @@
 export const getGraphQL = (payload, variables, onSuccess, onError) => {
-  onSuccess = onSuccess || (a => a);
-  onError = onError || (a => apologize(a));
-  return dispatch => {
-    return new Promise(function(resolve, reject) {
-      let request=new XMLHttpRequest();
-      request.open("POST", "/graphql", true);
-      request.setRequestHeader("Content-Type", "application/json");
-      request.send(JSON.stringify({query: payload, variables: variables}));
-      request.onreadystatechange = () => {
-        if (request.readyState === 4) {
-          resolve(request.responseText)
-        }
-      }
-    })
-    .catch(response => onError(JSON.parse(response)))
-    .then(response => onSuccess(JSON.parse(response).data))
-  }
+    onSuccess = onSuccess || ((a) => a)
+    onError = onError || ((a) => apologize(a))
+    return () => {
+        return new Promise((resolve) => {
+            let request = new XMLHttpRequest()
+            request.open('POST', '/graphql', true)
+            request.setRequestHeader('Content-Type', 'application/json')
+            request.send(JSON.stringify({ query: payload, variables: variables }))
+            request.onreadystatechange = () => {
+                if (request.readyState === 4) {
+                    resolve(request.responseText)
+                }
+            }
+        })
+        .catch((response) => onError(JSON.parse(response)))
+        .then((response) => onSuccess(JSON.parse(response).data))
+    }
 }
 
 export const userLoggedIn = (id, rowId, fullname, credit) => {
-  return {
-    type: 'USER_LOGGED_IN',
-    id: id,
-    rowId: rowId,
-    fullname: fullname,
-    credit : credit
-  }
+    return {
+        type: 'USER_LOGGED_IN',
+        id: id,
+        rowId: rowId,
+        fullname: fullname,
+        credit : credit,
+    }
 }
 export const userLoggedOut = () => {
-  return {
-    type: 'USER_LOGGED_OUT',
-    id: null,
-    rowId: null,
-    fullname: null,
-    credit : null,
-    projects : []
-  }
+    return {
+        type: 'USER_LOGGED_OUT',
+        id: null,
+        rowId: null,
+        fullname: null,
+        credit : null,
+        projects : [],
+    }
 }
-export const projectFetched = (id, row_id, title, estimate, acquired, description, author) => {
-  return {
-    type: 'PROJECT_FETCHED',
-    id: id,
-    rowId: row_id,
-    estimate: estimate,
-    acquired: acquired,
-    description: description,
-    title: title,
-  }
+export const projectFetched = (id, row_id, title, estimate, acquired, description) => {
+    return {
+        type: 'PROJECT_FETCHED',
+        id: id,
+        rowId: row_id,
+        estimate: estimate,
+        acquired: acquired,
+        description: description,
+        title: title,
+    }
 }
-export const projectCreated = (id, row_id, title, estimate, acquired, description, author) => {
-  return {
-    type: 'PROJECT_CREATED',
-    id: id,
-    rowId: row_id,
-    estimate: estimate,
-    acquired: acquired,
-    description: description,
-    title: title,
-  }
+export const projectCreated = (id, row_id, title, estimate, acquired, description) => {
+    return {
+        type: 'PROJECT_CREATED',
+        id: id,
+        rowId: row_id,
+        estimate: estimate,
+        acquired: acquired,
+        description: description,
+        title: title,
+    }
 }
 export const projectDeleted = (id) => {
     return {
         type: 'PROJECT_DELETED',
-        id: id
+        id: id,
     }
 }
 
@@ -93,7 +93,7 @@ export const closeProjectDialog = () => {
 export const openProjectDialog = (id) => {
     return {
         type: 'VIEW_PROJECT_DIALOG_OPEN',
-        id: id
+        id: id,
     }
 }
 
@@ -106,21 +106,21 @@ export const closeGiveTimeDialog = () => {
 export const openGiveTimeDialog = (id) => {
     return {
         type: 'GIVE_TIME_DIALOG_OPEN',
-        id: id
+        id: id,
     }
 }
 export const giveTime = (amount, projectId) => {
     return {
         type: 'GIVE_TIME',
         amount: amount,
-        id: projectId
+        id: projectId,
     }
 }
 export const giveTimeFormChange = (amount, projectId) => {
     return {
         type: 'GIVE_TIME_FORM_CHANGE',
         amount: amount,
-        id: projectId
+        id: projectId,
     }
 }
 
@@ -129,6 +129,6 @@ export const projectFormChange = (prop, value) => {
     return {
         type: 'PROJECT_FORM_CHANGE',
         prop: prop,
-        value: value
+        value: value,
     }
 }

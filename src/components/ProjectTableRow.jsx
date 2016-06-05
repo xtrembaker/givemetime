@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react'
-import IconButton from 'material-ui/IconButton';
-import ActionDelete from 'material-ui/svg-icons/action/delete';
+import IconButton from 'material-ui/IconButton'
+import ActionDelete from 'material-ui/svg-icons/action/delete'
 import LinearProgress from 'material-ui/LinearProgress'
-import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
-import ProjectDialog from './ProjectDialog.jsx';
-import GiveTimeDialog from './GiveTimeDialog.jsx';
-import { connect } from 'react-redux';
-import { getGraphQL, projectDeleted } from '../actions.js';
+import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card'
+import ProjectDialog from './ProjectDialog.jsx'
+import GiveTimeDialog from './GiveTimeDialog.jsx'
+import { connect } from 'react-redux'
+import { getGraphQL, projectDeleted } from '../actions.js'
 
 
 class ProjectTableRowComponent extends React.Component {
@@ -53,31 +53,29 @@ ProjectTableRowComponent.propTypes = {
     estimate: PropTypes.number.isRequired,
     acquired: PropTypes.number.isRequired,
     onDelete: PropTypes.func.isRequired,
-};
+}
 
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         onDelete: (id) => {
-          dispatch(getGraphQL(`
-              mutation deleteProject(
-                $id: ID!
-              ) {
-                  deleteProject(input: {
-                      id: $id
-                  }) {
-                      id
-                  }
-              }
-          `, {
-            id: id
-          },
-          response => dispatch(projectDeleted(response.deleteProject.id))
-        ))
+            dispatch(getGraphQL(`
+                mutation deleteProject(
+                    $id: ID!
+                ) {
+                    deleteProject(input: {
+                        id: $id
+                    }) {
+                        id
+                    }
+                }`,
+                { id: id },
+                (response) => dispatch(projectDeleted(response.deleteProject.id))
+            ))
         },
     }
-};
+}
 
 const ProjectTableRow = connect(null, mapDispatchToProps)(ProjectTableRowComponent)
 
-export default ProjectTableRow;
+export default ProjectTableRow

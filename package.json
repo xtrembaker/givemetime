@@ -4,7 +4,7 @@
   "description": "Project to give some time to a R&D project suggested by a team member",
   "main": "src/index.jsx",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "./node_modules/.bin/eslint src --ext .js --ext .jsx",
     "db": "docker-compose -f server/docker-compose.yml up",
     "db:rm": "docker-compose -f server/docker-compose.yml rm",
     "client": "./node_modules/.bin/webpack-dev-server --host localhost --open",
@@ -32,6 +32,8 @@
     "babel-preset-stage-0": "^6.5.0",
     "babel-preset-stage-1": "^6.5.0",
     "css-loader": "^0.23.1",
+    "eslint": "^2.11.1",
+    "eslint-plugin-react": "^5.1.1",
     "react-hot-loader": "^1.3.0",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.1",

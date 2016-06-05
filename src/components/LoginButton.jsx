@@ -1,23 +1,23 @@
-import React from 'react';
-import GoogleLogin from 'react-google-login';
-import { connect } from 'react-redux';
-import { getGraphQL, apologize, userLoggedIn, userLoggedOut } from '../actions.js';
+import React, { PropTypes } from 'react'
+import GoogleLogin from 'react-google-login'
+import { connect } from 'react-redux'
+import { getGraphQL, apologize, userLoggedIn, userLoggedOut } from '../actions.js'
 
 
 class LoginButtonComponent extends React.Component {
 
-    handleGoogleResponse = (response) => {
-        this.props.createUserIfNotExists(response);
-    };
+    handleGoogleResponse (response) {
+        this.props.createUserIfNotExists(response)
+    }
 
-    render() {
+    render () {
         if (this.props.user.id) {
             return (
                 <div>
                     {this.props.user.fullname}<br/> Crédits : {this.props.user.credit}<br/>
                     <button onClick={this.props.handleLogout}>Logout</button>
                 </div>
-            );
+            )
         } else {
             return (
                 <GoogleLogin
@@ -27,23 +27,32 @@ class LoginButtonComponent extends React.Component {
                     <script></script>
                     Login
                 </GoogleLogin>
-            );
+            )
         }
     }
 }
 
+LoginButtonComponent.propTypes = {
+    createUserIfNotExists: PropTypes.func.isRequired,
+    user: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        fullname: PropTypes.string.isRequired,
+        credit: PropTypes.number.isRequired,
+    }).isRequired,
+    handleLogout: PropTypes.func.isRequired,
+}
+
 const mapStateToProps = (state) => {
     return {
-        user: state.user
-    };
-};
+        user: state.user,
+    }
+}
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         createUserIfNotExists: (response) => {
-            const id = response.getBasicProfile().getId();
-            const fullname = response.getBasicProfile().getName();
-            const email = response.getBasicProfile().getEmail();
+            const fullname = response.getBasicProfile().getName()
+            const email = response.getBasicProfile().getEmail()
             dispatch(getGraphQL(`
                     mutation registerPerson(
                         $fullname: String!,
@@ -67,24 +76,24 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 {
                     fullname: fullname,
                     email: email,
-                    password: "password"
+                    password: 'password',
                 },
                 (createUserResponse) => {
                     if (createUserResponse.personRegisterOrRetrieve) {
-                        const user = createUserResponse.personRegisterOrRetrieve.output;
-                        dispatch(userLoggedIn(user.id, user.rowId, user.fullname, user.credit));
+                        const user = createUserResponse.personRegisterOrRetrieve.output
+                        dispatch(userLoggedIn(user.id, user.rowId, user.fullname, user.credit))
                     } else {
-                        dispatch(apologize({message: "Impossible de créer l'utilisateur"}));
+                        dispatch(apologize({ message: 'Cannot create user' }))
                     }
                 }
             ))
         },
         handleLogout : () => {
-            dispatch(userLoggedOut());
-        }
+            dispatch(userLoggedOut())
+        },
     }
-};
+}
 
 const LoginButton = connect(mapStateToProps, mapDispatchToProps)(LoginButtonComponent)
 
-export default LoginButton;
+export default LoginButton

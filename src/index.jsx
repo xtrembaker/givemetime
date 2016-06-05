@@ -1,10 +1,10 @@
-import React from "react"
-import ReactDom from "react-dom"
-import giveMeTimeReducers from './reducer.js';
-import Layout from './components/Layout.jsx';
-import { createStore, combineReducers, applyMiddleware } from "redux";
-import { Provider } from "react-redux";
-import thunkMiddleware from 'redux-thunk';
+import React from 'react'
+import ReactDom from 'react-dom'
+import giveMeTimeReducers from './reducer.js'
+import Layout from './components/Layout.jsx'
+import { createStore, applyMiddleware } from 'redux'
+import { Provider } from 'react-redux'
+import thunkMiddleware from 'redux-thunk'
 
 const initialState = {
     user: {},
@@ -12,18 +12,18 @@ const initialState = {
         open: false,
         title: '',
         estimate: 0,
-        author: ''
+        author: '',
     },
     viewProjectDialog: {
-        openId: null
+        openId: null,
     },
     giveTimeDialog: {
         openId: null,
         userCredit: 1,
-        amount: 10
+        amount: 10,
     },
-    projects: []
-};
+    projects: [],
+}
 
 const store = createStore(giveMeTimeReducers, initialState, applyMiddleware(thunkMiddleware))
 
@@ -31,5 +31,5 @@ ReactDom.render(
     <Provider store={store}>
         <Layout />
     </Provider>,
-    document.getElementById("main")
+    document.getElementById('main')
 )

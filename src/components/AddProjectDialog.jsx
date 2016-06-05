@@ -1,24 +1,22 @@
 import React, { PropTypes } from 'react'
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import TextField from 'material-ui/TextField';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import { connect } from 'react-redux';
-import {getGraphQL, projectCreated, addProjectDialogToggle, projectFormChange} from '../actions.js';
+import Dialog from 'material-ui/Dialog'
+import FlatButton from 'material-ui/FlatButton'
+import TextField from 'material-ui/TextField'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
+import ContentAdd from 'material-ui/svg-icons/content/add'
+import { connect } from 'react-redux'
+import { getGraphQL, projectCreated, addProjectDialogToggle, projectFormChange } from '../actions.js'
 
 class AddProjectDialogComponent extends React.Component {
 
-    handleChange(prop) {
-        return (event) => {
-            this.props.onChange(prop, event.target.value);
-        };
-    };
-    handleEstimateChange(event) {
-        this.props.onChange('estimate', parseInt(event.target.value) || 0);
-    };
+    handleChange (prop) {
+        return (event) => this.props.onChange(prop, event.target.value)
+    }
+    handleEstimateChange (event) {
+        this.props.onChange('estimate', parseInt(event.target.value) || 0)
+    }
 
-    render() {
+    render () {
         const actions = [
             <FlatButton
                 label="Close"
@@ -30,19 +28,19 @@ class AddProjectDialogComponent extends React.Component {
                 secondary={true}
                 onTouchTap={() => this.props.onSave.call(this, this.props.userRowId, this.props.title, this.props.estimate, this.props.description)}
             />,
-        ];
+        ]
 
         const style = {
-            position: "fixed",
+            position: 'fixed',
             right: 0,
             bottom: 0,
             margin: 10,
             marginRight: 20,
-        };
+        }
 
         const textFieldWidth = {
-            width: "100%"
-        };
+            width: '100%',
+        }
 
         return (
             <div>
@@ -69,10 +67,9 @@ class AddProjectDialogComponent extends React.Component {
                     </div>
                 </Dialog>
             </div>
-        );
+        )
     }
 }
-
 
 
 AddProjectDialogComponent.propTypes = {
@@ -80,12 +77,13 @@ AddProjectDialogComponent.propTypes = {
     title: PropTypes.string.isRequired,
     estimate: PropTypes.number,
     author: PropTypes.string.isRequired,
+    description: PropTypes.string,
     onSave: PropTypes.func.isRequired,
     openDialog: PropTypes.func.isRequired,
     closeDialog: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
     userRowId: PropTypes.number.isRequired,
-};
+}
 
 const mapStateToProps = (state) => {
     return {
@@ -94,11 +92,11 @@ const mapStateToProps = (state) => {
         estimate: state.addProjectDialog.estimate,
         author: state.user.fullname,
         description: state.addProjectDialog.description,
-        userRowId: state.user.rowId
-    };
-};
+        userRowId: state.user.rowId,
+    }
+}
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         openDialog: () => {
             dispatch(addProjectDialogToggle(true))
@@ -110,63 +108,60 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch(projectFormChange(prop, value))
         },
         onSave: (authorId, title, estimate, description) => {
-          dispatch(getGraphQL(`
-              mutation createProject(
-                  $title: String!,
-                  $estimate: Int!,
-                  $acquired: Int!,
-                  $description: String,
-                  $authorId: Int!
-              ){
-              insertProject(input: {
-                  title: $title,
-                  estimate: $estimate,
-                  acquired: $acquired,
-                  description: $description,
-                  authorId: $authorId
-              }) {
-                  project {
-                    id,
-                    rowId,
-                    title,
-                    estimate,
-                    acquired,
-                    description,
-                    personByAuthorId {
-                      id,
-                      fullname,
-                      credit
+            dispatch(getGraphQL(`
+                mutation createProject(
+                    $title: String!,
+                    $estimate: Int!,
+                    $acquired: Int!,
+                    $description: String,
+                    $authorId: Int!
+                ){
+                    insertProject(input: {
+                        title: $title,
+                        estimate: $estimate,
+                        acquired: $acquired,
+                        description: $description,
+                        authorId: $authorId
+                    }) {
+                        project {
+                            id,
+                            rowId,
+                            title,
+                            estimate,
+                            acquired,
+                            description,
+                            personByAuthorId {
+                                id,
+                                fullname,
+                                credit
+                            }
+                        }
                     }
-                  }
-              }
-            }
-          `, {
-              title: title,
-              estimate: estimate,
-              description: description,
-              acquired: 0,
-              authorId: authorId
-          },
-            response =>
-              dispatch => {
-                dispatch(projectCreated(
-                    response.insertProject.project.id,
-                    response.insertProject.project.rowId,
-                    response.insertProject.project.title,
-                    response.insertProject.project.estimate,
-                    response.insertProject.project.acquired,
-                    response.insertProject.project.description,
-                    response.insertProject.project.personByAuthorId.fullname
-                ));
-                dispatch(addProjectDialogToggle(false))
-              }
-            ,
-            (response) => apologize(response)
-          ))
+                }`,
+                {
+                    title: title,
+                    estimate: estimate,
+                    description: description,
+                    acquired: 0,
+                    authorId: authorId,
+                },
+                (response) => {
+                    dispatch(projectCreated(
+                        response.insertProject.project.id,
+                        response.insertProject.project.rowId,
+                        response.insertProject.project.title,
+                        response.insertProject.project.estimate,
+                        response.insertProject.project.acquired,
+                        response.insertProject.project.description,
+                        response.insertProject.project.personByAuthorId.fullname
+                    ))
+                    dispatch(addProjectDialogToggle(false))
+                }
+            ))
         },
     }
-};
+}
 
 const AddProjectDialog = connect(mapStateToProps, mapDispatchToProps)(AddProjectDialogComponent)
 
-export default AddProjectDialog;
+export default AddProjectDialog
