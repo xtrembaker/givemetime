@@ -38,3 +38,14 @@ Be sure that $PGHOST and $PGPORT environment variables are set
 
     npm run client
     # project located at http://localhost:8080
+
+# contribute
+
+    alias sqitch="docker run -it --rm         \
+        -v $(pwd):/project --workdir=/project \
+        -v ~/.sqitch:/root/.sqitch            \
+        aleksandrvin/sqitch"
+    sqitch config --user user.name 'My Name'
+    sqitch config --user user.email my@email.com
+    
+    sqitch add appschema -n "Adds a new schema" 
