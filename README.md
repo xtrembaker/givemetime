@@ -49,3 +49,5 @@ Be sure that $PGHOST and $PGPORT environment variables are set
     sqitch config --user user.email my@email.com
     
     sqitch add appschema -n "Adds a new schema" 
+    sqitch deploy db:pg://$PGUSER:$PGPASSWORD@$PGHOST:$PGPORT/$PGDATABASE
+    sqitch verify db:pg://$PGUSER:$PGPASSWORD@$PGHOST:$PGPORT/$PGDATABASE
