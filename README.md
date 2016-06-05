@@ -1,3 +1,7 @@
+# CI
+
+[![Build Status](https://travis-ci.org/prevostc/givemetime.svg?branch=master)](https://travis-ci.org/prevostc/givemetime)
+
 # install node dependencies
 
 npm install
