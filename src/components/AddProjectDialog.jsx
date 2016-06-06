@@ -7,7 +7,7 @@ import ContentAdd from 'material-ui/svg-icons/content/add'
 import { connect } from 'react-redux'
 import { getGraphQL, projectCreated, addProjectDialogToggle, projectFormChange } from '../actions.js'
 
-class AddProjectDialogComponent extends React.Component {
+class AddProjectDialog extends React.Component {
 
     handleChange (prop) {
         return (event) => this.props.onChange(prop, event.target.value)
@@ -72,7 +72,7 @@ class AddProjectDialogComponent extends React.Component {
 }
 
 
-AddProjectDialogComponent.propTypes = {
+AddProjectDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     title: PropTypes.string.isRequired,
     estimate: PropTypes.number,
@@ -162,6 +162,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-const AddProjectDialog = connect(mapStateToProps, mapDispatchToProps)(AddProjectDialogComponent)
-
-export default AddProjectDialog
+export default connect(mapStateToProps, mapDispatchToProps)(AddProjectDialog)
