@@ -41,18 +41,10 @@ Be sure that $PGHOST and $PGPORT environment variables are set
 
 # contribute
 
-    alias sqitch="docker run -it --rm         \
-        -v $(pwd):/project --workdir=/project \
-        -v ~/.sqitch:/root/.sqitch            \
-        aleksandrvin/sqitch"
-    sqitch config --user user.name 'My Name'
-    sqitch config --user user.email my@email.com
+    npm run:_sqitch config --user user.name 'My Name'
+    npm run:_sqitch config --user user.email my@email.com
     
-    sqitch add appschema -n "Adds a new schema" 
-    sqitch deploy db:pg://$PGUSER:$PGPASSWORD@$PGHOST:$PGPORT/$PGDATABASE --verify
-    sqitch verify db:pg://$PGUSER:$PGPASSWORD@$PGHOST:$PGPORT/$PGDATABASE
+    # add a migration
+    npm run:_sqitch add migration_name -n "Do something" --requires appschema 
+        
     
-    alias sqitch="docker run --rm      \
-        -v $(pwd)/project:/test       \
-        digit/pg-prove                 \
-        -h $PGHOST -p $PGPORT -u $PGUSER -w $PGPASSWORD -d $PGDATABASE -t '/test/db/*.sql'"
