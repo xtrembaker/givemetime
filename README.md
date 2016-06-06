@@ -41,10 +41,19 @@ Be sure that $PGHOST and $PGPORT environment variables are set
 
 # contribute
 
-    npm run:_sqitch config --user user.name 'My Name'
-    npm run:_sqitch config --user user.email my@email.com
+    npm run db:_sqitch config --user user.name 'My Name'
+    npm run db:_sqitch config --user user.email my@email.com
     
     # add a migration
-    npm run:_sqitch add migration_name -n "Do something" --requires appschema 
-        
+    npm run db:_sqitch -- add migration_name -n "Do something" --requires appschema
+    
+    # deploy a migration 
+    npm run db:deploy --loglevel=silent
+    # revert a migration 
+    npm run db:revert --loglevel=silent
+    
+    # test migrations
+    npm run --loglevel=silent db:test
+    npm run --loglevel=silent db:revert 
+ 
     
