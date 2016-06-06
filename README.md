@@ -49,6 +49,8 @@ Be sure that $PGHOST and $PGPORT environment variables are set
     
     # deploy a migration 
     npm run db:deploy --loglevel=silent
+    # revert and deploy a migration
+    npm run db:rebase --loglevel=silent
     # revert a migration 
     npm run db:revert --loglevel=silent
     

@@ -10,6 +10,7 @@
     "db:_sqitch": "docker run -it --rm -v $(pwd):/project --workdir=/project -v ~/.sqitch:/root/.sqitch aleksandrvin/sqitch",
     "db:deploy": "npm run db:_sqitch --loglevel=silent -- deploy db:pg://$PGUSER:$PGPASSWORD@$PGHOST:$PGPORT/$PGDATABASE --verify",
     "db:revert": "npm run db:_sqitch --loglevel=silent -- revert db:pg://$PGUSER:$PGPASSWORD@$PGHOST:$PGPORT/$PGDATABASE --to @HEAD^ -y",
+    "db:rebase": "npm run db:_sqitch --loglevel=silent -- rebase db:pg://$PGUSER:$PGPASSWORD@$PGHOST:$PGPORT/$PGDATABASE @HEAD^ -y",
     "db:test": "docker run --rm -v $(pwd)/server/sqitch/test/:/test digit/docker-pg-prove -h $PGHOST -p $PGPORT -u $PGUSER -w $PGPASSWORD -d $PGDATABASE -t '/test/*.sql'",
     "client": "./node_modules/.bin/webpack-dev-server --host localhost --open",
     "server": "./node_modules/.bin/postgraphql postgres://$PGUSER:$PGPASSWORD@$PGHOST:$PGPORT/$PGDATABASE --schema give_me_time --development",

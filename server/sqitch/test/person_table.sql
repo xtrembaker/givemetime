@@ -1,7 +1,34 @@
 BEGIN;
-select plan(1);
+select no_plan();
 
-select has_table('give_me_time_public'::NAME, 'person'::NAME);
+set search_path to give_me_time_public, "$user", public, tap;
+select has_table('person'::name);
+select has_pk('person'::name);
+
+select has_column('person'::name, 'id'::name);
+select col_type_is('person'::name, 'id'::name, 'integer');
+select col_has_default('person'::name, 'id'::name);
+select col_is_pk('person'::name, 'id'::name);
+
+select has_column('person'::name, 'fullname'::name);
+select col_type_is('person'::name, 'fullname'::name, 'character varying');
+select col_hasnt_default('person'::name, 'fullname'::name);
+select col_not_null('person'::name, 'fullname'::name);
+
+select has_column('person'::name, 'credit'::name);
+select col_type_is('person'::name, 'credit'::name, 'integer');
+select col_hasnt_default('person'::name, 'credit'::name);
+select col_not_null('person'::name, 'credit'::name);
+select col_has_check('person'::name, 'credit'::name);
+
+select has_column('person'::name, 'created_at'::name);
+select col_type_is('person'::name, 'created_at'::name, 'timestamp with time zone');
+select col_not_null('person'::name, 'created_at'::name);
+select col_hasnt_default('person'::name, 'created_at'::name);
+
+select has_column('person'::name, 'updated_at'::name);
+select col_type_is('person'::name, 'updated_at'::name, 'timestamp with time zone');
+select col_hasnt_default('person'::name, 'updated_at'::name);
 
 select finish();
 ROLLBACK;
