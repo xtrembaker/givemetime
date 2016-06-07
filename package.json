@@ -4,7 +4,7 @@
   "description": "Project to give some time to a R&D project suggested by a team member",
   "main": "src/index.jsx",
   "scripts": {
-    "test": "./node_modules/.bin/eslint src --ext .js --ext .jsx && mocha --compilers js:babel-register --recursive",
+    "test": "./node_modules/.bin/eslint . --ext .js --ext .jsx && mocha --compilers js:babel-register --recursive",
     "db": "docker-compose -f server/docker-compose.yml up",
     "db:rm": "docker-compose -f server/docker-compose.yml rm",
     "client": "./node_modules/.bin/webpack-dev-server --host localhost --open",
