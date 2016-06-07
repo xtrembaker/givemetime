@@ -11,4 +11,8 @@ create table give_me_time_public.person (
   updated_at       timestamp with time zone check (updated_at >= created_at)
 );
 
+comment on table give_me_time_public.person is 'A user of the forum.';
+comment on column give_me_time_public.person.id is 'The primary key for the person.';
+comment on column give_me_time_public.person.credit is 'The amount of hours this person can give. Can''t be negative';
+
 COMMIT;
