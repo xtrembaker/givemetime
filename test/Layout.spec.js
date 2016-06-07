@@ -25,12 +25,12 @@ function setup (user) {
 
 describe('Layout', () => {
 
-    it('render login button when user in not logged in', () => {
+    it('render login message when user is not logged in', () => {
         const { output } = setup({})
         expect(output.props.children[1]).toBe('Login to view projects')
     })
 
-    it('render login button when user is logged in', () => {
+    it('render page layout when user is logged in', () => {
         const { output } = setup({
             id: 'an id',
             credit: 16,
