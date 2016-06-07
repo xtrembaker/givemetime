@@ -5,7 +5,7 @@ import { getGraphQL, projectFetched } from '../actions.js'
 import { Responsive, WidthProvider } from 'react-grid-layout'
 const ResponsiveReactGridLayout = WidthProvider(Responsive)
 
-class ProjectsTableComponent extends React.Component {
+export class ProjectsTable extends React.Component {
 
     componentDidMount () {
         this.props.loadProjects()
@@ -48,7 +48,7 @@ class ProjectsTableComponent extends React.Component {
     }
 }
 
-ProjectsTableComponent.propTypes = {
+ProjectsTable.propTypes = {
     projects: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
@@ -104,6 +104,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-const ProjectsTable = connect(mapStateToProps, mapDispatchToProps)(ProjectsTableComponent)
-
-export default ProjectsTable
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectsTable)

@@ -8,7 +8,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import { connect } from 'react-redux'
 
-class LayoutComponent extends React.Component {
+// Use named export for unconnected component (for tests)
+export class Layout extends React.Component {
     handleMenuClick () {
         this.refs.ProjectLeftNav.setState({ open: true })
     }
@@ -56,7 +57,7 @@ class LayoutComponent extends React.Component {
     }
 }
 
-LayoutComponent.propTypes = {
+Layout.propTypes = {
     user: PropTypes.shape({
         id: PropTypes.string,
     }).isRequired,
@@ -69,6 +70,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-const Layout = connect(mapStateToProps)(LayoutComponent)
-
-export default Layout
+export default connect(mapStateToProps)(Layout)
