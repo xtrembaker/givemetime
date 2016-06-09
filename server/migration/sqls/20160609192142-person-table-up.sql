@@ -15,4 +15,9 @@ comment on table give_me_time_public.person is 'A user of the forum.';
 comment on column give_me_time_public.person.id is 'The primary key for the person.';
 comment on column give_me_time_public.person.credit is 'The amount of hours this person can give. Can''t be negative';
 
+create trigger created_at before insert on give_me_time_public.person
+for each row execute procedure give_me_time_private.set_created_at();
+create trigger updated_at before update on give_me_time_public.person
+for each row execute procedure give_me_time_private.set_updated_at();
+
 COMMIT;

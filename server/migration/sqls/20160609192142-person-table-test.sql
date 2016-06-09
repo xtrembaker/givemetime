@@ -30,5 +30,11 @@ select has_column('person'::name, 'updated_at'::name);
 select col_type_is('person'::name, 'updated_at'::name, 'timestamp with time zone');
 select col_hasnt_default('person'::name, 'updated_at'::name);
 
+with valid_insert as (
+  insert into give_me_time_public.person (id, fullname, credit)
+  values (1, 'abc', 12)
+)
+select pass('Can insert person');
+
 select finish();
 ROLLBACK;

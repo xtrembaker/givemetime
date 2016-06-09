@@ -9,4 +9,22 @@ create schema give_me_time_public;
 -- another schema is so that it can be private.
 create schema give_me_time_private;
 
+
+create function give_me_time_private.set_created_at() returns trigger as $$
+begin
+  -- We will let the inserter manually set a `created_at` time if they desire.
+  if (new.created_at is null) then
+    new.created_at := current_timestamp;
+  end if;
+  return new;
+end;
+$$ language plpgsql;
+
+create function give_me_time_private.set_updated_at() returns trigger as $$
+begin
+  new.updated_at := current_timestamp;
+  return new;
+end;
+$$ language plpgsql;
+
 COMMIT;
