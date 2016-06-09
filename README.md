@@ -32,6 +32,7 @@ Be sure that $PGHOST and $PGPORT environment variables are set
 # start project
 
     npm run db
+    npm run db:migrate
 
     npm run server
     # graphiql interface located at http://localhost:3000
@@ -40,22 +41,11 @@ Be sure that $PGHOST and $PGPORT environment variables are set
     # project located at http://localhost:8080
 
 # contribute
-
-    npm run db:_sqitch config --user user.name 'My Name'
-    npm run db:_sqitch config --user user.email my@email.com
     
     # add a migration
-    npm run db:_sqitch -- add migration_name -n "Do something" --requires appschema
+    npm run db:migration:create my_migration
     
-    # deploy a migration 
-    npm run db:deploy --loglevel=silent
-    # revert and deploy a migration
-    npm run db:rebase --loglevel=silent
-    # revert a migration 
-    npm run db:revert --loglevel=silent
-    
-    # test migrations
-    npm run --loglevel=silent db:test
-    npm run --loglevel=silent db:revert 
+    # test deployed migrations
+    npm run db:test
  
     

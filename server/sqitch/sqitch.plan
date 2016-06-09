@@ -1,5 +1,0 @@
-%syntax-version=1.0.0
-%project=givemetime
-
-appschema 2016-06-05T22:35:55Z Clement Prevost <prevostclement@gmail.com> # Adds app schema
-person_table [appschema] 2016-06-06T21:38:54Z Clement Prevost <prevostclement@gmail.com> # Adds person table
