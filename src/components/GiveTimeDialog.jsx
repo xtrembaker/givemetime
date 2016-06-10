@@ -6,7 +6,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import { connect } from 'react-redux'
 import { giveTime, giveTimeFormChange, openGiveTimeDialog, getGraphQL, closeGiveTimeDialog } from '../actions.js'
 
-class GiveTimeDialogComponent extends React.Component {
+export class GiveTimeDialog extends React.Component {
     isOpen () {
         return this.props.openId === this.props.id
     }
@@ -57,7 +57,7 @@ class GiveTimeDialogComponent extends React.Component {
 }
 
 
-GiveTimeDialogComponent.propTypes = {
+GiveTimeDialog.propTypes = {
     openId: PropTypes.string,
     amount: PropTypes.number.isRequired,
     id: PropTypes.string.isRequired,
@@ -127,6 +127,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-const GiveTimeDialog = connect(mapStateToProps, mapDispatchToProps)(GiveTimeDialogComponent)
-
-export default GiveTimeDialog
+export default connect(mapStateToProps, mapDispatchToProps)(GiveTimeDialog)

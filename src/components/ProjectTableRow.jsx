@@ -9,7 +9,7 @@ import { connect } from 'react-redux'
 import { getGraphQL, projectDeleted } from '../actions.js'
 
 
-class ProjectTableRowComponent extends React.Component {
+export class ProjectTableRow extends React.Component {
     render () {
         return (
           <Card onTouchTap={this.handleDiscoverClick} expanded={null} expandable={false} initiallyExpanded={false}>
@@ -44,7 +44,7 @@ class ProjectTableRowComponent extends React.Component {
     }
 }
 
-ProjectTableRowComponent.propTypes = {
+ProjectTableRow.propTypes = {
     id: PropTypes.string.isRequired,
     rowId: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
@@ -76,6 +76,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-const ProjectTableRow = connect(null, mapDispatchToProps)(ProjectTableRowComponent)
-
-export default ProjectTableRow
+export default connect(null, mapDispatchToProps)(ProjectTableRow)

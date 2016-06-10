@@ -6,7 +6,7 @@ import LinearProgress from 'material-ui/LinearProgress'
 import { connect } from 'react-redux'
 import { closeProjectDialog, openProjectDialog } from '../actions.js'
 
-class ViewProjectDialogComponent extends React.Component {
+export class ViewProjectDialog extends React.Component {
     isOpen () {
         return this.props.openId === this.props.id
     }
@@ -45,7 +45,7 @@ class ViewProjectDialogComponent extends React.Component {
     }
 }
 
-ViewProjectDialogComponent.propTypes = {
+ViewProjectDialog.propTypes = {
     openId: PropTypes.string,
     id: PropTypes.string.isRequired,
     title: PropTypes.string,
@@ -74,7 +74,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-const ProjectDialog = connect(mapStateToProps, mapDispatchToProps)(ViewProjectDialogComponent)
-
-
-export default ProjectDialog
+export default connect(mapStateToProps, mapDispatchToProps)(ViewProjectDialog)

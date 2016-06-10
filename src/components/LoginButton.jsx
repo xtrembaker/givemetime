@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { getGraphQL, apologize, userLoggedIn, userLoggedOut } from '../actions.js'
 
 
-class LoginButtonComponent extends React.Component {
+export class LoginButton extends React.Component {
 
     handleGoogleResponse (response) {
         this.props.createUserIfNotExists(response)
@@ -32,7 +32,7 @@ class LoginButtonComponent extends React.Component {
     }
 }
 
-LoginButtonComponent.propTypes = {
+LoginButton.propTypes = {
     createUserIfNotExists: PropTypes.func.isRequired,
     user: PropTypes.shape({
         id: PropTypes.string,
@@ -94,6 +94,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-const LoginButton = connect(mapStateToProps, mapDispatchToProps)(LoginButtonComponent)
-
-export default LoginButton
+export default connect(mapStateToProps, mapDispatchToProps)(LoginButton)
