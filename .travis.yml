@@ -6,13 +6,13 @@ services:
 language: node_js
 
 before_install:
-- npm run db
-- npm run db:migrate
+  - npm run db
 
 node_js:
   - "6"
   - "5"
 
 script:
+  - npm run db:migrate
   - npm test
   - npm run db:test
