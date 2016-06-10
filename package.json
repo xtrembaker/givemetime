@@ -5,11 +5,15 @@
   "main": "src/index.jsx",
   "scripts": {
     "test": "./node_modules/.bin/eslint . --ext .js --ext .jsx && mocha --compilers js:babel-register --recursive",
-    "db": "docker-compose -f server/docker-compose.yml up",
-    "db:rm": "docker-compose -f server/docker-compose.yml rm",
+    "db": "./scripts/db.sh up",
+    "db:rm": "./scripts/db.sh rm",
+    "db:migration:create": "./scripts/db-migrate.sh --sql-file create",
+    "db:migrate": "./scripts/db-migrate.sh up",
+    "db:revert": "./scripts/db-migrate.sh down",
+    "db:test": "./scripts/db-test.sh",
     "client": "./node_modules/.bin/webpack-dev-server --host localhost --open",
-    "server": "./node_modules/.bin/postgraphql postgres://$PGUSER:$PGPASSWORD@$PGHOST:$PGPORT/$PGDATABASE --schema give_me_time --development",
-    "build": "./node_modules/.bin/webpack ./webpack.config.js",
+    "server": "./scripts/server.sh",
+    "build": "./node_modules/.bin/webpack ./webpack.config.js"
     "jest": "jest --verbose"
   },
   "repository": {
@@ -35,6 +39,7 @@
     "babel-preset-stage-1": "^6.5.0",
     "babel-register": "^6.9.0",
     "css-loader": "^0.23.1",
+    "db-migrate": "^0.9.25",
     "eslint": "^2.11.1",
     "eslint-plugin-react": "^5.1.1",
     "expect": "^1.20.1",

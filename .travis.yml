@@ -1,4 +1,13 @@
+sudo: required
+
+services:
+  - docker
+
 language: node_js
+
+before_install:
+- npm run db
+- npm run db:migrate
 
 node_js:
   - "6"
@@ -6,3 +15,4 @@ node_js:
 
 script:
   - npm test
+  - npm run db:test

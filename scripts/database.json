@@ -1,0 +1,11 @@
+{
+  "dev": {
+    "host": { "ENV" : "PGHOST" },
+    "port": { "ENV" : "PGPORT" },
+    "user": { "ENV" : "PGUSER" },
+    "password" : { "ENV" : "PGPASSWORD" },
+    "database": { "ENV" : "PGDATABASE" },
+    "driver": "postgresql",
+    "multipleStatements": true
+  }
+}

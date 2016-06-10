@@ -9,7 +9,6 @@ services:
       - PG_PROJECT_DATABASE=${PGDATABASE}
     volumes:
       - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
-      - ./schema.sql:/sql/schema.sql
       - ./superuser.sql:/sql/superuser.sql
     ports:
       - 5430:5432
