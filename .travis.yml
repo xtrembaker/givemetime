@@ -8,12 +8,12 @@ language: node_js
 before_install:
   - docker run --name server-db -d -e POSTGRES_PASSWORD=postgres -e PG_PROJECT_USER=give_me_time -e PG_PROJECT_PASSWORD=give_me_time -e PG_PROJECT_DATABASE=give_me_time -v $(pwd)/server/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh -v $(pwd)/server/superuser.sql:/sql/superuser.sql -p 5430:5432 postgres
   - sleep 3 # wait for postgres to listen
+  - npm run db:migrate
 
 node_js:
   - "6"
   - "5"
 
 script:
-  - npm run db:migrate
+  - docker run --rm --link server-db:db -v $(pwd)/server/migration/sqls/:/test digit/docker-pg-prove -h db -p 5432 -u give_me_time -w give_me_time -d give_me_time -t '/test/*-test.sql'
   - npm test
-  - npm run db:test
