@@ -118,10 +118,3 @@ export const giveTime = (amount, projectId) => {
         id: projectId,
     }
 }
-export const giveTimeFormChange = (amount, projectId) => {
-    return {
-        type: 'GIVE_TIME_FORM_CHANGE',
-        amount: amount,
-        id: projectId,
-    }
-}

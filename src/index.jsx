@@ -18,8 +18,6 @@ const initialState = {
     },
     giveTimeDialog: {
         openId: null,
-        userCredit: 1,
-        amount: 10,
     },
     projects: [],
 }

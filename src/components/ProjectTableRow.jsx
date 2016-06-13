@@ -34,7 +34,13 @@ export class ProjectTableRow extends React.Component {
                       title={this.props.title}
                       author={this.props.author}
                       estimate={this.props.estimate}
-                      acquired={this.props.acquired} />
+                      acquired={this.props.acquired}
+                      initialValues={{
+                          amount: 0,
+                          projectRowId: this.props.rowId,
+                          userRowId: this.props.userRowId,
+                      }}
+                  />
                     <IconButton onTouchTap={() => this.props.onDelete.call(this, this.props.id)}>
                       <ActionDelete />
                   </IconButton>
@@ -53,6 +59,7 @@ ProjectTableRow.propTypes = {
     estimate: PropTypes.number.isRequired,
     acquired: PropTypes.number.isRequired,
     onDelete: PropTypes.func.isRequired,
+    userRowId: PropTypes.number.isRequired,
 }
 
 

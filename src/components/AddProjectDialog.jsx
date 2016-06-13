@@ -24,7 +24,7 @@ export class AddProjectDialog extends React.Component {
             width: '100%',
         }
 
-        const { fields: { author, title, estimate, description }, handleSubmit } = this.props
+        const { fields: { title, estimate, description }, handleSubmit } = this.props
 
         const actions = [
             <FlatButton
@@ -35,7 +35,7 @@ export class AddProjectDialog extends React.Component {
             <FlatButton
                 label="Save"
                 secondary={true}
-                onTouchTap={handleSubmit(this.props.onSubmit.bind(this))}
+                onTouchTap={handleSubmit(this.props.onSubmit)}
             />,
         ]
 
@@ -52,16 +52,14 @@ export class AddProjectDialog extends React.Component {
                     onRequestClose={this.props.closeDialog}
                     autoScrollBodyContent={true}
                 >
-                    <form onSubmit={handleSubmit(this.props.onSubmit.bind(this))}>
-                        <TextField floatingLabelText="Author" style={textFieldWidth} disabled={true} />
+                    <form onSubmit={handleSubmit(this.props.onSubmit)}>
+                        <TextField floatingLabelText="Author" style={textFieldWidth} disabled={true} value={this.props.userFullName} />
                         <br/>
                         <TextField floatingLabelText="Project Name" style={textFieldWidth} {...title}/>
                         <br/>
                         <TextField floatingLabelText="Estimated hours required " style={textFieldWidth} {...estimate}/>
                         <br/>
                         <TextField floatingLabelText="Project's description" multiLine={true} rows={4} style={textFieldWidth} {...description}/>
-                        <br/>
-                        <TextField floatingLabelText="AuthorId " style={textFieldWidth} {...author} />
                     </form>
                 </Dialog>
             </div>
@@ -76,12 +74,13 @@ AddProjectDialog.propTypes = {
     openDialog: PropTypes.func.isRequired,
     closeDialog: PropTypes.func.isRequired,
     userRowId: PropTypes.number.isRequired,
+    userFullName: PropTypes.string.isRequired,
     fields: PropTypes.shape({
         author: PropTypes.object.isRequired,
         title: PropTypes.object.isRequired,
         estimate: PropTypes.object.isRequired,
         description: PropTypes.object.isRequired,
-    }),
+    }).isRequired,
     handleSubmit: PropTypes.func.isRequired,
 }
 
@@ -89,9 +88,7 @@ const mapStateToProps = (state) => {
     return {
         open: state.project.addProjectDialog.open,
         userRowId: state.project.user.rowId,
-        initialValues: {
-            author: state.project.user.rowId,
-        },
+        userFullName: state.project.user.fullname,
     }
 }
 
@@ -104,7 +101,6 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(addProjectDialogToggle(false))
         },
         onSubmit: (form) => {
-            // @todo: find another way to get the user id that does not depend on props access
             dispatch(getGraphQL(`
                 mutation createProject(
                     $title: String!,

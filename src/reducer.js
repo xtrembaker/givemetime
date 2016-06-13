@@ -79,18 +79,6 @@ export default function (state, action) {
             user: Object.assign({}, state.user, { credit: state.user.credit - action.amount }),
         })
 
-    case 'GIVE_TIME_FORM_CHANGE':
-        return Object.assign({}, state, {
-            giveTimeDialog: Object.assign({}, state.giveTimeDialog, {
-                amount: Math.max(
-                    0,
-                    state.projects.reduce((agg, project) => {
-                        return project.id === action.id ? Math.min(agg, project.estimate - project.acquired) : agg
-                    }, Math.min(action.amount, state.user.credit))
-                ),
-            }),
-        })
-
     case 'APOLOGIZE':
         console.error(action.message) // eslint-disable-line no-console
         return state

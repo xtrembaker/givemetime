@@ -31,11 +31,11 @@ export class Layout extends React.Component {
                     </MuiThemeProvider>
 
                     <MuiThemeProvider muiTheme={getMuiTheme()}>
-                        <ProjectsTable/>
+                        <ProjectsTable userRowId={this.props.user.rowId}/>
                     </MuiThemeProvider>
 
                     <MuiThemeProvider muiTheme={getMuiTheme()}>
-                        <AddProjectDialog />
+                        <AddProjectDialog initialValues={{ author: this.props.user.rowId }} />
                     </MuiThemeProvider>
                 </div>
             )
@@ -60,6 +60,7 @@ export class Layout extends React.Component {
 Layout.propTypes = {
     user: PropTypes.shape({
         id: PropTypes.string,
+        rowId: PropTypes.number,
     }).isRequired,
 }
 

@@ -4,7 +4,8 @@ import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 import { connect } from 'react-redux'
-import { giveTime, giveTimeFormChange, openGiveTimeDialog, getGraphQL, closeGiveTimeDialog } from '../actions.js'
+import { giveTime, openGiveTimeDialog, getGraphQL, closeGiveTimeDialog } from '../actions.js'
+import { reduxForm } from 'redux-form'
 
 export class GiveTimeDialog extends React.Component {
     isOpen () {
@@ -15,6 +16,9 @@ export class GiveTimeDialog extends React.Component {
         const textFieldWidth = {
             width: '30px',
         }
+
+        const { fields: { amount }, handleSubmit } = this.props
+
         const actions = [
             <FlatButton
                 label="Close"
@@ -24,11 +28,12 @@ export class GiveTimeDialog extends React.Component {
             <FlatButton
                 label="GIVE !"
                 secondary={true}
-                onTouchTap={() => this.props.onSave(this.props.amount, this.props.rowId, this.props.userRowId)}
+                onTouchTap={handleSubmit(this.props.onSubmit)}
             />,
         ]
 
         const title = 'Give Time to project ' + this.props.title + ' (' + this.props.acquired + '/' + this.props.estimate + ')'
+
         return (
             <span>
                 <RaisedButton label="GIVE TIME" secondary={true}
@@ -41,15 +46,13 @@ export class GiveTimeDialog extends React.Component {
                     onRequestClose={this.props.closeDialog}
                     autoScrollBodyContent={true}
                 >
-                    <div>
+                    <form onSubmit={handleSubmit(this.props.onSubmit)}>
                         <TextField
                             name="amount"
                             style={textFieldWidth}
-                            value={this.props.amount}
-                            errorText={this.props.errorAmount}
-                            onChange={(e) => this.props.onChange(parseInt(e.target.value) || 0, this.props.id)}
+                            {...amount}
                         /> out of {this.props.userCredit} credits.
-                    </div>
+                    </form>
                 </Dialog>
             </span>
         )
@@ -59,19 +62,21 @@ export class GiveTimeDialog extends React.Component {
 
 GiveTimeDialog.propTypes = {
     openId: PropTypes.string,
-    amount: PropTypes.number.isRequired,
     id: PropTypes.string.isRequired,
     rowId: PropTypes.number.isRequired,
     userRowId: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
+    fields: PropTypes.shape({
+        amount: PropTypes.object.isRequired,
+    }).isRequired,
     estimate: PropTypes.number.isRequired,
     acquired: PropTypes.number.isRequired,
     userCredit: PropTypes.number.isRequired,
     errorAmount: PropTypes.string,
-    onChange: PropTypes.func.isRequired,
     closeDialog: PropTypes.func.isRequired,
     openDialog: PropTypes.func.isRequired,
-    onSave: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => {
@@ -86,7 +91,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onSave: (amount, projectRowId, userRowId) => {
+        onSubmit: (form) => {
             dispatch(getGraphQL(`
                 mutation giveTime(
                     $projectRowId: Int!,
@@ -105,12 +110,12 @@ const mapDispatchToProps = (dispatch) => {
                     }
                 }`,
                 {
-                    credit: amount,
-                    userRowId: userRowId,
-                    projectRowId: projectRowId,
+                    credit: form.amount,
+                    userRowId: form.userRowId,
+                    projectRowId: form.projectRowId,
                 },
                 () => {
-                    dispatch(giveTime(amount, projectRowId))
+                    dispatch(giveTime(form.amount, form.projectRowId))
                     dispatch(closeGiveTimeDialog())
                 }
             ))
@@ -121,10 +126,11 @@ const mapDispatchToProps = (dispatch) => {
         closeDialog: () => {
             dispatch(closeGiveTimeDialog())
         },
-        onChange: (amount, projectId) => {
-            dispatch(giveTimeFormChange(amount, projectId))
-        },
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(GiveTimeDialog)
+export default reduxForm({
+    form: 'giveProjectDialog',
+    fields: ['amount', 'projectRowId', 'userRowId'],
+})(connect(mapStateToProps, mapDispatchToProps)(GiveTimeDialog))
+

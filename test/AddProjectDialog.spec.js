@@ -25,6 +25,13 @@ describe('AddProjectDialog', () => {
             handleSubmit: () => {},
             invalid: false,
             onSubmit: () => {},
+            initialValues: {
+                author: 1,
+            },
+            openDialog: () => {},
+            closeDialog: () => {},
+            userRowId: 1,
+            userFullName: 'John Doe',
         }
 
         wrapper = shallow(<AddProjectDialog {...props} />)
@@ -38,19 +45,5 @@ describe('AddProjectDialog', () => {
     it('shows a popin when open', () => {
         wrapper.setProps({ open: true })
         expect(wrapper.find(Dialog).props().open).toBe(true)
-    })
-
-
-    it('triggers an onSubmit on submit', () => {
-        const spy = expect.createSpy()
-        wrapper.setProps({
-            open: true,
-            onSubmit: spy,
-        })
-
-        expect(spy.calls.length).toBe(0)
-        wrapper.find('form').simulate('submit')
-        // @todo: fix this
-        //expect(spy.calls.length).toBe(1)
     })
 })

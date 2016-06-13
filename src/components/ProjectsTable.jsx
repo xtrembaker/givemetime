@@ -40,6 +40,7 @@ export class ProjectsTable extends React.Component {
                             description={project.description}
                             estimate={project.estimate}
                             acquired={project.acquired}
+                            userRowId={this.props.userRowId}
                         />
                     </div>
                 )}
@@ -58,6 +59,7 @@ ProjectsTable.propTypes = {
         acquired: PropTypes.number.isRequired,
     }).isRequired).isRequired,
     loadProjects: PropTypes.func.isRequired,
+    userRowId: PropTypes.number.isRequired,
 }
 
 const mapStateToProps = (state) => {
