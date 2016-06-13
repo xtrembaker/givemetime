@@ -1,6 +1,5 @@
 
 export default function (state, action) {
-    let tmp = {}
     switch (action.type) {
     case 'PROJECT_DELETED':
         return Object.assign({}, state, {
@@ -39,14 +38,9 @@ export default function (state, action) {
             }]),
         })
 
-    case 'ADD_PROJECT_DIALOG_OPEN':
+    case 'ADD_PROJECT_DIALOG_TOGGLE':
         return Object.assign({}, state, {
-            addProjectDialog: Object.assign({}, state.addProjectDialog, { open: true }),
-        })
-
-    case 'ADD_PROJECT_DIALOG_CLOSE':
-        return Object.assign({}, state, {
-            addProjectDialog: Object.assign({}, state.addProjectDialog, { open: false }),
+            addProjectDialog: Object.assign({}, state.addProjectDialog, { open: action.open }),
         })
 
     case 'VIEW_PROJECT_DIALOG_OPEN':
@@ -97,15 +91,9 @@ export default function (state, action) {
             }),
         })
 
-    case 'PROJECT_FORM_CHANGE':
-        tmp[action.prop] = action.value
-        return Object.assign({}, state, {
-            addProjectDialog: Object.assign({}, state.addProjectDialog, tmp),
-        })
-
     case 'APOLOGIZE':
         console.error(action.message) // eslint-disable-line no-console
         return state
     }
-    return state
+    return state || {}
 }

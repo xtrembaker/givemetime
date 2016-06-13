@@ -76,11 +76,11 @@ GiveTimeDialog.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        openId: state.giveTimeDialog.openId,
-        amount: state.giveTimeDialog.amount,
-        userCredit: state.giveTimeDialog.userCredit,
-        userId: state.user.id,
-        userRowId: state.user.rowId,
+        openId: state.project.giveTimeDialog.openId,
+        amount: state.project.giveTimeDialog.amount,
+        userCredit: state.project.giveTimeDialog.userCredit,
+        userId: state.project.user.id,
+        userRowId: state.project.user.rowId,
     }
 }
 

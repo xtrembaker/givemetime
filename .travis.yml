@@ -7,7 +7,6 @@ language: node_js
 
 before_install:
   - docker run --name server-db -d -e POSTGRES_PASSWORD=postgres -e PG_PROJECT_USER=give_me_time -e PG_PROJECT_PASSWORD=give_me_time -e PG_PROJECT_DATABASE=give_me_time -v $(pwd)/server/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh -v $(pwd)/server/superuser.sql:/sql/superuser.sql -p 5430:5432 postgres
-  - sleep 3 # wait for postgres to listen
 
 node_js:
   - "6"

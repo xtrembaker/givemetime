@@ -1,18 +1,17 @@
 import React from 'react'
 import ReactDom from 'react-dom'
-import giveMeTimeReducers from './reducer.js'
+import giveMeTimeReducer from './reducer.js'
 import Layout from './components/Layout.jsx'
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
+import { reducer as formReducer } from 'redux-form'
+
 
 const initialState = {
     user: {},
     addProjectDialog: {
         open: false,
-        title: '',
-        estimate: 0,
-        author: '',
     },
     viewProjectDialog: {
         openId: null,
@@ -25,7 +24,15 @@ const initialState = {
     projects: [],
 }
 
-const store = createStore(giveMeTimeReducers, initialState, applyMiddleware(thunkMiddleware))
+const reducers = {
+    project: giveMeTimeReducer,
+    form: formReducer,
+}
+
+const reducer = combineReducers(reducers)
+const store = createStore(reducer, {
+    project: initialState,
+}, applyMiddleware(thunkMiddleware))
 
 ReactDom.render(
     <Provider store={store}>

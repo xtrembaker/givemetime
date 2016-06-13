@@ -62,7 +62,7 @@ ProjectsTable.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        projects: state.projects,
+        projects: state.project.projects,
     }
 }
 

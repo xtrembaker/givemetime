@@ -81,14 +81,9 @@ export const apologize = (msg) => {
 }
 
 export const addProjectDialogToggle = (open) => {
-    if (open) {
-        return {
-            type: 'ADD_PROJECT_DIALOG_OPEN',
-        }
-    } else {
-        return {
-            type: 'ADD_PROJECT_DIALOG_CLOSE',
-        }
+    return {
+        type: 'ADD_PROJECT_DIALOG_TOGGLE',
+        open: !!open,
     }
 }
 
@@ -128,14 +123,5 @@ export const giveTimeFormChange = (amount, projectId) => {
         type: 'GIVE_TIME_FORM_CHANGE',
         amount: amount,
         id: projectId,
-    }
-}
-
-// create dependency between store structure and redux connector but small amount of code :)
-export const projectFormChange = (prop, value) => {
-    return {
-        type: 'PROJECT_FORM_CHANGE',
-        prop: prop,
-        value: value,
     }
 }
