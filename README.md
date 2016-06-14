@@ -1,6 +1,7 @@
 # CI
 
 [![Build Status](https://travis-ci.org/prevostc/givemetime.svg?branch=master)](https://travis-ci.org/prevostc/givemetime)
+[![Coverage Status](https://coveralls.io/repos/github/prevostc/givemetime/badge.svg?branch=master)](https://coveralls.io/github/prevostc/givemetime?branch=master)
 
 # install node dependencies
 
