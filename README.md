@@ -22,5 +22,5 @@ npm install
     npm run server
     # graphiql interface located at http://localhost:3000
 
-    npm run client
+    npm start
     # project located at http://localhost:8080
