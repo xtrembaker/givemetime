@@ -16,7 +16,7 @@ module.exports = function (config) {
             './src/**/*.spec.js*': ['webpack'],
             './src/**/*.js*': ['webpack'],
         },
-        reporters: ['progress', 'coverage'],
+        reporters: ['progress', 'coverage', 'coveralls'],
         singleRun: true,
         webpack: {
             entry: {},
