@@ -1,4 +1,3 @@
-import React from 'react'
 import testSetupProvider from '../testSetup.js'
 import expect from 'expect'
 

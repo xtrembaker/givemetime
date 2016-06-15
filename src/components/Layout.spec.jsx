@@ -1,4 +1,3 @@
-import React from 'react'
 import testSetupProvider from '../testSetup.js'
 import expect from 'expect'
 
@@ -8,7 +7,7 @@ import { Layout } from './Layout.jsx'
 describe('Layout', () => {
 
     const setup = testSetupProvider({
-        user: { }
+        user: { },
     })
 
     it('render login message when user is not logged in', () => {
