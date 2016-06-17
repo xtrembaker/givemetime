@@ -12,3 +12,9 @@ services:
       - ./superuser.sql:/sql/superuser.sql
     ports:
       - 5430:5432
+    networks:
+      - give_me_time_db
+
+networks:
+  give_me_time_db:
+    driver: bridge

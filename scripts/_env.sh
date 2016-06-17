@@ -5,7 +5,7 @@ if [[ "$unamestr" == 'Darwin' ]]; then
     # mac users must use docker machine
     export PGHOST=$(docker-machine inspect --format '{{ .Driver.IPAddress }}' default)
 else
-    export PGHOST=127.0.0.1
+    export PGHOST=0.0.0.0
 fi
 
 export PGPORT=5430

@@ -17,7 +17,8 @@ npm install
 # start project
 
     npm run db
-    npm run db:migrate
+    npm run db:migrate --loglevel=silent
+    npm run db:test --loglevel=silent
 
     npm run server
     # graphiql interface located at http://localhost:3000

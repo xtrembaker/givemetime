@@ -11,8 +11,8 @@
     "db:migrate": "./scripts/db-migrate.sh up",
     "db:revert": "./scripts/db-migrate.sh down",
     "db:test": "./scripts/db-test.sh",
-    "start": "./node_modules/.bin/webpack-dev-server --config ./tooling/webpack.config.js --inline --quiet --host localhost --open",
-    "webpack": "./node_modules/.bin/webpack --config tooling/webpack.config.js",
+    "start": "./node_modules/.bin/webpack-dev-server --config ./webpack.config.js --inline --hot --host localhost --open",
+    "webpack": "./node_modules/.bin/webpack --config webpack.config.js",
     "server": "./scripts/server.sh",
     "build": "./node_modules/.bin/webpack ./webpack.config.js",
     "test:watch": "./node_modules/.bin/karma start --single-run=false karma.conf.js"
