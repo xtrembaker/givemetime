@@ -17,7 +17,6 @@ TODO (tooling)
 --------------
 
 - Sourcemaps for karma
-- Redux hot module reloading
 - Unit test everything
 - Merge db and server
 - Automatic migrate on server start

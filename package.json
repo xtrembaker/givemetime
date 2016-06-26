@@ -4,7 +4,7 @@
   "description": "Project to give some time to a R&D project suggested by a team member",
   "main": "src/index.jsx",
   "scripts": {
-    "test": "./node_modules/.bin/eslint . --ext .js --ext .jsx && ./node_modules/.bin/karma start --single-run=true karma.conf.js",
+    "test": "./node_modules/.bin/eslint . --ext .js --ext .jsx && NODE_ENV=test ./node_modules/.bin/karma start --single-run=true karma.conf.js",
     "db": "./scripts/db.sh up",
     "db:rm": "./scripts/db.sh rm",
     "db:migration:create": "./scripts/db-migrate.sh --sql-file create",
