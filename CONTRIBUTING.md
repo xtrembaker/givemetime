@@ -16,7 +16,6 @@
 TODO (tooling)
 --------------
 
-- Sourcemaps for webpack dev server
 - Sourcemaps for karma
 - Redux hot module reloading
 - Redux time travel

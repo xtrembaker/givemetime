@@ -11,7 +11,7 @@
     "db:migrate": "./scripts/db-migrate.sh up",
     "db:revert": "./scripts/db-migrate.sh down",
     "db:test": "./scripts/db-test.sh",
-    "start": "./node_modules/.bin/webpack-dev-server --config ./webpack.config.js --inline --hot --host localhost --open",
+    "start": "./node_modules/.bin/webpack-dev-server --config ./webpack.config.js -d --inline --hot --host localhost --open",
     "webpack": "./node_modules/.bin/webpack --config webpack.config.js",
     "server": "./scripts/server.sh",
     "psql": "./scripts/psql.sh",
