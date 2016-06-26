@@ -34,7 +34,7 @@ export class Layout extends React.Component {
             : (
                 <div>Login to view projects</div>
             )
-        
+
         return (
             <div>
                 <MuiThemeProvider muiTheme={getMuiTheme()}>
