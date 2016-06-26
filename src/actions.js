@@ -87,6 +87,13 @@ export const addProjectDialogToggle = (open) => {
     }
 }
 
+export const globalMenuToggle = (open) => {
+    return {
+        type: 'GLOBAL_MENU_TOGGLE',
+        open: !!open,
+    }
+}
+
 export const closeProjectDialog = () => {
     return {
         type: 'VIEW_PROJECT_DIALOG_CLOSE',

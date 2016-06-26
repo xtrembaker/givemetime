@@ -43,6 +43,9 @@ export default function (state, action) {
             addProjectDialog: Object.assign({}, state.addProjectDialog, { open: action.open }),
         })
 
+    case 'GLOBAL_MENU_TOGGLE':
+        return Object.assign({}, state, { globalMenuOpen: action.open })
+
     case 'VIEW_PROJECT_DIALOG_OPEN':
         return Object.assign({}, state, {
             viewProjectDialog: Object.assign({}, state.viewProjectDialog, { openId: action.id }),

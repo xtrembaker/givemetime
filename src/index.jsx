@@ -10,6 +10,7 @@ import { reducer as formReducer } from 'redux-form'
 
 const initialState = {
     user: {},
+    globalMenuOpen: false,
     addProjectDialog: {
         open: false,
     },
