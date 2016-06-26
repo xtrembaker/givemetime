@@ -8,6 +8,9 @@ import configureStore from './configureStore.js'
 // Don't do this! You’re bringing DevTools into the production bundle.
 import DevTools from './components/DevTools.jsx'
 
+import injectTapEventPlugin from 'react-tap-event-plugin'
+injectTapEventPlugin()
+
 const initialState = {
     user: {},
     globalMenuOpen: false,

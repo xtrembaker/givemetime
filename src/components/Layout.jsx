@@ -9,8 +9,6 @@ import { connect } from 'react-redux'
 import { globalMenuToggle } from '../actions.js'
 import Drawer from 'material-ui/Drawer'
 import MenuItem from 'material-ui/MenuItem'
-import injectTapEventPlugin from 'react-tap-event-plugin'
-injectTapEventPlugin()
 
 // Use named export for unconnected component (for tests)
 export class Layout extends React.Component {
