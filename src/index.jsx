@@ -1,12 +1,13 @@
 import React from 'react'
 import ReactDom from 'react-dom'
-import giveMeTimeReducer from './reducer.js'
 import Layout from './components/Layout.jsx'
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
-import thunkMiddleware from 'redux-thunk'
-import { reducer as formReducer } from 'redux-form'
 
+import configureStore from './configureStore.js'
+
+// Don't do this! You’re bringing DevTools into the production bundle.
+import DevTools from './components/DevTools.jsx'
 
 const initialState = {
     user: {},
@@ -23,19 +24,16 @@ const initialState = {
     projects: [],
 }
 
-const reducers = {
-    project: giveMeTimeReducer,
-    form: formReducer,
-}
-
-const reducer = combineReducers(reducers)
-const store = createStore(reducer, {
+const store = configureStore({
     project: initialState,
-}, applyMiddleware(thunkMiddleware))
+});
 
 ReactDom.render(
     <Provider store={store}>
-        <Layout />
+        <div>
+            <Layout />
+            <DevTools />
+        </div>
     </Provider>,
     document.getElementById('main')
 )

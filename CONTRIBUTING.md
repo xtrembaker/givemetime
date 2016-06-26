@@ -18,7 +18,6 @@ TODO (tooling)
 
 - Sourcemaps for karma
 - Redux hot module reloading
-- Redux time travel
 - Unit test everything
 - Merge db and server
 - Automatic migrate on server start
