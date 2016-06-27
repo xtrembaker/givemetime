@@ -20,6 +20,7 @@ TODO (tooling)
 - Unit test everything
 - Merge db and server
 - Automatic migrate on server start
+- Use immutable state 
   
 TODO (features)
 ---------------
@@ -32,3 +33,4 @@ TODO (features)
 - Credit users every month
 - Better side menu
 - Better grid system
+- Business objects and classes
