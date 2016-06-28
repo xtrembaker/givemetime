@@ -1,79 +1,90 @@
-//import {Map} from 'immutable';
 
-
-export default function (state = {}, action) {
+export default function (state, action) {
     switch (action.type) {
-        /*case 'APOLLO_MUTATION_INIT':
-        case 'APOLLO_MUTATION_RESULT':
-            return state;*/
+    case 'PROJECT_DELETED':
+        return Object.assign({}, state, {
+            projects: state.projects.filter((project) => project.id !== action.id),
+        })
 
-        case 'CREATE_PROJECT' :
-            var newProjectsList = state.projects.concat([{
+    case 'USER_LOGGED_IN':
+        return Object.assign({}, state, { user: {
+            id : action.id,
+            rowId: action.rowId,
+            credit: action.credit,
+            fullname: action.fullname,
+        } })
+
+    case 'USER_LOGGED_OUT':
+        return Object.assign({}, state, { user: {
+            id : action.id,
+            rowId: action.rowId,
+            credit: action.credit,
+            fullname: action.fullname,
+        }, projects: [] })
+
+    case 'PROJECT_CREATED':
+    case 'PROJECT_FETCHED':
+        return Object.assign({}, state, {
+            projects: state.projects.concat([{
                 id: action.id,
+                rowId: action.rowId,
+                name: action.name,
+                time: action.time,
                 title: action.title,
                 estimate: action.estimate,
                 acquired: action.acquired,
                 description: action.description,
                 author: action.author,
-            }]);
-            return Object.assign({}, state, {projects: newProjectsList});
+            }]),
+        })
 
-        case 'ADD_PROJECT_DIALOG_OPEN':
-            let addProjectDialogOpen = Object.assign({}, state.addProjectDialog, {open: true});
-            return Object.assign({}, state, {addProjectDialog: addProjectDialogOpen});
+    case 'ADD_PROJECT_DIALOG_TOGGLE':
+        return Object.assign({}, state, {
+            addProjectDialog: Object.assign({}, state.addProjectDialog, { open: action.open }),
+        })
 
-        case 'ADD_PROJECT_DIALOG_CLOSE':
-            let addProjectDialogClosed = Object.assign({}, state.addProjectDialog, {open: false});
-            return Object.assign({}, state, {addProjectDialog: addProjectDialogClosed});
+    case 'GLOBAL_MENU_TOGGLE':
+        return Object.assign({}, state, { globalMenuOpen: action.open })
 
-        case 'VIEW_PROJECT_DIALOG_OPEN':
-            let viewProjectDialogOpen = Object.assign({}, state.viewProjectDialog, {openId: action.id});
-            return Object.assign({}, state, {viewProjectDialog: viewProjectDialogOpen});
+    case 'VIEW_PROJECT_DIALOG_OPEN':
+        return Object.assign({}, state, {
+            viewProjectDialog: Object.assign({}, state.viewProjectDialog, { openId: action.id }),
+        })
 
-        case 'VIEW_PROJECT_DIALOG_CLOSE':
-            let viewProjectDialogClosed = Object.assign({}, state.viewProjectDialog, {openId: null});
-            return Object.assign({}, state, {viewProjectDialog: viewProjectDialogClosed});
+    case 'VIEW_PROJECT_DIALOG_CLOSE':
+        return Object.assign({}, state, {
+            viewProjectDialog: Object.assign({}, state.viewProjectDialog, { openId: null }),
+        })
 
-        case 'GIVE_TIME_DIALOG_OPEN':
-            let defaultAmount = state.projects.reduce((agg, project) => {
-                return project.id === action.id ? Math.min(agg, project.estimate - project.acquired) : agg
-            }, state.user.credit)
-            let giveTimeDialogOpen = Object.assign({}, state.giveTimeDialog, {
+    case 'GIVE_TIME_DIALOG_OPEN':
+        return Object.assign({}, state, {
+            giveTimeDialog: Object.assign({}, state.giveTimeDialog, {
                 openId: action.id,
                 userCredit: state.user.credit,
-                amount: defaultAmount
-            });
-            return Object.assign({}, state, {giveTimeDialog: giveTimeDialogOpen});
+                amount: state.projects.reduce((agg, project) => {
+                    return project.id === action.id ? Math.min(agg, project.estimate - project.acquired) : agg
+                }, state.user.credit),
+            }),
+        })
 
-        case 'GIVE_TIME_DIALOG_CLOSE':
-            let giveTimeDialogClose = Object.assign({}, state.giveTimeDialog, {openId: null, projectId: null});
-            return Object.assign({}, state, {giveTimeDialog: giveTimeDialogClose});
+    case 'GIVE_TIME_DIALOG_CLOSE':
+        return Object.assign({}, state, {
+            giveTimeDialog: Object.assign({}, state.giveTimeDialog, { openId: null, projectId: null }),
+        })
 
-        case 'GIVE_TIME':
-            let projects = state.projects.map(project => {
-                if (project.id === action.id) {
-                    return Object.assign({}, project, {acquired: project.acquired + action.amount});
-                } else {
-                    return project;
-                }
-            })
-            let user = Object.assign({}, state.user, {credit: state.user.credit - action.amount});
-            return Object.assign({}, state, {projects: projects, user: user});
+    case 'GIVE_TIME':
+        return Object.assign({}, state, {
+            projects: state.projects.map(
+                (project) => project.id === action.id
+                    ? Object.assign({}, project, { acquired: project.acquired + action.amount })
+                    : project
+            ),
+            user: Object.assign({}, state.user, { credit: state.user.credit - action.amount }),
+        })
 
-        case 'GIVE_TIME_FORM_CHANGE':
-            let amount = state.projects.reduce((agg, project) => {
-                return project.id === action.id ? Math.min(agg, project.estimate - project.acquired) : agg
-            }, Math.min(action.amount, state.user.credit))
-            let giveTimeFormChange = Object.assign({}, state.giveTimeDialog, {
-                amount: Math.max(0, amount)
-            });
-            return Object.assign({}, state, {giveTimeDialog: giveTimeFormChange});
-
-        case 'PROJECT_FORM_CHANGE':
-            let newFormValues = {};
-            newFormValues[action.prop] = action.value;
-            let addProjectDialogFormChange = Object.assign({}, state.addProjectDialog, newFormValues);
-            return Object.assign({}, state, {addProjectDialog: addProjectDialogFormChange});
-    };
-    return state;
+    case 'APOLOGIZE':
+        console.error(action.message) // eslint-disable-line no-console
+        return state
+    }
+    return state || {}
 }

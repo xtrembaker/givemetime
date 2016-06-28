@@ -1,32 +1,31 @@
 import React, { PropTypes } from 'react'
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import TextField from 'material-ui/TextField';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import { connect } from 'react-apollo';
-import gql from 'apollo-client/gql';
-import {createProject, addProjectDialogToggle, projectFormChange} from '../actions.js';
+import Dialog from 'material-ui/Dialog'
+import FlatButton from 'material-ui/FlatButton'
+import TextField from 'material-ui/TextField'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
+import ContentAdd from 'material-ui/svg-icons/content/add'
+import { connect } from 'react-redux'
+import { getGraphQL, projectCreated, addProjectDialogToggle } from '../actions.js'
+import { reduxForm } from 'redux-form'
 
-class AddProjectDialogComponent extends React.Component {
+export class AddProjectDialog extends React.Component {
 
-    handleChange = (prop) => {
-        return (event) => {
-            this.props.onChange(prop, event.target.value);
-        };
-    };
-    handleEstimateChange = (event) => {
-        this.props.onChange('estimate', parseInt(event.target.value) || 0);
-    };
+    render () {
 
-    handleSave = () => {
-        this.props.closeDialog();
-        this.props.mutations.createProject(this.props.author, this.props.title, this.props.estimate, this.props.description)
-            .then(() => this.props.closeDialog())
-            .catch(() => this.props.openDialog())
-    };
+        const style = {
+            position: 'fixed',
+            right: 0,
+            bottom: 0,
+            margin: 10,
+            marginRight: 20,
+        }
 
-    render() {
+        const textFieldWidth = {
+            width: '100%',
+        }
+
+        const { fields: { title, estimate, description }, handleSubmit } = this.props
+
         const actions = [
             <FlatButton
                 label="Close"
@@ -36,21 +35,9 @@ class AddProjectDialogComponent extends React.Component {
             <FlatButton
                 label="Save"
                 secondary={true}
-                onTouchTap={this.handleSave}
+                onTouchTap={handleSubmit(this.props.onSubmit)}
             />,
-        ];
-
-        const style = {
-            position: "fixed",
-            right: 0,
-            bottom: 0,
-            margin: 10,
-            marginRight: 20,
-        };
-
-        const textFieldWidth = {
-            width: "100%"
-        };
+        ]
 
         return (
             <div>
@@ -65,47 +52,47 @@ class AddProjectDialogComponent extends React.Component {
                     onRequestClose={this.props.closeDialog}
                     autoScrollBodyContent={true}
                 >
-                    <div>
-                        <TextField onChange={this.handleChange('author')} value={this.props.author} floatingLabelText="Author" style={textFieldWidth} disabled={true} value="Eric Raffin"/>
+                    <form onSubmit={handleSubmit(this.props.onSubmit)}>
+                        <TextField floatingLabelText="Author" style={textFieldWidth} disabled={true} value={this.props.userFullName} />
                         <br/>
-                        <TextField onChange={this.handleChange('title')} value={this.props.title} floatingLabelText="Project Name" style={textFieldWidth}/>
+                        <TextField floatingLabelText="Project Name" style={textFieldWidth} {...title}/>
                         <br/>
-                        <TextField onChange={this.handleEstimateChange} value={this.props.estimate} floatingLabelText="Estimated hours required " style={textFieldWidth}/>
+                        <TextField floatingLabelText="Estimated hours required " style={textFieldWidth} {...estimate}/>
                         <br/>
-                        <TextField onChange={this.handleChange('description')} value={this.props.description} floatingLabelText="Project's description" multiLine={true} rows={4} style={textFieldWidth}/>
-                        <br/>
-                    </div>
+                        <TextField floatingLabelText="Project's description" multiLine={true} rows={4} style={textFieldWidth} {...description}/>
+                    </form>
                 </Dialog>
             </div>
-        );
+        )
     }
 }
 
 
-
-AddProjectDialogComponent.propTypes = {
+AddProjectDialog.propTypes = {
     open: PropTypes.bool.isRequired,
-    title: PropTypes.string.isRequired,
-    estimate: PropTypes.number,
-    author: PropTypes.string.isRequired,
-    mutations: PropTypes.shape({
-        createProject: PropTypes.func.isRequired,
-    }).isRequired,
+    onSubmit: PropTypes.func.isRequired,
     openDialog: PropTypes.func.isRequired,
     closeDialog: PropTypes.func.isRequired,
-    onChange: PropTypes.func.isRequired,
-};
+    userRowId: PropTypes.number.isRequired,
+    userFullName: PropTypes.string.isRequired,
+    fields: PropTypes.shape({
+        author: PropTypes.object.isRequired,
+        title: PropTypes.object.isRequired,
+        estimate: PropTypes.object.isRequired,
+        description: PropTypes.object.isRequired,
+    }).isRequired,
+    handleSubmit: PropTypes.func.isRequired,
+}
 
 const mapStateToProps = (state) => {
     return {
-        open: state.global.addProjectDialog.open,
-        title: state.global.addProjectDialog.title,
-        estimate: state.global.addProjectDialog.estimate,
-        author: state.global.addProjectDialog.author,
-        description: state.global.addProjectDialog.description,
-    };
-};
-const mapDispatchToProps = (dispatch, ownProps) => {
+        open: state.project.addProjectDialog.open,
+        userRowId: state.project.user.rowId,
+        userFullName: state.project.user.fullname,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
     return {
         openDialog: () => {
             dispatch(addProjectDialogToggle(true))
@@ -113,54 +100,62 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         closeDialog: () => {
             dispatch(addProjectDialogToggle(false))
         },
-        onChange: (prop, value) => {
-            dispatch(projectFormChange(prop, value))
+        onSubmit: (form) => {
+            dispatch(getGraphQL(`
+                mutation createProject(
+                    $title: String!,
+                    $estimate: Int!,
+                    $acquired: Int!,
+                    $description: String,
+                    $authorId: Int!
+                ){
+                    insertProject(input: {
+                        title: $title,
+                        estimate: $estimate,
+                        acquired: $acquired,
+                        description: $description,
+                        authorId: $authorId
+                    }) {
+                        project {
+                            id,
+                            rowId,
+                            title,
+                            estimate,
+                            acquired,
+                            description,
+                            personByAuthorId {
+                                id,
+                                fullname,
+                                credit
+                            }
+                        }
+                    }
+                }`,
+                {
+                    title: form.title,
+                    estimate: form.estimate,
+                    description: form.description,
+                    acquired: 0,
+                    authorId: form.author,
+                },
+                (response) => {
+                    dispatch(projectCreated(
+                        response.insertProject.project.id,
+                        response.insertProject.project.rowId,
+                        response.insertProject.project.title,
+                        response.insertProject.project.estimate,
+                        response.insertProject.project.acquired,
+                        response.insertProject.project.description,
+                        response.insertProject.project.personByAuthorId.fullname
+                    ))
+                    dispatch(addProjectDialogToggle(false))
+                }
+            ))
         },
     }
-};
+}
 
-function mapMutationsToProps({ ownProps, state }) {
-    return {
-        createProject: (author, title, estimate, description) => ({
-            mutation: gql`
-                mutation createProject(
-                      $title: String!,
-                      $estimate: Int!,
-                      $acquired: Int!,
-                      $description: String
-                  ){
-                  createProject(input: {
-                      title: $title,
-                      estimate: $estimate,
-                      acquired: $acquired,
-                      description: $description
-                  }) {
-                      id,
-                      changedProject {
-                          title,
-                          estimate,
-                          acquired,
-                          description 
-                      }
-                  }
-                }
-            `,
-            variables: {
-                title: title,
-                estimate: estimate,
-                description: description,
-                acquired: 0
-            },
-        }),
-    };
-};
-
-const AddProjectDialog = connect({
-    mapStateToProps,
-    mapDispatchToProps,
-    mapMutationsToProps
-})(AddProjectDialogComponent)
-
-
-
-export default AddProjectDialog;
+export default reduxForm({
+    form: 'addProjectDialog',
+    fields: ['author', 'title', 'estimate', 'description'],
+})(connect(mapStateToProps, mapDispatchToProps)(AddProjectDialog))

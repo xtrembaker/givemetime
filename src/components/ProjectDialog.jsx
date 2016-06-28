@@ -1,30 +1,30 @@
 import React, { PropTypes } from 'react'
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/FlatButton';
+import Dialog from 'material-ui/Dialog'
+import FlatButton from 'material-ui/FlatButton'
+import RaisedButton from 'material-ui/FlatButton'
 import LinearProgress from 'material-ui/LinearProgress'
-import {connect} from 'react-redux';
-import {closeProjectDialog, openProjectDialog} from '../actions.js';
+import { connect } from 'react-redux'
+import { closeProjectDialog, openProjectDialog } from '../actions.js'
 
-class ViewProjectDialogComponent extends React.Component {
+export class ViewProjectDialog extends React.Component {
     isOpen () {
         return this.props.openId === this.props.id
     }
 
-    render() {
+    render () {
         const actions = [
             <FlatButton
                 label="Close"
                 primary={true}
                 onTouchTap={this.props.closeDialog}
             />,
-        ];
+        ]
 
         return (
             <span>
-                <RaisedButton label="Discover" primary={true}  onTouchTap={() => this.props.onTap(this.props.id)}/>
+                <RaisedButton label="Discover" primary={true} onTouchTap={() => this.props.onTap(this.props.id)}/>
                 <Dialog
-                    title={this.props.title + ' by ' + this.props.author  }
+                    title={this.props.title + ' by ' + this.props.author}
                     actions={actions}
                     modal={false}
                     open={this.isOpen()}
@@ -41,11 +41,11 @@ class ViewProjectDialogComponent extends React.Component {
                     </p>
                 </Dialog>
             </span>
-        );
+        )
     }
 }
 
-ViewProjectDialogComponent.propTypes = {
+ViewProjectDialog.propTypes = {
     openId: PropTypes.string,
     id: PropTypes.string.isRequired,
     title: PropTypes.string,
@@ -54,14 +54,15 @@ ViewProjectDialogComponent.propTypes = {
     author: PropTypes.string,
     closeDialog: PropTypes.func.isRequired,
     onTap: PropTypes.func.isRequired,
-};
+    description: PropTypes.string,
+}
 
 
 const mapStateToProps = (state) => {
     return {
-        openId: state.global.viewProjectDialog.openId
-    };
-};
+        openId: state.project.viewProjectDialog.openId,
+    }
+}
 const mapDispatchToProps = (dispatch) => {
     return {
         closeDialog: () => {
@@ -71,9 +72,6 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(openProjectDialog(id))
         },
     }
-};
+}
 
-const ProjectDialog = connect(mapStateToProps, mapDispatchToProps)(ViewProjectDialogComponent)
-
-
-export default ProjectDialog;
+export default connect(mapStateToProps, mapDispatchToProps)(ViewProjectDialog)

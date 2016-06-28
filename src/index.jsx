@@ -1,49 +1,41 @@
-import React from "react"
-import ReactDom from "react-dom"
-import giveMeTimeReducers from './reducer.js';
-import Layout from './components/Layout.jsx';
-import { createStore, combineReducers, applyMiddleware } from "redux";
-import { ApolloProvider } from 'react-apollo';
-import ApolloClient, { createNetworkInterface } from 'apollo-client';
+import React from 'react'
+import ReactDom from 'react-dom'
+import Layout from './components/Layout.jsx'
+import { Provider } from 'react-redux'
 
-const networkInterface = createNetworkInterface('https://enriched-fluorine-353.myreindex.com/graphql');
+import configureStore from './configureStore.js'
+
+// Don't do this! You’re bringing DevTools into the production bundle.
+import DevTools from './components/DevTools.jsx'
+
+import injectTapEventPlugin from 'react-tap-event-plugin'
+injectTapEventPlugin()
 
 const initialState = {
-    user: {
-        id: 12,
-        credit: 20
-    },
+    user: {},
+    globalMenuOpen: false,
     addProjectDialog: {
         open: false,
-        title: '',
-        estimate: 0,
-        author: ''
     },
     viewProjectDialog: {
-        openId: null
+        openId: null,
     },
     giveTimeDialog: {
         openId: null,
-        userCredit: 1,
-        amount: 10
-    }
-};
-
-const client = new ApolloClient({ networkInterface });
-const store = createStore(
-    combineReducers({
-        global: giveMeTimeReducers,
-        apollo: client.reducer(),
-    }),
-    {
-        global: initialState
     },
-    applyMiddleware(client.middleware())
-)
+    projects: [],
+}
+
+const store = configureStore({
+    project: initialState,
+})
 
 ReactDom.render(
-    <ApolloProvider store={store} client={client}>
-        <Layout />
-    </ApolloProvider>,
-    document.getElementById("main")
+    <Provider store={store}>
+        <div>
+            <Layout />
+            <DevTools />
+        </div>
+    </Provider>,
+    document.getElementById('main')
 )
