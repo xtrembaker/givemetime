@@ -44,7 +44,7 @@ export const userLoggedOut = () => {
         projects : [],
     }
 }
-export const projectFetched = (id, row_id, title, estimate, acquired, description) => {
+export const projectFetched = (id, row_id, title, estimate, acquired, description, author) => {
     return {
         type: 'PROJECT_FETCHED',
         id: id,
@@ -53,6 +53,7 @@ export const projectFetched = (id, row_id, title, estimate, acquired, descriptio
         acquired: acquired,
         description: description,
         title: title,
+        author: author,
     }
 }
 export const projectCreated = (id, row_id, title, estimate, acquired, description) => {

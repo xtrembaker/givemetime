@@ -4,13 +4,20 @@ import { connect } from 'react-redux'
 import { getGraphQL, apologize, userLoggedIn, userLoggedOut } from '../actions.js'
 
 
+const USER_TOKEN_KEY = 'userId'
+
 export class LoginButton extends React.Component {
 
     handleGoogleResponse (response) {
         this.props.createUserIfNotExists(response)
     }
 
+    componentDidMount () {
+        this.props.checkSavedUserId()
+    }
+
     render () {
+
         if (this.props.user.id) {
             return (
                 <div>
@@ -40,6 +47,7 @@ LoginButton.propTypes = {
         credit: PropTypes.number,
     }).isRequired,
     handleLogout: PropTypes.func.isRequired,
+    checkSavedUserId: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => {
@@ -51,6 +59,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         createUserIfNotExists: (response) => {
+
             const fullname = response.getBasicProfile().getName()
             const email = response.getBasicProfile().getEmail()
             dispatch(getGraphQL(`
@@ -82,14 +91,80 @@ const mapDispatchToProps = (dispatch) => {
                     if (createUserResponse.personRegisterOrRetrieve) {
                         const user = createUserResponse.personRegisterOrRetrieve.output
                         dispatch(userLoggedIn(user.id, user.rowId, user.fullname, user.credit))
+
+                        // persist userId
+                        dispatch(() => {
+                            localStorage.setItem(USER_TOKEN_KEY, user.id)
+                        })
+
                     } else {
                         dispatch(apologize('Cannot create user'))
                     }
                 }
             ))
         },
+
+
+        checkSavedUserId: () => {
+            // if the user is "google" logged in and an id is present in localstorage,
+            // we try to fetch user from graphql and dispatch the userLoggedInAction
+
+            const userId = localStorage.getItem(USER_TOKEN_KEY)
+
+            // we need to wait google auth lib to be loaded
+            const waitGoogleAuthLoaded = () => {
+
+                if (window.gapi && window.gapi.auth2) {
+
+                    const auth2Instance = window.gapi.auth2.getAuthInstance()
+
+                    auth2Instance.isSignedIn.listen((loggedIn) => {
+
+                        if (loggedIn) {
+                            // fetch user info
+                            dispatch(getGraphQL(`
+                                    query findPersonById($id: ID!) {
+                                      person(id: $id) {
+                                        id,
+                                        rowId,
+                                        fullname
+                                        credit
+                                        createdAt
+                                      }
+                                    }
+                                `,
+                                {
+                                    id: userId,
+                                },
+                                (userResponse) => {
+                                    const person = userResponse.person
+                                    dispatch(userLoggedIn(person.id, person.rowId, person.fullname, person.credit))
+                                }
+                            ))
+                        }
+                        else {
+                            // the user has logged out Google Account stuff, clean local storage
+                            localStorage.removeItem(USER_TOKEN_KEY)
+                        }
+                    })
+                }
+                else {
+                    setTimeout(waitGoogleAuthLoaded, 50)
+                }
+
+            }
+
+            if (userId) {
+                waitGoogleAuthLoaded()
+            }
+
+        },
+
         handleLogout : () => {
             dispatch(userLoggedOut())
+
+            // remove google user token
+            localStorage.removeItem(USER_TOKEN_KEY)
         },
     }
 }
