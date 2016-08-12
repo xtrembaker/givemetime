@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react'
 import IconButton from 'material-ui/IconButton'
 import ActionDelete from 'material-ui/svg-icons/action/delete'
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
-import ActionCreditCard from 'material-ui/svg-icons/action/credit-card';
 import LinearProgress from 'material-ui/LinearProgress'
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card'
 import ProjectDialog from './ProjectDialog.jsx'
@@ -17,7 +16,7 @@ export class ProjectTableRow extends React.Component {
         const ownerElements = (this.props.userRowId === this.props.author.rowId) ?
             (
                 <span>
-                    <IconButton onTouchTap={() => this.props.onDelete.call(this, this.props.id, )}>
+                    <IconButton onTouchTap={() => this.props.onDelete.call(this, this.props.id)}>
                         <ActionDelete />
                     </IconButton>
                     <IconButton onTouchTap={() => {
@@ -27,7 +26,7 @@ export class ProjectTableRow extends React.Component {
                     </IconButton>
                 </span>
             )
-            :''
+            : ''
 
 
         return (
@@ -77,6 +76,7 @@ ProjectTableRow.propTypes = {
     estimate: PropTypes.number.isRequired,
     acquired: PropTypes.number.isRequired,
     onDelete: PropTypes.func.isRequired,
+    editProject: PropTypes.func.isRequired,
     userRowId: PropTypes.number.isRequired,
 
 }
@@ -108,7 +108,7 @@ const mapDispatchToProps = (dispatch) => {
                 description,
                 estimate
             ))
-        }
+        },
     }
 }
 

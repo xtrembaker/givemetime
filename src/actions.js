@@ -85,7 +85,9 @@ export const addProjectDialogToggle = (open, id, rowId, title, description, esti
     return {
         type: 'ADD_PROJECT_DIALOG_TOGGLE',
         open: !!open,
-        title: title
+        title,
+        description,
+        estimate,
     }
 }
 

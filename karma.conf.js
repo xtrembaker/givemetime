@@ -47,8 +47,8 @@ module.exports = function (config) {
                     {
                         test: /\.json$/,
                         loader: 'json',
-                    }
-                ]
+                    },
+                ],
             },
         },
         webpackMiddleware: {

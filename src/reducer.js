@@ -50,7 +50,7 @@ export default function (state, action) {
                     acquired: action.acquired,
                     description: action.description,
                     author: action.author,
-                }
+                },
             }),
         })
 

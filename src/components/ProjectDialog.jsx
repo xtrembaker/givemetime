@@ -61,7 +61,7 @@ ViewProjectDialog.propTypes = {
 const mapStateToProps = (state) => {
     return {
         openId: state.project.viewProjectDialog.openId,
-        user: state.user
+        user: state.user,
     }
 }
 const mapDispatchToProps = (dispatch) => {

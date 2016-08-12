@@ -25,6 +25,7 @@ describe('AddEditProjectDialog', () => {
         closeDialog: () => {},
         userRowId: 1,
         userFullName: 'John Doe',
+        openProject: {},
     })
 
     it('shows a button when closed', () => {

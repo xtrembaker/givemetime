@@ -46,7 +46,7 @@ export class AddEditProjectDialog extends React.Component {
                 </FloatingActionButton>
 
                 <Dialog
-                    title={this.props.openId ? 'Edit project' : 'Add project' }
+                    title={this.props.openProject.id ? 'Edit project' : 'Add project' }
                     actions={actions}
                     modal={false}
                     open={this.props.open}
@@ -84,7 +84,7 @@ AddEditProjectDialog.propTypes = {
         description: PropTypes.object.isRequired,
     }).isRequired,
     handleSubmit: PropTypes.func.isRequired,
-    openProject: PropTypes.string
+    openProject: PropTypes.object,
 }
 
 const mapStateToProps = (state) => {
@@ -94,11 +94,10 @@ const mapStateToProps = (state) => {
         open: state.project.addProjectDialog.open,
         userRowId: state.project.user.rowId,
         userFullName: state.project.user.fullname,
-        openId: state.project.addProjectDialog.openId,
         fields : {
             estimate: state.project.addProjectDialog.openProject.estimate,
             title: state.project.addProjectDialog.openProject.title,
-        }
+        },
     }
 }
 
