@@ -3,7 +3,6 @@ import GoogleLogin from 'react-google-login'
 import { connect } from 'react-redux'
 import { getGraphQL, apologize, userLoggedIn, userLoggedOut } from '../actions.js'
 
-
 const USER_TOKEN_KEY = 'userId'
 
 export class LoginButton extends React.Component {
@@ -115,7 +114,6 @@ const mapDispatchToProps = (dispatch) => {
             const waitGoogleAuthLoaded = () => {
 
                 if (window.gapi && window.gapi.auth2) {
-
                     const auth2Instance = window.gapi.auth2.getAuthInstance()
 
                     auth2Instance.isSignedIn.listen((loggedIn) => {
@@ -151,7 +149,6 @@ const mapDispatchToProps = (dispatch) => {
                 else {
                     setTimeout(waitGoogleAuthLoaded, 50)
                 }
-
             }
 
             if (userId) {

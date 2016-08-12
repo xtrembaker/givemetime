@@ -81,10 +81,11 @@ export const apologize = (msg) => {
     }
 }
 
-export const addProjectDialogToggle = (open) => {
+export const addProjectDialogToggle = (open, id, rowId, title, description, estimate) => {
     return {
         type: 'ADD_PROJECT_DIALOG_TOGGLE',
         open: !!open,
+        title: title
     }
 }
 

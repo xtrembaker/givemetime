@@ -30,7 +30,8 @@ module.exports = {
                 },
                 include: path.resolve(__dirname, './src')
             }
-        ]
+        ],
+        noParse: /react\/lib\/ExecutionEnvironment/
     },
 
     //  Configure the plugins. We copy the index.html

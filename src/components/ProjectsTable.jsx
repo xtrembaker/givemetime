@@ -53,7 +53,7 @@ ProjectsTable.propTypes = {
     projects: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
-        author: PropTypes.string,
+        author: PropTypes.object.isRequired,
         description: PropTypes.string,
         estimate: PropTypes.number.isRequired,
         acquired: PropTypes.number.isRequired,
@@ -63,6 +63,7 @@ ProjectsTable.propTypes = {
 }
 
 const mapStateToProps = (state) => {
+
     return {
         projects: state.project.projects,
     }
@@ -85,7 +86,8 @@ const mapDispatchToProps = (dispatch) => {
                                 personByAuthorId {
                                     id,
                                     fullname,
-                                    credit
+                                    credit,
+                                    rowId
                                 }
                             }
                         }
@@ -100,8 +102,9 @@ const mapDispatchToProps = (dispatch) => {
                         node.estimate,
                         node.acquired,
                         node.description,
-                        node.personByAuthorId ? node.personByAuthorId.fullname : null
+                        node.personByAuthorId
                     )))
+
             )),
     }
 }

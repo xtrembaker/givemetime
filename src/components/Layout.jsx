@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react'
 import AppBar from 'material-ui/AppBar'
 import ProjectsTable from './ProjectsTable.jsx'
-import AddProjectDialog from './AddProjectDialog.jsx'
+import AddEditProjectDialog from './AddEditProjectDialog.jsx'
 import LoginButton from './LoginButton.jsx'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import { connect } from 'react-redux'
-import { globalMenuToggle } from '../actions.js'
+import { globalMenuToggle, addProjectDialogToggle } from '../actions.js'
 import Drawer from 'material-ui/Drawer'
 import MenuItem from 'material-ui/MenuItem'
 
@@ -25,7 +25,7 @@ export class Layout extends React.Component {
                     </MuiThemeProvider>
 
                     <MuiThemeProvider muiTheme={getMuiTheme()}>
-                        <AddProjectDialog initialValues={{ author: this.props.user.rowId }} />
+                        <AddEditProjectDialog initialValues={{ author: this.props.user.rowId }} />
                     </MuiThemeProvider>
                 </div>
             )
@@ -55,8 +55,7 @@ export class Layout extends React.Component {
                             onLeftIconButtonTouchTap={() => this.handleMenuClick()}
                             isInitiallyOpen={true}
                         />
-                        <MenuItem onTouchTap={this.handleClose}>Projects</MenuItem>
-                        <MenuItem onTouchTap={this.handleClose}>Add project</MenuItem>
+                        <MenuItem onTouchTap={this.props.showNewProjectDialog}>Add project</MenuItem>
                         <MenuItem onTouchTap={this.handleClose}>My account</MenuItem>
                     </Drawer>
                 </MuiThemeProvider>
@@ -73,6 +72,7 @@ Layout.propTypes = {
     }).isRequired,
     globalMenuOpen: PropTypes.bool.isRequired,
     globalMenuToggle: PropTypes.func.isRequired,
+    showNewProjectDialog: PropTypes.func.isRequired,
 }
 
 
@@ -87,6 +87,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         globalMenuToggle: (currentState) => {
             dispatch(globalMenuToggle(!currentState))
+        },
+        showNewProjectDialog: () => {
+            dispatch(addProjectDialogToggle(true))
         },
     }
 }

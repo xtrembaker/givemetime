@@ -24,7 +24,7 @@ export class ViewProjectDialog extends React.Component {
             <span>
                 <RaisedButton label="Discover" primary={true} onTouchTap={() => this.props.onTap(this.props.id)}/>
                 <Dialog
-                    title={this.props.title + ' by ' + this.props.author}
+                    title={this.props.title + ' by ' + this.props.author.fullname}
                     actions={actions}
                     modal={false}
                     open={this.isOpen()}
@@ -51,7 +51,7 @@ ViewProjectDialog.propTypes = {
     title: PropTypes.string,
     estimate: PropTypes.number,
     acquired: PropTypes.number,
-    author: PropTypes.string,
+    author: PropTypes.object.isRequired,
     closeDialog: PropTypes.func.isRequired,
     onTap: PropTypes.func.isRequired,
     description: PropTypes.string,
@@ -61,6 +61,7 @@ ViewProjectDialog.propTypes = {
 const mapStateToProps = (state) => {
     return {
         openId: state.project.viewProjectDialog.openId,
+        user: state.user
     }
 }
 const mapDispatchToProps = (dispatch) => {

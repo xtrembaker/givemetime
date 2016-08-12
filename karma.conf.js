@@ -23,8 +23,10 @@ module.exports = function (config) {
             module: {
                 externals: {
                     'jsdom': 'window',
-                    'cheerio': 'window',
+                    //'cheerio': 'window',
                     'react/lib/ExecutionEnvironment': true,
+                    'react/lib/ReactContext': true,
+                    'react/addons': true,
                 },
                 preLoaders: [
                     {
@@ -42,7 +44,11 @@ module.exports = function (config) {
                         loader: 'babel-loader',
                         include: path.resolve(__dirname, './src'),
                     },
-                ],
+                    {
+                        test: /\.json$/,
+                        loader: 'json',
+                    }
+                ]
             },
         },
         webpackMiddleware: {
@@ -56,4 +62,7 @@ module.exports = function (config) {
             ],
         },
     })
+
+
+
 }

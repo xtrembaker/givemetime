@@ -8,7 +8,7 @@ import { connect } from 'react-redux'
 import { getGraphQL, projectCreated, addProjectDialogToggle } from '../actions.js'
 import { reduxForm } from 'redux-form'
 
-export class AddProjectDialog extends React.Component {
+export class AddEditProjectDialog extends React.Component {
 
     render () {
 
@@ -44,14 +44,16 @@ export class AddProjectDialog extends React.Component {
                 <FloatingActionButton style={style} secondary={true} onTouchTap={this.props.openDialog} >
                     <ContentAdd />
                 </FloatingActionButton>
+
                 <Dialog
-                    title={'Add project' }
+                    title={this.props.openId ? 'Edit project' : 'Add project' }
                     actions={actions}
                     modal={false}
                     open={this.props.open}
                     onRequestClose={this.props.closeDialog}
                     autoScrollBodyContent={true}
                 >
+                    <span>{this.props.fields.title}</span>
                     <form onSubmit={handleSubmit(this.props.onSubmit)}>
                         <TextField floatingLabelText="Author" style={textFieldWidth} disabled={true} value={this.props.userFullName} />
                         <br/>
@@ -68,7 +70,7 @@ export class AddProjectDialog extends React.Component {
 }
 
 
-AddProjectDialog.propTypes = {
+AddEditProjectDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     onSubmit: PropTypes.func.isRequired,
     openDialog: PropTypes.func.isRequired,
@@ -82,13 +84,21 @@ AddProjectDialog.propTypes = {
         description: PropTypes.object.isRequired,
     }).isRequired,
     handleSubmit: PropTypes.func.isRequired,
+    openProject: PropTypes.string
 }
 
 const mapStateToProps = (state) => {
+
+
     return {
         open: state.project.addProjectDialog.open,
         userRowId: state.project.user.rowId,
         userFullName: state.project.user.fullname,
+        openId: state.project.addProjectDialog.openId,
+        fields : {
+            estimate: state.project.addProjectDialog.openProject.estimate,
+            title: state.project.addProjectDialog.openProject.title,
+        }
     }
 }
 
@@ -158,4 +168,4 @@ const mapDispatchToProps = (dispatch) => {
 export default reduxForm({
     form: 'addProjectDialog',
     fields: ['author', 'title', 'estimate', 'description'],
-})(connect(mapStateToProps, mapDispatchToProps)(AddProjectDialog))
+})(connect(mapStateToProps, mapDispatchToProps)(AddEditProjectDialog))

@@ -40,7 +40,18 @@ export default function (state, action) {
 
     case 'ADD_PROJECT_DIALOG_TOGGLE':
         return Object.assign({}, state, {
-            addProjectDialog: Object.assign({}, state.addProjectDialog, { open: action.open }),
+            addProjectDialog: Object.assign({}, state.addProjectDialog, {
+                open: action.open,
+                openProject: {
+                    id: action.id,
+                    rowId: action.rowId,
+                    name: action.name,
+                    title: action.title,
+                    acquired: action.acquired,
+                    description: action.description,
+                    author: action.author,
+                }
+            }),
         })
 
     case 'GLOBAL_MENU_TOGGLE':

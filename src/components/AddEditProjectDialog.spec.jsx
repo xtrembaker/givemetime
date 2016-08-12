@@ -1,9 +1,9 @@
 import expect from 'expect'
 import testSetupProvider from '../testSetup.js'
 
-import { AddProjectDialog } from './AddProjectDialog.jsx'
+import { AddEditProjectDialog } from './AddEditProjectDialog.jsx'
 
-describe('AddProjectDialog', () => {
+describe('AddEditProjectDialog', () => {
 
     const field = { touched: null, error: null, value: '' }
     const setup = testSetupProvider({
@@ -28,13 +28,13 @@ describe('AddProjectDialog', () => {
     })
 
     it('shows a button when closed', () => {
-        const { output } = setup(AddProjectDialog)
+        const { output } = setup(AddEditProjectDialog)
         // expect dialog to be closed
         expect(output.props.children[1].props.open).toBe(false)
     })
 
     it('shows a popin when open', () => {
-        const { output } = setup(AddProjectDialog, { open: true })
+        const { output } = setup(AddEditProjectDialog, { open: true })
         // expect dialog to be closed
         expect(output.props.children[1].props.open).toBe(true)
     })

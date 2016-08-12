@@ -16,6 +16,7 @@ const initialState = {
     globalMenuOpen: false,
     addProjectDialog: {
         open: false,
+        openProject: {}
     },
     viewProjectDialog: {
         openId: null,
