@@ -25,25 +25,7 @@ export const getGraphQL = (payload, variables, onSuccess, onError) => {
     }
 }
 
-export const userLoggedIn = (id, rowId, fullname, credit) => {
-    return {
-        type: 'USER_LOGGED_IN',
-        id: id,
-        rowId: rowId,
-        fullname: fullname,
-        credit : credit,
-    }
-}
-export const userLoggedOut = () => {
-    return {
-        type: 'USER_LOGGED_OUT',
-        id: null,
-        rowId: null,
-        fullname: null,
-        credit : null,
-        projects : [],
-    }
-}
+
 export const projectFetched = (id, row_id, title, estimate, acquired, description) => {
     return {
         type: 'PROJECT_FETCHED',
