@@ -4,8 +4,9 @@ import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 import { connect } from 'react-redux'
-import { giveTime, openGiveTimeDialog, getGraphQL, closeGiveTimeDialog } from '../actions.js'
+import actions from './giveTime.actions'
 import { reduxForm } from 'redux-form'
+import { bindActionCreators } from 'redux'
 
 export class GiveTimeDialog extends React.Component {
     isOpen () {
@@ -36,7 +37,7 @@ export class GiveTimeDialog extends React.Component {
 
         return (
             <span>
-                <RaisedButton label="GIVE TIME" secondary={true}
+                <RaisedButton label="GIVE TIME2" secondary={true}
                               onTouchTap={() => this.props.openDialog(this.props.id)}/>
                 <Dialog
                     title={title}
@@ -90,43 +91,10 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        onSubmit: (form) => {
-            dispatch(getGraphQL(`
-                mutation giveTime(
-                    $projectRowId: Int!,
-                    $userRowId: Int!,
-                    $credit: Int!
-                ){
-                    projectGiveTime(input: {
-                        personId: $userRowId,
-                        projectId: $projectRowId,
-                        amount: $credit
-                    }) {
-                        output {
-                            rowId,
-                            acquired
-                        }
-                    }
-                }`,
-                {
-                    credit: form.amount,
-                    userRowId: form.userRowId,
-                    projectRowId: form.projectRowId,
-                },
-                () => {
-                    dispatch(giveTime(form.amount, form.projectRowId))
-                    dispatch(closeGiveTimeDialog())
-                }
-            ))
-        },
-        openDialog: (id) => {
-            dispatch(openGiveTimeDialog(id))
-        },
-        closeDialog: () => {
-            dispatch(closeGiveTimeDialog())
-        },
-    }
+    return bindActionCreators({
+        onSubmit: actions.onSubmit,
+        openDialog: actions.openDialog,
+        closeDialog: actions.closeDialog }, dispatch)
 }
 
 export default reduxForm({

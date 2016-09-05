@@ -5,27 +5,15 @@ import TextField from 'material-ui/TextField'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import { connect } from 'react-redux'
-import { getGraphQL, projectCreated, addProjectDialogToggle } from '../actions.js'
+import actions from '../actions.js'
 import { reduxForm } from 'redux-form'
+import { bindActionCreators } from 'redux'
+import { style, textFieldWidth } from './addProject.style'
 
 export class AddProjectDialog extends React.Component {
 
     render () {
-
-        const style = {
-            position: 'fixed',
-            right: 0,
-            bottom: 0,
-            margin: 10,
-            marginRight: 20,
-        }
-
-        const textFieldWidth = {
-            width: '100%',
-        }
-
         const { fields: { title, estimate, description }, handleSubmit } = this.props
-
         const actions = [
             <FlatButton
                 label="Close"
@@ -93,66 +81,10 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        openDialog: () => {
-            dispatch(addProjectDialogToggle(true))
-        },
-        closeDialog: () => {
-            dispatch(addProjectDialogToggle(false))
-        },
-        onSubmit: (form) => {
-            dispatch(getGraphQL(`
-                mutation createProject(
-                    $title: String!,
-                    $estimate: Int!,
-                    $acquired: Int!,
-                    $description: String,
-                    $authorId: Int!
-                ){
-                    insertProject(input: {
-                        title: $title,
-                        estimate: $estimate,
-                        acquired: $acquired,
-                        description: $description,
-                        authorId: $authorId
-                    }) {
-                        project {
-                            id,
-                            rowId,
-                            title,
-                            estimate,
-                            acquired,
-                            description,
-                            personByAuthorId {
-                                id,
-                                fullname,
-                                credit
-                            }
-                        }
-                    }
-                }`,
-                {
-                    title: form.title,
-                    estimate: form.estimate,
-                    description: form.description,
-                    acquired: 0,
-                    authorId: form.author,
-                },
-                (response) => {
-                    dispatch(projectCreated(
-                        response.insertProject.project.id,
-                        response.insertProject.project.rowId,
-                        response.insertProject.project.title,
-                        response.insertProject.project.estimate,
-                        response.insertProject.project.acquired,
-                        response.insertProject.project.description,
-                        response.insertProject.project.personByAuthorId.fullname
-                    ))
-                    dispatch(addProjectDialogToggle(false))
-                }
-            ))
-        },
-    }
+    return bindActionCreators({
+        openDialog: actions.openDialog,
+        closeDialog: actions.closeDialog,
+        onSubmit: actions.onSubmit }, dispatch)
 }
 
 export default reduxForm({

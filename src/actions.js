@@ -37,17 +37,7 @@ export const projectFetched = (id, row_id, title, estimate, acquired, descriptio
         title: title,
     }
 }
-export const projectCreated = (id, row_id, title, estimate, acquired, description) => {
-    return {
-        type: 'PROJECT_CREATED',
-        id: id,
-        rowId: row_id,
-        estimate: estimate,
-        acquired: acquired,
-        description: description,
-        title: title,
-    }
-}
+
 export const projectDeleted = (id) => {
     return {
         type: 'PROJECT_DELETED',
@@ -62,12 +52,7 @@ export const apologize = (msg) => {
     }
 }
 
-export const addProjectDialogToggle = (open) => {
-    return {
-        type: 'ADD_PROJECT_DIALOG_TOGGLE',
-        open: !!open,
-    }
-}
+
 
 export const globalMenuToggle = (open) => {
     return {
@@ -85,25 +70,5 @@ export const openProjectDialog = (id) => {
     return {
         type: 'VIEW_PROJECT_DIALOG_OPEN',
         id: id,
-    }
-}
-
-
-export const closeGiveTimeDialog = () => {
-    return {
-        type: 'GIVE_TIME_DIALOG_CLOSE',
-    }
-}
-export const openGiveTimeDialog = (id) => {
-    return {
-        type: 'GIVE_TIME_DIALOG_OPEN',
-        id: id,
-    }
-}
-export const giveTime = (amount, projectId) => {
-    return {
-        type: 'GIVE_TIME',
-        amount: amount,
-        id: projectId,
     }
 }
