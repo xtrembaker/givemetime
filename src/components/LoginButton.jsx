@@ -6,8 +6,12 @@ import { getGraphQL, apologize, userLoggedIn, userLoggedOut } from '../actions.j
 
 export class LoginButton extends React.Component {
 
-    handleGoogleResponse (response) {
+    handleGoogleSuccess (response) {
         this.props.createUserIfNotExists(response)
+    }
+
+    handleGoogleFailure (response) {
+        this.props.failureError(response)
     }
 
     render () {
@@ -23,7 +27,8 @@ export class LoginButton extends React.Component {
                 <GoogleLogin
                     clientId="673157831962-gcgp4mj9mgadau0nh9pbaikhbmqkl04d.apps.googleusercontent.com"
                     buttonText="Login"
-                    callback={this.handleGoogleResponse.bind(this)}>
+                    onSuccess={this.handleGoogleSuccess.bind(this)}
+                    onFailure={this.handleGoogleFailure.bind(this)}>
                     <script></script>
                     Login
                 </GoogleLogin>
@@ -34,6 +39,7 @@ export class LoginButton extends React.Component {
 
 LoginButton.propTypes = {
     createUserIfNotExists: PropTypes.func.isRequired,
+    failureError: PropTypes.func.isRequired,
     user: PropTypes.shape({
         id: PropTypes.string,
         fullname: PropTypes.string,
@@ -50,6 +56,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        failureError: (response) => {
+            dispatch(apologize('Can\'t log in. Error : ' + response))
+        },
         createUserIfNotExists: (response) => {
             const fullname = response.getBasicProfile().getName()
             const email = response.getBasicProfile().getEmail()

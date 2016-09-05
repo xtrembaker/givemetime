@@ -39,7 +39,6 @@ export class Layout extends React.Component {
                     <AppBar
                         title="Give R&D time"
                         onLeftIconButtonTouchTap={() => this.handleMenuClick()}
-                        isInitiallyOpen={true}
                         iconElementRight={<LoginButton />}
                     />
                 </MuiThemeProvider>
@@ -53,7 +52,6 @@ export class Layout extends React.Component {
                         <AppBar
                             title="Give R&D time"
                             onLeftIconButtonTouchTap={() => this.handleMenuClick()}
-                            isInitiallyOpen={true}
                         />
                         <MenuItem onTouchTap={this.handleClose}>Projects</MenuItem>
                         <MenuItem onTouchTap={this.handleClose}>Add project</MenuItem>
