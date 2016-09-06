@@ -4,7 +4,7 @@ import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 import { connect } from 'react-redux'
-import actions from './giveTime.actions'
+import * as actions from './giveTime.actions'
 import { reduxForm } from 'redux-form'
 import { bindActionCreators } from 'redux'
 
@@ -82,11 +82,11 @@ GiveTimeDialog.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        openId: state.project.giveTimeDialog.openId,
-        amount: state.project.giveTimeDialog.amount,
-        userCredit: state.project.giveTimeDialog.userCredit,
-        userId: state.project.user.id,
-        userRowId: state.project.user.rowId,
+        openId: state.project.giveTime.giveTimeDialog.openId,
+        amount: state.project.giveTime.giveTimeDialog.amount,
+        userCredit: state.project.giveTime.giveTimeDialog.userCredit,
+        userId: state.project.login.user.id,
+        userRowId: state.project.login.user.rowId,
     }
 }
 

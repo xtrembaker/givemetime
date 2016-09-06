@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDom from 'react-dom'
-import Layout from './components/Layout.jsx'
+import Layout from './layout/layout.container'
 import { Provider } from 'react-redux'
 
 import configureStore from './configureStore.js'
@@ -27,7 +27,7 @@ const initialState = {
 }
 
 const store = configureStore({
-    project: initialState,
+
 })
 
 ReactDom.render(

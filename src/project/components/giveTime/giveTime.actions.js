@@ -1,4 +1,4 @@
-import { getGraphQL } from '../../actions.js'
+import { getGraphQL } from '../../../common/common.actions.js'
 import * as constants from './giveTime.actionTypes'
 
 export function onSubmit (form) {

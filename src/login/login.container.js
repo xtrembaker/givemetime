@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import GoogleLogin from 'react-google-login'
 import { connect } from 'react-redux'
-import * as actions from '../login/login.actions'
+import * as actions from './login.actions'
 import { bindActionCreators } from 'redux'
 
 export class LoginButton extends React.Component {
@@ -42,7 +42,7 @@ LoginButton.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        user: state.project.user,
+        user: state.project.login.user,
     }
 }
 

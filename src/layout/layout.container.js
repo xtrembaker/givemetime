@@ -1,12 +1,13 @@
 import React, { PropTypes } from 'react'
 import AppBar from 'material-ui/AppBar'
-import ProjectsTable from './ProjectsTable.jsx'
-import AddProjectDialog from './AddProjectDialog.jsx'
+import ProjectsTable from '../project/project.container'
+import AddProjectDialog from '../project/components/addProject/addProject.js'
 import LoginButton from '../login/login.container'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import { connect } from 'react-redux'
-import { globalMenuToggle } from '../actions.js'
+import * as actions from './Layout.actions'
+import { bindActionCreators } from 'redux'
 import Drawer from 'material-ui/Drawer'
 import MenuItem from 'material-ui/MenuItem'
 
@@ -75,18 +76,16 @@ Layout.propTypes = {
 
 
 const mapStateToProps = (state) => {
+    console.log("state : %j", state);
     return {
-        user: state.project.user,
-        globalMenuOpen: state.project.globalMenuOpen,
+        user: state.project.login.user,
+        globalMenuOpen: state.project.layout.globalMenuOpen,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        globalMenuToggle: (currentState) => {
-            dispatch(globalMenuToggle(!currentState))
-        },
-    }
+    return bindActionCreators({
+        globalMenuToggle: actions.globalMenuToggle }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Layout)

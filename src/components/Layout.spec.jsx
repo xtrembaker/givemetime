@@ -1,4 +1,4 @@
-import testSetupProvider from '../testSetup.js'
+/*import testSetupProvider from '../testSetup.js'
 import expect from 'expect'
 import * as actions from '../actions.js'
 import reducer from '../reducer.js'
@@ -77,3 +77,4 @@ describe('Layout reducer', () => {
         ).toEqual({ globalMenuOpen: true })
     })
 })
+*/

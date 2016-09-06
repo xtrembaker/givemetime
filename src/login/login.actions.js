@@ -1,4 +1,4 @@
-import { getGraphQL, apologize } from '../actions.js'
+import { getGraphQL, apologize } from '../common/common.actions.js'
 import * as constant from './login.actionTypes.js'
 
 export function failureError (response) {

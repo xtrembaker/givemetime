@@ -5,7 +5,7 @@ import TextField from 'material-ui/TextField'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import { connect } from 'react-redux'
-import actions from '../actions.js'
+import * as actions from './addProject.actions.js'
 import { reduxForm } from 'redux-form'
 import { bindActionCreators } from 'redux'
 import { style, textFieldWidth } from './addProject.style'
@@ -74,9 +74,9 @@ AddProjectDialog.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        open: state.project.addProjectDialog.open,
-        userRowId: state.project.user.rowId,
-        userFullName: state.project.user.fullname,
+        open: state.project.addProject.addProjectDialog.open,
+        userRowId: state.project.login.user.rowId,
+        userFullName: state.project.login.user.fullname,
     }
 }
 
