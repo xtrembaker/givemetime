@@ -8,12 +8,24 @@ import { connect } from 'react-redux'
 import * as actions from './addProject.actions.js'
 import { reduxForm } from 'redux-form'
 import { bindActionCreators } from 'redux'
-import { style, textFieldWidth } from './addProject.style'
 
 export class AddProjectDialog extends React.Component {
 
     render () {
+        const style = {
+            position: 'fixed',
+            right: 0,
+            bottom: 0,
+            margin: 10,
+            marginRight: 20,
+        }
+
+        const textFieldWidth = {
+            width: '100%',
+        }
+
         const { fields: { title, estimate, description }, handleSubmit } = this.props
+
         const actions = [
             <FlatButton
                 label="Close"
@@ -36,7 +48,7 @@ export class AddProjectDialog extends React.Component {
                     title={'Add project' }
                     actions={actions}
                     modal={false}
-                    open={this.props.open}
+                    open={this.props.open || false}
                     onRequestClose={this.props.closeDialog}
                     autoScrollBodyContent={true}
                 >

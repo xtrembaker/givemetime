@@ -1,9 +1,11 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import ProjectTableRow from './components/projectResultsRow/projectResultsRow.js'
 import { connect } from 'react-redux'
 import * as actions from './project.actions'
 import { bindActionCreators } from 'redux'
 import { Responsive, WidthProvider } from 'react-grid-layout'
+import PropTypes from 'prop-types'
+
 const ResponsiveReactGridLayout = WidthProvider(Responsive)
 
 export class ProjectsTable extends React.Component {
@@ -70,7 +72,6 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-    console.log("ACTION : %j", actions);
     return bindActionCreators({
         loadProjects: actions.loadProjects }, dispatch)
 }

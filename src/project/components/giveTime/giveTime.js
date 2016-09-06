@@ -84,7 +84,7 @@ const mapStateToProps = (state) => {
     return {
         openId: state.project.giveTime.giveTimeDialog.openId,
         amount: state.project.giveTime.giveTimeDialog.amount,
-        userCredit: state.project.giveTime.giveTimeDialog.userCredit,
+        userCredit: state.project.login.user.credit,
         userId: state.project.login.user.id,
         userRowId: state.project.login.user.rowId,
     }

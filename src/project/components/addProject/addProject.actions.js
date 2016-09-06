@@ -1,5 +1,6 @@
 import { getGraphQL } from '../../../common/common.actions.js'
 import * as constants from './addProject.actionTypes'
+import { formValueSelector } from 'redux-form'
 
 export function openDialog () {
     return (dispatch) => {
@@ -14,6 +15,7 @@ export function closeDialog () {
 }
 
 export function onSubmit (form) {
+    console.log("FORM : %j", form)
     return (dispatch) => {
         dispatch(getGraphQL(`
             mutation createProject(

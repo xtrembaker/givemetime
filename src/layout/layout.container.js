@@ -76,7 +76,6 @@ Layout.propTypes = {
 
 
 const mapStateToProps = (state) => {
-    console.log("state : %j", state);
     return {
         user: state.project.login.user,
         globalMenuOpen: state.project.layout.globalMenuOpen,

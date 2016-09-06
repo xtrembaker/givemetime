@@ -11,21 +11,6 @@ import DevTools from './components/DevTools.jsx'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 injectTapEventPlugin()
 
-const initialState = {
-    user: {},
-    globalMenuOpen: false,
-    addProjectDialog: {
-        open: false,
-    },
-    viewProjectDialog: {
-        openId: null,
-    },
-    giveTimeDialog: {
-        openId: null,
-    },
-    projects: [],
-}
-
 const store = configureStore({
 
 })
