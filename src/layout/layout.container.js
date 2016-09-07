@@ -1,15 +1,13 @@
 import React, { PropTypes } from 'react'
-import AppBar from 'material-ui/AppBar'
+import { AppBar, MenuItem, Drawer } from 'material-ui'
 import ProjectsTable from '../project/project.container'
 import AddProjectDialog from '../project/components/addProject/addProject.js'
 import LoginButton from '../login/login.container'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import { connect } from 'react-redux'
 import * as actions from './Layout.actions'
+import * as actionsDialog from '../project/components/addProject/addProject.actions.js'
 import { bindActionCreators } from 'redux'
-import Drawer from 'material-ui/Drawer'
-import MenuItem from 'material-ui/MenuItem'
+import { Link } from 'react-router'
 
 // Use named export for unconnected component (for tests)
 export class Layout extends React.Component {
@@ -21,13 +19,8 @@ export class Layout extends React.Component {
         const content = this.props.user.id
             ? (
                 <div>
-                    <MuiThemeProvider muiTheme={getMuiTheme()}>
                         <ProjectsTable userRowId={this.props.user.rowId}/>
-                    </MuiThemeProvider>
-
-                    <MuiThemeProvider muiTheme={getMuiTheme()}>
                         <AddProjectDialog initialValues={{ author: this.props.user.rowId }} />
-                    </MuiThemeProvider>
                 </div>
             )
             : (
@@ -36,14 +29,12 @@ export class Layout extends React.Component {
 
         return (
             <div>
-                <MuiThemeProvider muiTheme={getMuiTheme()}>
                     <AppBar
                         title="Give R&D time"
                         onLeftIconButtonTouchTap={() => this.handleMenuClick()}
                         iconElementRight={<LoginButton />}
                     />
-                </MuiThemeProvider>
-                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                <div>
                     <Drawer
                         docked={false}
                         width={300}
@@ -54,11 +45,14 @@ export class Layout extends React.Component {
                             title="Give R&D time"
                             onLeftIconButtonTouchTap={() => this.handleMenuClick()}
                         />
-                        <MenuItem onTouchTap={this.handleClose}>Projects</MenuItem>
-                        <MenuItem onTouchTap={this.handleClose}>Add project</MenuItem>
-                        <MenuItem onTouchTap={this.handleClose}>My account</MenuItem>
+                        <MenuItem linkButton={true}
+                            containerElement={<Link to ="/home" />}>Projects</MenuItem>
+                        <MenuItem linkButton={true}
+                            onTouchTap={this.props.openDialog}>Add Project</MenuItem>
+                        <MenuItem linkButton={true}
+                            containerElement={<Link to ="/" />}>My account</MenuItem>
                     </Drawer>
-                </MuiThemeProvider>
+                </div>  
                 { content }
             </div>
         )
@@ -72,8 +66,8 @@ Layout.propTypes = {
     }).isRequired,
     globalMenuOpen: PropTypes.bool.isRequired,
     globalMenuToggle: PropTypes.func.isRequired,
+    openDialog: PropTypes.func.isRequired,
 }
-
 
 const mapStateToProps = (state) => {
     return {
@@ -84,6 +78,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
+        openDialog: actionsDialog.openDialog,
         globalMenuToggle: actions.globalMenuToggle }, dispatch)
 }
 

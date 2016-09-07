@@ -86,7 +86,7 @@
     "isparta-instrumenter-loader": "^1.0.1",
     "istanbul": "^0.4.4",
     "karma-phantomjs-launcher": "^1.0.1",
-    "material-ui": "^0.15.1",
+    "material-ui": "^0.15.4",
     "mocha": "^3.0.0-1",
     "postgraphql": "^1.7.0",
     "prop-types": "^0.2.0",

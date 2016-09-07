@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react'
-import IconButton from 'material-ui/IconButton'
+import { IconButton, LinearProgress } from 'material-ui'
 import ActionDelete from 'material-ui/svg-icons/action/delete'
-import LinearProgress from 'material-ui/LinearProgress'
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card'
 import ProjectDialog from '../viewProject/viewProject.js'
 import GiveTimeDialog from '../giveTime/giveTime.js'

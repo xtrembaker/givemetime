@@ -1,29 +1,15 @@
 import React, { PropTypes } from 'react'
-import Dialog from 'material-ui/Dialog'
-import FlatButton from 'material-ui/FlatButton'
-import TextField from 'material-ui/TextField'
-import FloatingActionButton from 'material-ui/FloatingActionButton'
+import { Dialog, FlatButton, TextField, FloatingActionButton } from 'material-ui'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import { connect } from 'react-redux'
 import * as actions from './addProject.actions.js'
 import { reduxForm } from 'redux-form'
 import { bindActionCreators } from 'redux'
+import { style, textFieldWidth } from './addProject.style'
 
 export class AddProjectDialog extends React.Component {
 
     render () {
-        const style = {
-            position: 'fixed',
-            right: 0,
-            bottom: 0,
-            margin: 10,
-            marginRight: 20,
-        }
-
-        const textFieldWidth = {
-            width: '100%',
-        }
-
         const { fields: { title, estimate, description }, handleSubmit } = this.props
 
         const actions = [
