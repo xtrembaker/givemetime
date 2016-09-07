@@ -52,7 +52,7 @@ export class Layout extends React.Component {
                         <MenuItem linkButton={true}
                             containerElement={<Link to ="/" />}>My account</MenuItem>
                     </Drawer>
-                </div>  
+                </div>
                 { content }
             </div>
         )

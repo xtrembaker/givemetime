@@ -16,7 +16,7 @@ module.exports = function (config) {
             './src/**/*.spec.js*': ['webpack'],
             './src/**/*.js*': ['webpack'],
         },
-        reporters: ['progress', 'coverage', 'coveralls'],
+        reporters: ['progress', 'coverage', 'coveralls','verbose', 'junit'],
         singleRun: true,
         webpack: {
             entry: {},
@@ -46,7 +46,7 @@ module.exports = function (config) {
             },
         },
         webpackMiddleware: {
-            noInfo: true,
+            stats: 'errors-only',
         },
         coverageReporter: {
             dir: './build/coverage/',

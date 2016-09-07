@@ -1,10 +1,20 @@
-/*import testSetupProvider from '../testSetup.js'
+import testSetupProvider from '../testSetup.js'
 import expect from 'expect'
-import * as actions from '../actions.js'
-import reducer from '../reducer.js'
+import * as actions from './layout.actions.js'
+import reducer from './layout.reducers.js'
+import * as constants from './layout.actionTypes.js'
 
-import { Layout } from './Layout.jsx'
+import 'isomorphic-fetch' // Fetch polyfill for node and browsers alike
+import thunk from 'redux-thunk'
+import fetchMock from 'fetch-mock'
 
+import { Layout } from './layout.container.js'
+/*eslint-disable */
+import configureMockStore from 'redux-mock-store'
+
+const middlewares = [ thunk ]
+const mockStore = configureMockStore(middlewares)
+fetchMock.mock('^http://localhost:8080', {data: 'foo'})
 
 describe('Layout component', () => {
 
@@ -12,6 +22,7 @@ describe('Layout component', () => {
         user: { },
         globalMenuToggle: () => {},
         globalMenuOpen: false,
+        openDialog: () => {},
     })
 
     it('render login message when user is not logged in', () => {
@@ -31,7 +42,7 @@ describe('Layout component', () => {
         }
         const { output } = setup(Layout, props)
         expect(output.props.children[1].props.children.props.open).toEqual(false)
-        output.props.children[0].props.children.props.onLeftIconButtonTouchTap()
+        output.props.children[0].props.onLeftIconButtonTouchTap()
         expect(props.globalMenuToggle).toHaveBeenCalled()
     })
     it('should be able to open the left panel when not logged in', () => {
@@ -41,22 +52,24 @@ describe('Layout component', () => {
         }
         const { output } = setup(Layout, props)
         expect(output.props.children[1].props.children.props.open).toEqual(false)
-        output.props.children[0].props.children.props.onLeftIconButtonTouchTap()
+        output.props.children[0].props.onLeftIconButtonTouchTap()
         expect(props.globalMenuToggle).toHaveBeenCalled()
     })
 })
 
 describe('Layout actions', () => {
     it('should create a global menu toggle action', () => {
-        expect(actions.globalMenuToggle(true)).toEqual({
-            type: 'GLOBAL_MENU_TOGGLE',
-            open: true,
-        })
 
-        expect(actions.globalMenuToggle(false)).toEqual({
-            type: 'GLOBAL_MENU_TOGGLE',
-            open: false,
-        })
+        var store = mockStore({})
+        const expected = {type: constants.GLOBAL_MENU_TOGGLE, open: false}
+        store.dispatch(actions.globalMenuToggle(true))
+        expect(store.getActions()[0]).toEqual(expected)
+
+
+        store.dispatch(actions.globalMenuToggle(false))
+        expect(store.getActions()[1]).toEqual({
+            type: constants.GLOBAL_MENU_TOGGLE,
+            open: true})
     })
 })
 
@@ -77,4 +90,4 @@ describe('Layout reducer', () => {
         ).toEqual({ globalMenuOpen: true })
     })
 })
-*/
+/*eslint-enable */

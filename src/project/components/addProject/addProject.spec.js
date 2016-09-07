@@ -1,7 +1,7 @@
-/*import expect from 'expect'
-import testSetupProvider from '../testSetup.js'
+import expect from 'expect'
+import testSetupProvider from '../../../testSetup.js'
 
-import { AddProjectDialog } from './AddProjectDialog.jsx'
+import { AddProjectDialog } from './addProject.js'
 
 describe('AddProjectDialog', () => {
 
@@ -39,4 +39,3 @@ describe('AddProjectDialog', () => {
         expect(output.props.children[1].props.open).toBe(true)
     })
 })
-*/
