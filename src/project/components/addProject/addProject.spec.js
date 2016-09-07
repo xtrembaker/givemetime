@@ -3,7 +3,7 @@ import testSetupProvider from '../../../testSetup.js'
 
 import { AddProjectDialog } from './addProject.js'
 
-describe('AddProjectDialog', () => {
+describe('AddProject Component', () => {
 
     const field = { touched: null, error: null, value: '' }
     const setup = testSetupProvider({
@@ -29,13 +29,11 @@ describe('AddProjectDialog', () => {
 
     it('shows a button when closed', () => {
         const { output } = setup(AddProjectDialog)
-        // expect dialog to be closed
         expect(output.props.children[1].props.open).toBe(false)
     })
 
     it('shows a popin when open', () => {
         const { output } = setup(AddProjectDialog, { open: true })
-        // expect dialog to be closed
         expect(output.props.children[1].props.open).toBe(true)
     })
 })

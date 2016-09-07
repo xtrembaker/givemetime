@@ -10,6 +10,7 @@ module.exports = function (config) {
             './node_modules/phantomjs-polyfill/bind-polyfill.js',
             './node_modules/phantomjs-polyfill-object-assign/object-assign-polyfill.js',
             './src/**/*.spec.js*',
+            './src/**/components/**/*.spec.js*',
         ],
         frameworks: ['mocha'],
         preprocessors: {

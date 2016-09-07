@@ -1,5 +1,6 @@
 import { getGraphQL } from '../../../common/common.actions.js'
 import * as constants from './addProject.actionTypes'
+
 export function openDialog () {
     return (dispatch) => {
         dispatch(addProjectDialogToggle(true))

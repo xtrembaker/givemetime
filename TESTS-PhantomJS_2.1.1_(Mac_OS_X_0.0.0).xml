@@ -1,16 +1,20 @@
 <?xml version="1.0"?>
-<testsuite name="PhantomJS 2.1.1 (Mac OS X 0.0.0)" package="" timestamp="2016-09-07T09:14:56" id="0" hostname="MacBook-Pro-de-inovia-3.local" tests="8" errors="0" failures="0" time="0.035">
+<testsuite name="PhantomJS 2.1.1 (Mac OS X 0.0.0)" package="" timestamp="2016-09-07T12:34:23" id="0" hostname="MacBook-Pro-de-inovia-3.local" tests="12" errors="0" failures="0" time="0.033">
   <properties>
     <property name="browser.fullName" value="Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1"/>
   </properties>
-  <testcase name="Layout component render login message when user is not logged in" time="0.008" classname="PhantomJS_2_1_1_(Mac_OS_X_0_0_0).Layout component"/>
+  <testcase name="Layout actions should create a global menu toggle action" time="0.003" classname="PhantomJS_2_1_1_(Mac_OS_X_0_0_0).Layout actions"/>
+  <testcase name="Layout component render login message when user is not logged in" time="0.007" classname="PhantomJS_2_1_1_(Mac_OS_X_0_0_0).Layout component"/>
   <testcase name="Layout component render page layout when user is logged in" time="0.001" classname="PhantomJS_2_1_1_(Mac_OS_X_0_0_0).Layout component"/>
-  <testcase name="Layout component should be able to open the left panel" time="0.001" classname="PhantomJS_2_1_1_(Mac_OS_X_0_0_0).Layout component"/>
-  <testcase name="Layout component should be able to open the left panel when not logged in" time="0" classname="PhantomJS_2_1_1_(Mac_OS_X_0_0_0).Layout component"/>
-  <testcase name="Layout actions should create a global menu toggle action" time="0.002" classname="PhantomJS_2_1_1_(Mac_OS_X_0_0_0).Layout actions"/>
+  <testcase name="Layout component should be able to open the left panel" time="0.002" classname="PhantomJS_2_1_1_(Mac_OS_X_0_0_0).Layout component"/>
+  <testcase name="Layout component should be able to open the left panel when not logged in" time="0.001" classname="PhantomJS_2_1_1_(Mac_OS_X_0_0_0).Layout component"/>
   <testcase name="Layout reducer should handle GLOBAL_MENU_TOGGLE" time="0.001" classname="PhantomJS_2_1_1_(Mac_OS_X_0_0_0).Layout reducer"/>
-  <testcase name="AddProjectDialog shows a button when closed" time="0.021" classname="PhantomJS_2_1_1_(Mac_OS_X_0_0_0).AddProjectDialog"/>
-  <testcase name="AddProjectDialog shows a popin when open" time="0.001" classname="PhantomJS_2_1_1_(Mac_OS_X_0_0_0).AddProjectDialog"/>
+  <testcase name="addProject actions should create a openDialog action" time="0.002" classname="PhantomJS_2_1_1_(Mac_OS_X_0_0_0).addProject actions"/>
+  <testcase name="addProject reducer should handle ADD_PROJECT_DIALOG_TOGGLE" time="0.002" classname="PhantomJS_2_1_1_(Mac_OS_X_0_0_0).addProject reducer"/>
+  <testcase name="AddProject Component shows a button when closed" time="0.009" classname="PhantomJS_2_1_1_(Mac_OS_X_0_0_0).AddProject Component"/>
+  <testcase name="AddProject Component shows a popin when open" time="0.001" classname="PhantomJS_2_1_1_(Mac_OS_X_0_0_0).AddProject Component"/>
+  <testcase name="addProject actions should create a openDialog action" time="0.002" classname="PhantomJS_2_1_1_(Mac_OS_X_0_0_0).addProject actions"/>
+  <testcase name="viewProject reducer should handle VIEW_PROJECT_DIALOG" time="0.002" classname="PhantomJS_2_1_1_(Mac_OS_X_0_0_0).viewProject reducer"/>
   <system-out>
     <![CDATA[
 ]]>
