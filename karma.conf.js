@@ -10,13 +10,14 @@ module.exports = function (config) {
             './node_modules/phantomjs-polyfill/bind-polyfill.js',
             './node_modules/phantomjs-polyfill-object-assign/object-assign-polyfill.js',
             './src/**/*.spec.js*',
+            './src/**/components/**/*.spec.js*',
         ],
         frameworks: ['mocha'],
         preprocessors: {
             './src/**/*.spec.js*': ['webpack'],
             './src/**/*.js*': ['webpack'],
         },
-        reporters: ['progress', 'coverage', 'coveralls'],
+        reporters: ['progress', 'coverage', 'coveralls','verbose', 'junit'],
         singleRun: true,
         webpack: {
             entry: {},
@@ -46,7 +47,7 @@ module.exports = function (config) {
             },
         },
         webpackMiddleware: {
-            noInfo: true,
+            stats: 'errors-only',
         },
         coverageReporter: {
             dir: './build/coverage/',
