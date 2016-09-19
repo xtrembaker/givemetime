@@ -1,8 +1,11 @@
-import React, { PropTypes } from 'react'
-import ProjectTableRow from './ProjectTableRow.jsx'
+import React from 'react'
+import ProjectTableRow from './components/projectResultsRow/projectResultsRow.js'
 import { connect } from 'react-redux'
-import { getGraphQL, projectFetched } from '../actions.js'
+import * as actions from './project.actions'
+import { bindActionCreators } from 'redux'
 import { Responsive, WidthProvider } from 'react-grid-layout'
+import PropTypes from 'prop-types'
+
 const ResponsiveReactGridLayout = WidthProvider(Responsive)
 
 export class ProjectsTable extends React.Component {
@@ -64,46 +67,13 @@ ProjectsTable.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        projects: state.project.projects,
+        projects: state.project.project.projects,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        loadProjects: () =>
-            dispatch(getGraphQL(`
-                query {
-                    viewer {
-                        projectNodes {
-                            nodes {
-                                id,
-                                rowId,
-                                title,
-                                estimate,
-                                acquired,
-                                description,
-                                personByAuthorId {
-                                    id,
-                                    fullname,
-                                    credit
-                                }
-                            }
-                        }
-                    }
-                }`,
-                {},
-                (response) => response.viewer.projectNodes.nodes
-                    .map((node) => dispatch(projectFetched(
-                        node.id,
-                        node.rowId,
-                        node.title,
-                        node.estimate,
-                        node.acquired,
-                        node.description,
-                        node.personByAuthorId ? node.personByAuthorId.fullname : null
-                    )))
-            )),
-    }
+    return bindActionCreators({
+        loadProjects: actions.loadProjects }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectsTable)

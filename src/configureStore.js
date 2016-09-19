@@ -1,5 +1,4 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
-import DevTools from './components/DevTools.jsx'
 import thunkMiddleware from 'redux-thunk'
 import { reducer as formReducer } from 'redux-form'
 import giveMeTimeReducer from './reducer.js'
@@ -15,8 +14,6 @@ function getDebugSessionKey () {
 const enhancer = compose(
     // Middleware you want to use in development:
     applyMiddleware(thunkMiddleware),
-    // Required! Enable Redux DevTools with the monitors you chose
-    DevTools.instrument(),
     // Optional. Lets you write ?debug_session=<key> in address bar to persist debug sessions
     persistState(getDebugSessionKey())
 )
