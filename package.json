@@ -2,7 +2,6 @@
   "name": "givemetime",
   "version": "0.0.1",
   "description": "Project to give some time to a R&D project suggested by a team member",
-  "main": "src/index.jsx",
   "pre-commit": "test",
   "scripts": {
     "test": "npm run --loglevel=silent test:lint && npm run --loglevel=silent test:unit",
@@ -12,26 +11,15 @@
     "db:migrate": "./scripts/db-migrate.sh up",
     "db:revert": "./scripts/db-migrate.sh down",
     "db:test": "./scripts/db-test.sh",
-    "start": "./node_modules/.bin/webpack-dev-server --config ./webpack.config.js -d --inline --hot --host localhost --open",
-    "webpack": "./node_modules/.bin/webpack --config webpack.config.js",
+    "start": "./node_modules/.bin/webpack-dev-server",
     "server": "./scripts/server.sh",
     "psql": "./scripts/psql.sh",
-    "build": "./node_modules/.bin/webpack ./webpack.config.js",
     "test:lint": "./node_modules/.bin/eslint . --ext .js --ext .jsx",
     "test:lint:fix": "npm run --loglevel=silent test:lint -- --fix",
     "test:unit": "./node_modules/.bin/mocha --compilers js:babel-register --recursive $(find src -name '*.spec.js')",
     "test:unit:watch": "npm run --loglevel=silent test:unit -- --watch"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/inovia-team/givemetime.git"
-  },
-  "author": "inovia-team",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/inovia-team/givemetime/issues"
-  },
-  "homepage": "https://github.com/inovia-team/givemetime#readme",
+  "main": "src/index.jsx",
   "devDependencies": {
     "babel-cli": "~6.14.0",
     "babel-core": "~6.14.0",
@@ -78,5 +66,15 @@
     "redux": "^3.5.2",
     "redux-form": "^5.2.5",
     "redux-thunk": "^2.1.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inovia-team/givemetime.git"
+  },
+  "author": "inovia-team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/inovia-team/givemetime/issues"
+  },
+  "homepage": "https://github.com/inovia-team/givemetime#readme"
 }

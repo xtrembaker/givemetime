@@ -45,11 +45,11 @@ export class Layout extends React.Component {
                             title="Give R&D time"
                             onLeftIconButtonTouchTap={() => this.handleMenuClick()}
                         />
-                        <MenuItem linkButton={true}
+                        <MenuItem
                             containerElement={<Link to ="/home" />}>Projects</MenuItem>
-                        <MenuItem linkButton={true}
+                        <MenuItem
                             onTouchTap={this.props.openDialog}>Add Project</MenuItem>
-                        <MenuItem linkButton={true}
+                        <MenuItem
                             containerElement={<Link to ="/" />}>My account</MenuItem>
                     </Drawer>
                 </div>

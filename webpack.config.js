@@ -3,13 +3,12 @@ const path = require('path');
 const webpack = require('webpack');
 const fs = require('fs');
 
-const ENV = require('./env');
 const PATHS = {
     src: path.join(__dirname, 'src'),
     build: path.join(__dirname, 'build/public'),
 };
 
-process.env.BABEL_ENV = ENV;
+process.env.BABEL_ENV = 'development';
 
 const common = {
     entry: PATHS.src,
