@@ -1,28 +1,33 @@
 import * as constants from './common.actionTypes'
+import 'isomorphic-fetch'
+import * as config from '../config'
 
-export const getGraphQL = (payload, variables, onSuccess, onError) => {
+export const getGraphQL = (query, variables, onSuccess, onError) => {
     onSuccess = onSuccess || ((a) => a)
     return (dispatch) => {
         onError = onError || ((a) => dispatch(apologize(a)))
-        return new Promise((resolve) => {
-            let request = new XMLHttpRequest()
-            request.open('POST', '/graphql', true)
-            request.setRequestHeader('Content-Type', 'application/json')
-            request.send(JSON.stringify({ query: payload, variables: variables }))
-            request.onreadystatechange = () => {
-                if (request.readyState === 4) {
-                    resolve(request.responseText)
-                }
-            }
+        return fetch(`${config.API_URL}/graphql`, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify({ query, variables }),
         })
-        .catch((response) => onError(JSON.parse(response)))
         .then((response) => {
-            response = JSON.parse(response)
+            if (response.status === 200) {
+                return response.json()
+            }
+            return Promise.reject(response)
+        })
+        .then((response) => {
             if (response.errors) {
                 onError(response)
             } else {
                 onSuccess(response.data)
             }
+        })
+        .catch((err) => {
+            onError(err.message || err)
         })
     }
 }

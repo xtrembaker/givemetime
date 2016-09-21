@@ -1,8 +1,6 @@
 import expect from 'expect'
 
-import 'isomorphic-fetch' // Fetch polyfill for node and browsers alike
 import thunk from 'redux-thunk'
-import fetchMock from 'fetch-mock'
 
 import * as actions from './layout.actions.js'
 
@@ -12,7 +10,6 @@ import configureMockStore from 'redux-mock-store'
 
 const middlewares = [ thunk ]
 const mockStore = configureMockStore(middlewares)
-fetchMock.mock('^http://localhost:8080', { data: 'foo' })
 
 describe('Layout actions', () => {
     it('should create a global menu toggle action', () => {

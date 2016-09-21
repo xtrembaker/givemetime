@@ -11,7 +11,7 @@ const PATHS = {
 process.env.BABEL_ENV = 'development';
 
 const common = {
-    entry: PATHS.src,
+    entry: PATHS.src + '/index.jsx',
     output: {
         path: PATHS.build,
         filename: 'bundle.js',
@@ -70,15 +70,9 @@ if (process.env.STAGING !== 'production') {
             port: process.env.PORT,
 
             proxy: {
-                "/graphql": {
-                    "target": {
-                        "host": "localhost",
-                        "protocol": 'http:',
-                        "port": 3000
-                    },
-                    ignorePath: true,
-                    changeOrigin: true,
-                    secure: false
+                '/graphql': {
+                    target: 'http://localhost:3000',
+                    pathRewrite: {'^/graphql' : '/?'},
                 }
             }
         },
@@ -87,3 +81,4 @@ if (process.env.STAGING !== 'production') {
 
 
 module.exports = conf;
+
