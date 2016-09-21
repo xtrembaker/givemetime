@@ -3,6 +3,7 @@ import GoogleLogin from 'react-google-login'
 import { connect } from 'react-redux'
 import * as actions from './login.actions'
 import { bindActionCreators } from 'redux'
+import * as config from '../config'
 
 export class LoginButton extends React.Component {
 
@@ -17,7 +18,7 @@ export class LoginButton extends React.Component {
         } else {
             return (
                 <GoogleLogin
-                    clientId="673157831962-gcgp4mj9mgadau0nh9pbaikhbmqkl04d.apps.googleusercontent.com"
+                    clientId={config.GOOGLE_KEY}
                     buttonText="Login"
                     onSuccess={this.props.createUserIfNotExists.bind(this)}
                     onFailure={this.props.failureError.bind(this)}>
