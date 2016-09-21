@@ -23,7 +23,7 @@ describe('GraphQL actions', () => {
         nock.cleanAll()
     })
 
-    it('should call the graphql endpoint and call the success function', (done) => {
+    it('should call the graphql endpoint and call the success function', done => {
         nock(config.API_URL, {
             reqheaders: {
                 'content-type': 'application/json',
@@ -42,7 +42,7 @@ describe('GraphQL actions', () => {
         }).catch(done)
     })
 
-    it('should call the error function on server error', (done) => {
+    it('should call the error function on server error', done => {
         nock(config.API_URL)
             .post('/graphql')
             .replyWithError('OMG nope!')

@@ -2,19 +2,19 @@ import { getGraphQL } from '../../../common/common.actions.js'
 import * as constants from './addProject.actionTypes'
 
 export function openDialog () {
-    return (dispatch) => {
+    return dispatch => {
         dispatch(addProjectDialogToggle(true))
     }
 }
 
 export function closeDialog () {
-    return (dispatch) => {
+    return dispatch => {
         dispatch(addProjectDialogToggle(false))
     }
 }
 
 export function onSubmit (form) {
-    return (dispatch) => {
+    return dispatch => {
         dispatch(getGraphQL(`
             mutation createProject(
                 $title: String!,
@@ -52,7 +52,7 @@ export function onSubmit (form) {
                 acquired: 0,
                 authorId: form.author,
             },
-            (response) => {
+            response => {
                 dispatch(projectCreated(
                     response.insertProject.project.id,
                     response.insertProject.project.rowId,
@@ -68,7 +68,7 @@ export function onSubmit (form) {
     }
 }
 
-export const addProjectDialogToggle = (open) => {
+export const addProjectDialogToggle = open => {
     return {
         type: constants.ADD_PROJECT_DIALOG_TOGGLE,
         open: !!open,

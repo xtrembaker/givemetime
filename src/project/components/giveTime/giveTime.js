@@ -77,7 +77,7 @@ GiveTimeDialog.propTypes = {
     handleSubmit: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         openId: state.project.giveTime.giveTimeDialog.openId,
         amount: state.project.giveTime.giveTimeDialog.amount,
@@ -87,7 +87,7 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         onSubmit: actions.onSubmit,
         openDialog: actions.openDialog,

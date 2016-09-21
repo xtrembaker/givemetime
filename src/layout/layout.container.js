@@ -69,14 +69,14 @@ Layout.propTypes = {
     openDialog: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         user: state.project.login.user,
         globalMenuOpen: state.project.layout.globalMenuOpen,
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         openDialog: actionsDialog.openDialog,
         globalMenuToggle: actions.globalMenuToggle }, dispatch)

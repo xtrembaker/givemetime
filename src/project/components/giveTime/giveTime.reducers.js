@@ -21,7 +21,7 @@ export default function (state = { giveTimeDialog: {
     case constants.GIVE_TIME:
         return { ...state,
             projects: state.projects.map(
-                (project) => project.id === action.id
+                project => project.id === action.id
                     ? { ...project, acquired: project.acquired + action.amount }
                     : project
             ),

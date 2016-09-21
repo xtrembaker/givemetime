@@ -2,7 +2,7 @@ import { getGraphQL } from '../common/common.actions.js'
 import * as constants from './project.actionTypes'
 
 export function loadProjects () {
-    return (dispatch) => {
+    return dispatch => {
         dispatch(getGraphQL(`
             query {
                 viewer {
@@ -24,8 +24,8 @@ export function loadProjects () {
                 }
             }`,
             {},
-            (response) => response.viewer.projectNodes.nodes
-                .map((node) => dispatch(projectFetched(
+            response => response.viewer.projectNodes.nodes
+                .map(node => dispatch(projectFetched(
                     node.id,
                     node.rowId,
                     node.title,

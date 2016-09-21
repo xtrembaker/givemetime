@@ -65,13 +65,13 @@ ProjectsTable.propTypes = {
     userRowId: PropTypes.number.isRequired,
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         projects: state.project.project.projects,
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         loadProjects: actions.loadProjects }, dispatch)
 }

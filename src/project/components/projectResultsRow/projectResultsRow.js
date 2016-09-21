@@ -63,7 +63,7 @@ ProjectTableRow.propTypes = {
 }
 
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         onDelete: actions.onDelete }, dispatch)
 }

@@ -2,7 +2,7 @@ import { getGraphQL } from '../../../common/common.actions.js'
 import * as constants from './giveTime.actionTypes'
 
 export function onSubmit (form) {
-    return (dispatch) => {
+    return dispatch => {
         dispatch(getGraphQL(`
             mutation giveTime(
                 $projectRowId: Int!,
@@ -34,13 +34,13 @@ export function onSubmit (form) {
 }
 
 export function openDialog (id) {
-    return (dispatch) => {
+    return dispatch => {
         dispatch(openGiveTimeDialog(id))
     }
 }
 
 export function closeDialog () {
-    return (dispatch) => {
+    return dispatch => {
         dispatch(closeGiveTimeDialog())
     }
 }
@@ -50,7 +50,7 @@ export const closeGiveTimeDialog = () => {
         type: constants.GIVE_TIME_DIALOG_CLOSE,
     }
 }
-export const openGiveTimeDialog = (id) => {
+export const openGiveTimeDialog = id => {
     return {
         type: constants.GIVE_TIME_DIALOG_OPEN,
         id: id,

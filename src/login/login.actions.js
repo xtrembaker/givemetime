@@ -2,7 +2,7 @@ import { getGraphQL, apologize } from '../common/common.actions.js'
 import * as constant from './login.actionTypes.js'
 
 export function failureError (response) {
-    return (dispatch) => {
+    return dispatch => {
         dispatch(apologize('Can\'t log in. Error : ' + response))
     }
 }
@@ -10,7 +10,7 @@ export function failureError (response) {
 export function createUserIfNotExists (response) {
     const fullname = response.getBasicProfile().getName()
     const email = response.getBasicProfile().getEmail()
-    return (dispatch) => {
+    return dispatch => {
         dispatch(getGraphQL(`
             mutation registerPerson(
                 $fullname: String!,
@@ -36,7 +36,7 @@ export function createUserIfNotExists (response) {
                 email: email,
                 password: 'password',
             },
-            (createUserResponse) => {
+            createUserResponse => {
                 if (createUserResponse.personRegisterOrRetrieve) {
                     const user = createUserResponse.personRegisterOrRetrieve.output
                     dispatch(userLoggedIn(user.id, user.rowId, user.fullname, user.credit))
@@ -49,7 +49,7 @@ export function createUserIfNotExists (response) {
 }
 
 export function handleLogout () {
-    return (dispatch) => {
+    return dispatch => {
         dispatch(userLoggedOut())
     }
 }

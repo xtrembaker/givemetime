@@ -2,7 +2,7 @@ import { getGraphQL } from '../../../common/common.actions.js'
 import * as constants from './projectResultsRow.actionTypes'
 
 export function onDelete (id) {
-    return (dispatch) => {
+    return dispatch => {
         dispatch(getGraphQL(`
             mutation deleteProject(
                 $id: ID!
@@ -14,12 +14,12 @@ export function onDelete (id) {
                 }
             }`,
             { id: id },
-            (response) => dispatch(projectDeleted(response.deleteProject.id))
+            response => dispatch(projectDeleted(response.deleteProject.id))
         ))
     }
 }
 
-export const projectDeleted = (id) => {
+export const projectDeleted = id => {
     return {
         type: constants.ROJECT_DELETED,
         id: id,

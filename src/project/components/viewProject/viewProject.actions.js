@@ -1,13 +1,13 @@
 import * as constants from './viewProject.actionTypes.js'
 
 export function closeDialog () {
-    return (dispatch) => {
+    return dispatch => {
         dispatch(closeProjectDialog())
     }
 }
 
 export function onTap (id) {
-    return (dispatch) => {
+    return dispatch => {
         dispatch(openProjectDialog(id))
     }
 }
@@ -17,7 +17,7 @@ export const closeProjectDialog = () => {
         type: constants.VIEW_PROJECT_DIALOG_CLOSE,
     }
 }
-export const openProjectDialog = (id) => {
+export const openProjectDialog = id => {
     return {
         type: constants.VIEW_PROJECT_DIALOG_OPEN,
         id: id,

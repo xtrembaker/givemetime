@@ -70,7 +70,7 @@ AddProjectDialog.propTypes = {
     handleSubmit: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         open: state.project.addProject.addProjectDialog.open,
         userRowId: state.project.login.user.rowId,
@@ -78,7 +78,7 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         openDialog: actions.openDialog,
         closeDialog: actions.closeDialog,

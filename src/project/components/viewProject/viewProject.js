@@ -56,12 +56,12 @@ ViewProjectDialog.propTypes = {
 }
 
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         openId: state.project.viewProject.viewProjectDialog.openId,
     }
 }
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         closeDialog: actions.closeDialog,
         onTap:actions.onTap }, dispatch)

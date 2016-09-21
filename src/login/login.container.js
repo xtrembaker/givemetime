@@ -40,13 +40,13 @@ LoginButton.propTypes = {
     handleLogout: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         user: state.project.login.user,
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         handleLogout: actions.handleLogout,
         failureError: actions.failureError,
