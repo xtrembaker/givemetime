@@ -6,9 +6,9 @@ export default function (state = { addProjectDialog: {
     switch (action.type) {
     case constants.PROJECT_CREATED:
     case constants.ADD_PROJECT_DIALOG_TOGGLE:
-        return Object.assign({}, state, {
-            addProjectDialog: Object.assign({}, state.addProjectDialog, { open: action.open }),
-        })
+        return { ...state,
+            addProjectDialog: { ...state.addProjectDialog, open: action.open },
+        }
     default:
         return state
     }
