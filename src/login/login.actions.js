@@ -74,7 +74,7 @@ export function checkLocalUser () {
             if (window.gapi && window.gapi.auth2) {
                 const auth2Instance = window.gapi.auth2.getAuthInstance()
 
-                auth2Instance.isSignedIn.listen((loggedIn) => {
+                auth2Instance.isSignedIn.listen(loggedIn => {
 
                     if (loggedIn) {
                         // fetch user info
@@ -92,7 +92,7 @@ export function checkLocalUser () {
                             {
                                 id: userId,
                             },
-                            (userResponse) => {
+                            userResponse => {
                                 const person = userResponse.person
                                 dispatch(userLoggedIn(person.id, person.rowId, person.fullname, person.credit))
                             }

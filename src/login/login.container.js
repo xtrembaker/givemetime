@@ -55,7 +55,7 @@ const mapDispatchToProps = dispatch => {
         handleLogout: actions.handleLogout,
         failureError: actions.failureError,
         createUserIfNotExists: actions.createUserIfNotExists,
-        checkLocalUser: actions.checkLocalUser
+        checkLocalUser: actions.checkLocalUser,
     }, dispatch)
 }
 
