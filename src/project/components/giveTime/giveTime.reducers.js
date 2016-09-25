@@ -1,24 +1,10 @@
-import * as constants from './giveTime.actionTypes.js'
+import * as constants from './giveTime.actionTypes'
 
-export default function (state = { giveTimeDialog: {
+export default function (state = { giveTime: {
     openId: null,
 } }, action) {
     switch (action.type) {
-    case constants.GIVE_TIME_DIALOG_OPEN:
-        return { ...state,
-            giveTimeDialog: { ...state.giveTimeDialog,
-                openId: action.id,
-                userCredit: state.user.credit,
-                amount: state.projects.reduce((agg, project) => {
-                    return project.id === action.id ? Math.min(agg, project.estimate - project.acquired) : agg
-                }, state.user.credit),
-            },
-        }
-    case constants.GIVE_TIME_DIALOG_CLOSE:
-        return { ...state,
-            giveTimeDialog: { ...state.giveTimeDialog, openId: null, projectId: null },
-        }
-    case constants.GIVE_TIME:
+    case constants.GAVE_TIME:
         return { ...state,
             projects: state.projects.map(
                 project => project.id === action.id

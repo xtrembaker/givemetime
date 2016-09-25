@@ -1,5 +1,5 @@
-import { getGraphQL } from '../../../common/common.actions.js'
-import * as constants from './projectResultsRow.actionTypes'
+import { getGraphQL } from '../../../common/common.actions'
+import * as constants from './projectRow.actionTypes'
 
 export function onDelete (id) {
     return dispatch => {

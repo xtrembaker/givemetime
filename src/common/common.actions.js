@@ -19,15 +19,19 @@ export const getGraphQL = (query, variables, onSuccess, onError) => {
             }
             return Promise.reject(response)
         })
+        .catch(err => {
+            if (err.json) {
+                return err.json()
+            }
+            return { errors: [ err ] }
+        })
         .then(response => {
+
             if (response.errors) {
-                onError(response)
+                onError(response.errors.map(err => err.message || err).join('. '))
             } else {
                 onSuccess(response.data)
             }
-        })
-        .catch(err => {
-            onError(err.message || err)
         })
     }
 }

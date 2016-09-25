@@ -1,13 +1,17 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import { reducer as formReducer } from 'redux-form'
-import giveMeTimeReducer from './reducer.js'
+import giveMeTimeReducer from './reducer'
+import { browserHistory } from 'react-router'
+import { routerReducer } from 'react-router-redux'
+import { routerMiddleware } from 'react-router-redux'
 
 export default function configureStore (initialState) {
 
     const enhancer = compose(
         // Middleware you want to use in development:
         applyMiddleware(thunkMiddleware),
+        applyMiddleware(routerMiddleware(browserHistory)),
         // enable redux extension
         window.devToolsExtension ? window.devToolsExtension() : () => {}
     )
@@ -15,6 +19,7 @@ export default function configureStore (initialState) {
     const store = createStore(combineReducers({
         project: giveMeTimeReducer,
         form: formReducer,
+        routing: routerReducer,
     }), initialState, enhancer)
 
     // Hot reload reducers (requires Webpack or Browserify HMR to be enabled)

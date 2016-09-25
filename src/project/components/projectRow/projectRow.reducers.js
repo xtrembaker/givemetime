@@ -1,4 +1,4 @@
-import * as constants from './projectResultsRow.actionTypes.js'
+import * as constants from './projectRow.actionTypes'
 
 export default function (state = {}, action) {
     switch (action.type) {
