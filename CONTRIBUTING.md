@@ -16,21 +16,17 @@
 TODO (tooling)
 --------------
 
-- Sourcemaps for karma
 - Unit test everything
 - Merge db and server
 - Automatic migrate on server start
-- Use immutable state 
-  
+- Use immutable state
+- Always use id or rowId
+
 TODO (features)
 ---------------
 
 - Better header (logout)
 - Add project error messages
-- Project view is broken
-- Project give time is broken
-- Project delete is broken
 - Credit users every month
 - Better side menu
 - Better grid system
-- Business objects and classes
