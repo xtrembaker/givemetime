@@ -1,18 +1,17 @@
 import { getGraphQL } from '../../../common/common.actions'
 import * as constants from './giveTime.actionTypes'
 
-export function giveTime ({ amount, userId, projectId }) {
-
+export function giveTime ({ amount, userRowId, projectRowId }) {
     return dispatch => {
         dispatch(getGraphQL(`
             mutation giveTime(
-                $projectId: ID!,
-                $userId: ID!,
+                $projectRowId: Int!,
+                $userRowId: Int!,
                 $credit: Int!
             ){
                 projectGiveTime(input: {
-                    person: $userId,
-                    project: $projectId,
+                    personId: $userRowId,
+                    projectId: $projectRowId,
                     amount: $credit
                 }) {
                     output {
@@ -23,11 +22,11 @@ export function giveTime ({ amount, userId, projectId }) {
             }`,
             {
                 credit: amount,
-                userId: userId,
-                projectId: projectId,
+                userRowId: userRowId,
+                projectRowId: projectRowId,
             },
             () => {
-                dispatch(gaveTime(amount, projectId))
+                dispatch(gaveTime(amount, projectRowId))
             }
         ))
     }

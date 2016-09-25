@@ -46,6 +46,5 @@ export function AddProjectComponent ({ handleSubmit }) {
 
 
 AddProjectComponent.propTypes = {
-    userRowId: PropTypes.number.isRequired,
     handleSubmit: PropTypes.func.isRequired,
 }

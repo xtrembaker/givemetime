@@ -5,7 +5,7 @@ import { ProjectRowComponent } from './projectRow.view'
 
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
-        onDelete: actions.onDelete,
+        deleteProject: actions.deleteProject,
     }, dispatch)
 }
 

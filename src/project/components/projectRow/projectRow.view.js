@@ -5,18 +5,18 @@ import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card'
 import ProjectPropTypes from '../../project.propTypes'
 import { Link } from 'react-router'
 
-export function ProjectRowComponent ({ project: { id, title, estimate, author, acquired }, onDelete }) {
+export function ProjectRowComponent ({ project: { id, rowId, title, estimate, acquired, author }, deleteProject }) {
     return (
       <Card expanded={null} expandable={false} initiallyExpanded={false}>
           <CardHeader title={title} subtitle={author}/>
           <CardText>
-              <div>Estimated time : {estimate}</div>
+              <div>{acquired}h of {estimate}h {(acquired / estimate).toFixed(4) * 100}%</div>
               <LinearProgress max={estimate} min={0} value={acquired} mode="determinate"/>
           </CardText>
           <CardActions>
               <Link to={`/view/${id}`}>View</Link>
-              <Link to={`/give/${id}`}>Give Time</Link>
-              <IconButton onTouchTap={() => onDelete(id)}>
+              <Link to={`/give/${id}/${rowId}`}>Give Time</Link>
+              <IconButton onTouchTap={() => deleteProject(rowId)}>
                   <ActionDelete />
               </IconButton>
           </CardActions>
@@ -26,5 +26,5 @@ export function ProjectRowComponent ({ project: { id, title, estimate, author, a
 
 ProjectRowComponent.propTypes = {
     project: ProjectPropTypes,
-    onDelete: PropTypes.func.isRequired,
+    deleteProject: PropTypes.func.isRequired,
 }

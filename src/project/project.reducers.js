@@ -1,8 +1,11 @@
-import * as constants from './project.actionTypes.js'
+import * as projectActions from './project.actionTypes'
+import * as giveTimeActions from './components/giveTime/giveTime.actionTypes'
+import * as projectRowActions from './components/projectRow/projectRow.actionTypes'
 
 export default function (state = { projects: [] }, action) {
     switch (action.type) {
-    case constants.PROJECT_FETCHED:
+
+    case projectActions.PROJECT_FETCHED:
         return { ...state,
             projects: state.projects
                 .filter(project => project.id !== action.id)
@@ -18,7 +21,23 @@ export default function (state = { projects: [] }, action) {
                     author: action.author,
                 }]),
         }
+
+    case giveTimeActions.GAVE_TIME:
+        return { ...state,
+            projects: state.projects.map(
+                project => project.id === action.id
+                    ? { ...project, acquired: project.acquired + action.amount }
+                    : project
+            ),
+        }
+
+    case projectRowActions.PROJECT_DELETED:
+        return { ...state,
+            projects: state.projects.filter(project => project.id !== action.id),
+        }
+
     default:
         return state
+
     }
 }
