@@ -6,7 +6,9 @@ import { bindActionCreators } from 'redux'
 import * as config from '../config'
 
 export class LoginButton extends React.Component {
-
+    componentDidMount () {
+        this.props.checkLocalUser()
+    }
     render () {
         if (this.props.user.id) {
             return (
@@ -39,6 +41,7 @@ LoginButton.propTypes = {
         credit: PropTypes.number,
     }).isRequired,
     handleLogout: PropTypes.func.isRequired,
+    checkLocalUser: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => {
@@ -51,7 +54,9 @@ const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         handleLogout: actions.handleLogout,
         failureError: actions.failureError,
-        createUserIfNotExists: actions.createUserIfNotExists }, dispatch)
+        createUserIfNotExists: actions.createUserIfNotExists,
+        checkLocalUser: actions.checkLocalUser
+    }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginButton)

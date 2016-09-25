@@ -28,7 +28,8 @@ const common = {
                 loader: 'babel?cacheDirectory',
                 include: PATHS.src,
             }
-        ]
+        ],
+        noParse: /react\/lib\/ExecutionEnvironment/
     },
     plugins: [
         new webpack.DefinePlugin({
