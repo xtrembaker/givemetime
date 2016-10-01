@@ -12,8 +12,8 @@ const mapStateToProps = (state, ownProps) => {
         userCredit: state.project.login.user.credit,
         initialValues: {
             userId: state.project.login.user.id,
-            userRowId: state.project.login.user.rowId,
             projectRowId: ownProps.params.rowId,
+            userToken: state.project.login.user.token,
         },
     }
 }

@@ -4,7 +4,8 @@ services:
     image: postgres
     environment:
       - POSTGRES_PASSWORD=postgres
-      - PG_PROJECT_USER=${PGUSER}
+      - PG_PROJECT_OWNER="${PROJECT_USER_BASE_NAME}_owner"
+      - PG_PROJECT_USER="${PROJECT_USER_BASE_NAME}_user"
       - PG_PROJECT_PASSWORD=${PGPASSWORD}
       - PG_PROJECT_DATABASE=${PGDATABASE}
     volumes:

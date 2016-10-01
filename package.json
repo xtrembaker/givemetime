@@ -6,7 +6,7 @@
   "scripts": {
     "test": "npm run --loglevel=silent test:lint && npm run --loglevel=silent test:unit",
     "db": "./scripts/db.sh up",
-    "db:rm": "./scripts/db.sh stop && ./scripts/db.sh rm",
+    "db:rm": "./scripts/db.sh stop && ./scripts/db.sh rm --force",
     "db:migration:create": "./scripts/db-migrate.sh --sql-file create",
     "db:migrate": "./scripts/db-migrate.sh up",
     "db:revert": "./scripts/db-migrate.sh down",

@@ -9,7 +9,7 @@ const mapStateToProps = state => {
     return {
         initialValues: {
             author: state.project.login.user.fullname,
-            authorId: state.project.login.user.rowId,
+            userToken: state.project.login.user.token,
         },
     }
 }

@@ -32,6 +32,8 @@ const graphql = postgraphql(
         development: true,
         secret: JWT_SECRET,
         log: true,
+        // any non logged user is not admin
+        anonymousRole: 'give_me_time_user'
     }
 )
 // graphql endpoint

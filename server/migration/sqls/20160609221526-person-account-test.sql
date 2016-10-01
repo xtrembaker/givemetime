@@ -17,7 +17,6 @@ select col_hasnt_default('person_account'::name, 'email'::name);
 select col_not_null('person_account'::name, 'email'::name);
 select col_has_check('person_account'::name, 'email'::name);
 
-
 -- author mock
 insert into give_me_time_public.person (id, fullname, credit)
 values (1, 'abc', 12);

@@ -1,7 +1,9 @@
 BEGIN;
 select no_plan();
 
-set search_path to give_me_time_private, "$user", public, tap;
+set search_path to give_me_time_public, "$user", public, tap;
+
+-- this function is only called by the node server when the user has been authenticated
 select has_function(
   'give_me_time_private',
   'person_register_or_retrieve',
@@ -9,7 +11,7 @@ select has_function(
 );
 
 select is(
-    (select id from give_me_time_public.person join person_account on person_account.person_id = person.id where email = 'someone_new@test.com'),
+    (select id from give_me_time_public.person join give_me_time_private.person_account on person_account.person_id = person.id where email = 'someone_new@test.com'),
     null, 'Ensure person does not exists yet'
 );
 select isnt(
@@ -17,7 +19,7 @@ select isnt(
     null, 'Should create person account'
 );
 select isnt(
-    (select id from give_me_time_public.person join person_account on person_account.person_id = person.id where email = 'someone_new@test.com'),
+    (select id from give_me_time_public.person join give_me_time_private.person_account on person_account.person_id = person.id where email = 'someone_new@test.com'),
     null, 'Ensure person exist now'
 );
 
