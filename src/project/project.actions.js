@@ -26,7 +26,7 @@ const graphQLDispatchNodeFetched = dispatch => node => dispatch(projectFetched(
 
 export function loadProjects () {
     return dispatch => {
-        dispatch(getGraphQL(`
+        dispatch(getGraphQL(null, `
             query {
                 viewer {
                     projectNodes {
@@ -45,7 +45,7 @@ export function loadProjects () {
 
 export function loadProject (id) {
     return () => dispatch => {
-        dispatch(getGraphQL(`
+        dispatch(getGraphQL(null, `
              query project($id: ID!) {
                 viewer {
                   project(id: $id) {

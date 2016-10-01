@@ -75,6 +75,9 @@ if (process.env.STAGING !== 'production') {
                 '/graphql': {
                     target: 'http://localhost:3000',
                     pathRewrite: {'^/graphql' : '/?'},
+                },
+                '/jwt_auth': {
+                    target: 'http://localhost:3000',
                 }
             }
         },

@@ -3,7 +3,7 @@ import * as constants from './giveTime.actionTypes'
 
 export function giveTime ({ amount, userRowId, projectRowId }) {
     return dispatch => {
-        dispatch(getGraphQL(`
+        dispatch(getGraphQL(null, `
             mutation giveTime(
                 $projectRowId: Int!,
                 $userRowId: Int!,

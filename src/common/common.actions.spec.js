@@ -33,7 +33,7 @@ describe('GraphQL actions', () => {
             .reply(200, { data: { todos: ['do something'] } })
 
         store.dispatch(actions.getGraphQL(
-            'query { ... }', { params : {} }, onSuccess, onError
+            null, 'query { ... }', { params : {} }, onSuccess, onError
         )).then(() => {
             expect(onSuccess.calledOnce).toEqual(true)
             expect(onSuccess.calledWith({ todos: ['do something'] })).toEqual(true)
@@ -48,7 +48,7 @@ describe('GraphQL actions', () => {
             .replyWithError('OMG nope!')
 
         store.dispatch(actions.getGraphQL(
-            'query { ... }', { params : {} }, onSuccess, onError
+            null, 'query { ... }', { params : {} }, onSuccess, onError
         )).then(() => {
             expect(onSuccess.calledOnce).toEqual(false)
             expect(onError.calledOnce).toEqual(true)

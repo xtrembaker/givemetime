@@ -3,7 +3,7 @@ import * as constants from './addProject.actionTypes'
 
 export function createProject ({ title, estimate, description, authorId }) {
     return dispatch => {
-        dispatch(getGraphQL(`
+        dispatch(getGraphQL(null, `
             mutation createProject(
                 $title: String!,
                 $estimate: Int!,

@@ -1,16 +1,18 @@
 import * as constants from './common.actionTypes'
-import 'isomorphic-fetch'
+import fetch from 'isomorphic-fetch'
 import * as config from '../config'
 
-export const getGraphQL = (query, variables, onSuccess, onError) => {
+export const getGraphQL = (userToken, query, variables, onSuccess, onError) => {
     onSuccess = onSuccess || (a => a)
     return dispatch => {
         onError = onError || (a => dispatch(apologize(a)))
+        let headers = { 'content-type': 'application/json' }
+        if (userToken) {
+            headers['authorization'] = `Bearer ${userToken}`
+        }
         return fetch(`${config.API_URL}/graphql`, {
             method: 'POST',
-            headers: {
-                'content-type': 'application/json',
-            },
+            headers: headers,
             body: JSON.stringify({ query, variables }),
         })
         .then(response => {
