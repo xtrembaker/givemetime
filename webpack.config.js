@@ -34,7 +34,8 @@ const common = {
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
-                'NODE_ENV': JSON.stringify(process.env.STAGING || 'development')
+                'NODE_ENV': JSON.stringify(process.env.STAGING || 'development'),
+                'GOOGLE_CLIENT_ID': JSON.stringify(process.env.GOOGLE_CLIENT_ID || 'Please set the GOOGLE_CLIENT_ID env var')
             },
         }),
     ],

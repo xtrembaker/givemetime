@@ -20,8 +20,8 @@ npm install
     npm run db:migrate --loglevel=silent
     npm run db:test --loglevel=silent
 
-    npm run server
+    GOOGLE_CLIENT_ID=xxxxxx-xxxxx.apps.googleusercontent.com GOOGLE_CLIENT_SECRET=xxxxxxx GOOGLE_REDIRECT_URL=http://localhost:8080/smth npm run server
     # graphiql interface located at http://localhost:3000
 
-    npm start
+    GOOGLE_CLIENT_ID=xxxxxx-xxxxx.apps.googleusercontent.com npm start
     # project located at http://localhost:8080

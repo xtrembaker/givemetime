@@ -2,4 +2,4 @@
 
 cd "$(dirname "$0")"
 source ./_env.sh
-../node_modules/.bin/postgraphql postgres://$PGUSER:$PGPASSWORD@$PGHOST:$PGPORT/$PGDATABASE --schema give_me_time_public --development
+NODE_PATH=../node_modules ../node_modules/.bin/nodemon --watch ../server --watch ../server/auth ../server/server.js
