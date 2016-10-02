@@ -19,6 +19,8 @@ select col_hasnt_default('credit_source'::name, 'last_distribution'::name);
 select col_not_null('credit_source'::name, 'last_distribution'::name);
 select col_has_check('credit_source'::name, 'last_distribution'::name);
 
+-- reset credit_source for the sake of this test suite (depends heavily on now())
+truncate table give_me_time_private.credit_source;
 
 set search_path to give_me_time_public, "$user", public, tap;
 select has_function('give_me_time_public', 'everybody_gets_credits', ARRAY['timestamp with time zone']);

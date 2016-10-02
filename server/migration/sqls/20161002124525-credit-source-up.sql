@@ -5,8 +5,10 @@ create table give_me_time_private.credit_source (
     amount_per_year credits,
     last_distribution timestamp with time zone not null check(last_distribution <= current_timestamp)
 );
+insert into give_me_time_private.credit_source (id, amount_per_year, last_distribution)
+values (1, 1000, now());
 
-create function give_me_time_public.everybody_gets_credits(_now timestamp with time zone) returns void as $$
+create function give_me_time_public.everybody_gets_credits(_now timestamp with time zone default current_timestamp) returns void as $$
 declare
     _credit_source record;
     _person_count integer;
