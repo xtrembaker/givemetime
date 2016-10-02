@@ -27,17 +27,13 @@ select col_hasnt_default('project'::name, 'description'::name);
 select col_is_null('project'::name, 'description'::name);
 
 select has_column('project'::name, 'estimate'::name);
-select col_type_is('project'::name, 'estimate'::name, 'integer');
+select col_type_is('project'::name, 'estimate'::name, 'credits');
 select col_hasnt_default('project'::name, 'estimate'::name);
-select col_not_null('project'::name, 'estimate'::name);
-select col_has_check('project'::name, 'estimate'::name);
 
 select has_column('project'::name, 'acquired'::name);
-select col_type_is('project'::name, 'acquired'::name, 'integer');
+select col_type_is('project'::name, 'acquired'::name, 'credits');
 select col_has_default('project'::name, 'acquired'::name);
 select col_default_is('project'::name, 'acquired'::name, 0);
-select col_not_null('project'::name, 'acquired'::name);
-select col_has_check('project'::name, 'acquired'::name);
 
 select table_privs_are(
     'give_me_time_public', 'project', 'give_me_time_user', ARRAY['SELECT']::text[],

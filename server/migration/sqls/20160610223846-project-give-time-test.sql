@@ -29,12 +29,12 @@ select isnt_empty('give_ok');
 prepare not_enough_credit as
   select project_give_time(10, 7);
 set local jwt.claims.user_rowId to 2;
-select throws_ok('not_enough_credit', 'This person only have 6 and cannot transfer 7');
+select throws_ok('not_enough_credit', 'This person only have 6.00 and cannot transfer 7');
 
 prepare too_many_credit_given as
   select project_give_time(10, 12);
 set local jwt.claims.user_rowId to 1;
-select throws_ok('too_many_credit_given', 'This project can only accept 10, we have to refuse your 12 credits');
+select throws_ok('too_many_credit_given', 'This project can only accept 10.00, we have to refuse your 12 credits');
 
 prepare invalid_credit as
   select project_give_time(10, -1);

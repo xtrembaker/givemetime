@@ -12,6 +12,10 @@ node_js:
   - "6"
 
 script:
-  - npm run db:migrate # depends on npm package
+  - npm run db:migrate
   - docker run --rm --link server-db:db -v $(pwd)/server/migration/sqls/:/test digit/docker-pg-prove -h db -p 5432 -u give_me_time_owner -w give_me_time -d give_me_time -t '/test/*-test.sql'
   - npm test
+  # this also tests down migrations
+  - npm run db:revert -- --count 10000
+  - npm run db:migrate
+  - docker run --rm --link server-db:db -v $(pwd)/server/migration/sqls/:/test digit/docker-pg-prove -h db -p 5432 -u give_me_time_owner -w give_me_time -d give_me_time -t '/test/*-test.sql'

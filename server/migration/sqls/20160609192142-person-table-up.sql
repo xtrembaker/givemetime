@@ -3,10 +3,12 @@
 
 BEGIN;
 
+create domain credits as numeric(16,10) not null check (value >= 0.0);
+
 create table give_me_time_public.person (
   id               serial not null primary key,
   fullname         character varying not null,
-  credit           integer not null check (credit >= 0),
+  credit           credits,
   created_at       timestamp with time zone not null,
   updated_at       timestamp with time zone check (updated_at >= created_at)
 );
