@@ -10,7 +10,6 @@ before_install:
 
 node_js:
   - "6"
-  - "5"
 
 script:
   - npm run db:migrate # depends on npm package
