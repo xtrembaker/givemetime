@@ -1,7 +1,7 @@
-import { getGraphQL } from '../../../common/common.actions.js'
+import { getGraphQL } from '../../../common/common.actions'
 import * as constants from './giveTime.actionTypes'
 
-export function onSubmit (form) {
+export function giveTime ({ amount, userRowId, projectRowId }) {
     return dispatch => {
         dispatch(getGraphQL(`
             mutation giveTime(
@@ -21,45 +21,20 @@ export function onSubmit (form) {
                 }
             }`,
             {
-                credit: form.amount,
-                userRowId: form.userRowId,
-                projectRowId: form.projectRowId,
+                credit: amount,
+                userRowId: userRowId,
+                projectRowId: projectRowId,
             },
             () => {
-                dispatch(giveTime(form.amount, form.projectRowId))
-                dispatch(closeGiveTimeDialog())
+                dispatch(gaveTime(amount, projectRowId))
             }
         ))
     }
 }
 
-export function openDialog (id) {
-    return dispatch => {
-        dispatch(openGiveTimeDialog(id))
-    }
-}
-
-export function closeDialog () {
-    return dispatch => {
-        dispatch(closeGiveTimeDialog())
-    }
-}
-
-export const closeGiveTimeDialog = () => {
+export const gaveTime = (amount, projectId) => {
     return {
-        type: constants.GIVE_TIME_DIALOG_CLOSE,
-    }
-}
-export const openGiveTimeDialog = id => {
-    return {
-        type: constants.GIVE_TIME_DIALOG_OPEN,
-        id: id,
-    }
-}
-
-export const giveTime = (amount, projectId) => {
-    return {
-        type: constants.GIVE_TIME,
+        type: constants.GAVE_TIME,
         amount: amount,
         id: projectId,
     }

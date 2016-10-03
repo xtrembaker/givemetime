@@ -1,11 +1,8 @@
 import React, { PropTypes } from 'react'
 import GoogleLogin from 'react-google-login'
-import { connect } from 'react-redux'
-import * as actions from './login.actions'
-import { bindActionCreators } from 'redux'
 import * as config from '../config'
 
-export class LoginButton extends React.Component {
+export class LoginComponent extends React.Component {
     componentDidMount () {
         this.props.checkLocalUser()
     }
@@ -32,7 +29,7 @@ export class LoginButton extends React.Component {
     }
 }
 
-LoginButton.propTypes = {
+LoginComponent.propTypes = {
     createUserIfNotExists: PropTypes.func.isRequired,
     failureError: PropTypes.func.isRequired,
     user: PropTypes.shape({
@@ -43,20 +40,3 @@ LoginButton.propTypes = {
     handleLogout: PropTypes.func.isRequired,
     checkLocalUser: PropTypes.func.isRequired,
 }
-
-const mapStateToProps = state => {
-    return {
-        user: state.project.login.user,
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return bindActionCreators({
-        handleLogout: actions.handleLogout,
-        failureError: actions.failureError,
-        createUserIfNotExists: actions.createUserIfNotExists,
-        checkLocalUser: actions.checkLocalUser,
-    }, dispatch)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(LoginButton)
