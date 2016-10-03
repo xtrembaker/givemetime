@@ -5,13 +5,16 @@ import giveMeTimeReducer from './reducer'
 import { browserHistory } from 'react-router'
 import { routerReducer } from 'react-router-redux'
 import { routerMiddleware } from 'react-router-redux'
+import { layoutMiddleware } from './layout/layout.middleware'
+
+
+const middlewares = [thunkMiddleware, routerMiddleware(browserHistory), layoutMiddleware]
 
 export default function configureStore (initialState) {
 
     const enhancer = compose(
         // Middleware you want to use in development:
-        applyMiddleware(thunkMiddleware),
-        applyMiddleware(routerMiddleware(browserHistory)),
+        applyMiddleware(...middlewares),
         // enable redux extension
         window.devToolsExtension ? window.devToolsExtension() : () => {}
     )

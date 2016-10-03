@@ -43,11 +43,11 @@ export class LayoutComponent extends React.Component {
                             onLeftIconButtonTouchTap={() => this.handleMenuClick()}
                         />
                         <MenuItem
-                            containerElement={<Link to ="/home" />}>Projects</MenuItem>
+                            containerElement={<Link to ="/" />}>Projects</MenuItem>
                         <MenuItem
                             containerElement={<Link to ="/add" />}>Add Project</MenuItem>
                         <MenuItem
-                            containerElement={<Link to ="/" />}>My account</MenuItem>
+                            containerElement={<Link to ="/me" />}>My account</MenuItem>
                     </Drawer>
                 </div>
                 { content }
