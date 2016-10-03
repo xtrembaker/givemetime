@@ -5,8 +5,8 @@ create table give_me_time_public.project (
   author_id        int not null references give_me_time_public.person(id),
   title            character varying not null,
   description      text,
-  estimate         integer not null check (estimate > 0),
-  acquired         integer not null check (acquired >= 0) check (acquired <= estimate) default 0,
+  estimate         credits check (estimate > 0),
+  acquired         credits check (acquired <= estimate) default 0,
   created_at       timestamp with time zone,
   updated_at       timestamp with time zone
 );

@@ -4,8 +4,8 @@ BEGIN;
 -- Transfer some credits from a user to a project
 create function give_me_time_public.project_give_time(project_id integer, amount integer) returns give_me_time_public.project as $$
 declare
-  person_row give_me_time_public.person;
-  project_row give_me_time_public.project;
+  person_row record;
+  project_row record;
   person_id integer;
 begin
   -- get logged in user id
@@ -30,12 +30,12 @@ begin
 
   -- check if the person has enough credits
   if (person_row.credit < amount) then
-    raise exception 'This person only have % and cannot transfer %', person_row.credit, amount;
+    raise exception 'This person only have % and cannot transfer %', round(person_row.credit, 2), amount;
   end if;
 
   -- check if the project can accept this much credits
   if (project_row.estimate - project_row.acquired < amount) then
-    raise exception 'This project can only accept %, we have to refuse your % credits', project_row.estimate - project_row.acquired, amount;
+    raise exception 'This project can only accept %, we have to refuse your % credits', round(project_row.estimate, 2) - round(project_row.acquired, 2), amount;
   end if;
 
   -- do the transfer

@@ -11,20 +11,26 @@ module.exports = (req, res, next)=>{
     var client = new pg.Client();
 
     // connect to our database
-    client.connect(function (err) {
+    client.connect(err=>{
         if (err) throw err;
 
-        // execute a query on our database
+        // create or retrieve the current user
         client.query('SELECT * from give_me_time_private.person_register_or_retrieve($1, $2)', [req.auth.fullname, req.auth.email], (err, result)=>{
             if (err) throw err;
 
             // this query always return a user
             req.user = result.rows[0];
-            next()
 
-            // disconnect the client
-            client.end(function (err) {
+            // also refresh credits
+            client.query('SELECT give_me_time_public.everybody_gets_credits()', [], (err)=>{
                 if (err) throw err;
+
+                // disconnect the client
+                client.end(err=>{
+                    if (err) throw err;
+                });
+
+                next()
             });
         });
     });

@@ -4,4 +4,5 @@ cd "$(dirname "$0")"
 
 source ./_env.sh
 
-docker run --rm -v $(pwd)/../server/migration/sqls/:/tests digit/docker-pg-prove -h $HOST_PORT_FROM_CONTAINER -d $PGDATABASE -p $PGPORT -u $PGUSER -w $PGPASSWORD -t '/tests/*-test.sql'
+TESTS=${1:-'*-test.sql'}
+docker run --rm -v $(pwd)/../server/migration/sqls/:/tests digit/docker-pg-prove -h $HOST_PORT_FROM_CONTAINER -d $PGDATABASE -p $PGPORT -u $PGUSER -w $PGPASSWORD -t "/tests/$TESTS"
