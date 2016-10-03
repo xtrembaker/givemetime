@@ -24,4 +24,18 @@ for each row execute procedure give_me_time_private.set_created_at();
 create trigger updated_at before update on give_me_time_public.project
 for each row execute procedure give_me_time_private.set_updated_at();
 
+grant select on table give_me_time_public.project to give_me_time_user;
+
+--
+create function give_me_time_public.project_create(_title varchar, _estimate integer, _description text)
+returns give_me_time_public.project as $$
+    insert into give_me_time_public.project(author_id, title, description, estimate)
+    values ((select current_setting('jwt.claims.user_rowId')::integer), _title, _description, _estimate)
+    returning *
+$$
+language sql volatile
+ security definer
+set search_path = give_me_time_public, pg_temp;
+grant execute on function give_me_time_public.project_create(varchar, integer, text) to give_me_time_user;
+
 COMMIT;

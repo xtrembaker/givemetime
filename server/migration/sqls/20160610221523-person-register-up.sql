@@ -2,29 +2,34 @@ BEGIN;
 
 -- Registers a person with a few key parameters creating a `person` row and an associated `person_account` row.
 -- If the person already exists by email and password means, just returns it
-create function give_me_time_public.person_register_or_retrieve(fullname varchar, email varchar, password varchar) returns give_me_time_public.person as $$
+create function give_me_time_private.person_register_or_retrieve(fullname varchar, _email varchar) returns give_me_time_public.person as $$
 declare
   row give_me_time_public.person;
 begin
-  -- check if person provided proper credentials
-  select * from give_me_time_public.person_search_by_email_and_password(email, password) into row;
+  -- check if person exists
+  select give_me_time_public.person.*
+  from give_me_time_public.person join give_me_time_private.person_account
+    on give_me_time_public.person.id = give_me_time_private.person_account.person_id
+  where lower(trim(both from give_me_time_private.person_account.email)) = lower(trim(both from _email))
+  into row;
   if (row.id is not null) then
     return row;
   end if;
 
   -- Insert the person’s public profile data.
-  insert into give_me_time_public.person (fullname, credit) values (fullname, 20 /* default to 20 credits */)
+  insert into give_me_time_public.person (fullname, credit, created_at, updated_at)
+    values (fullname, 20 /* default to 20 credits */, now(), now())
   returning * into row;
 
   -- Insert the person’s private account data.
-  insert into give_me_time_private.person_account (person_id, email, pass_hash) values
-    (row.id, trim(both from lower(email)), crypt(password, gen_salt('bf')));
+  insert into give_me_time_private.person_account (person_id, email) values
+    (row.id, trim(both from lower(_email)));
 
   return row;
 end;
 $$ language plpgsql strict set search_path from current;
 
-comment on function give_me_time_public.person_register_or_retrieve(varchar, varchar, varchar) is 'Register a person. If this person supplied proper credentials, just return this person data.';
+comment on function give_me_time_private.person_register_or_retrieve(varchar, varchar) is 'Register a person. If this person already exists just return this person data.';
 
 
 COMMIT;

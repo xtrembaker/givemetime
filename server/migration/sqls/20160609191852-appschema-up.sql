@@ -9,6 +9,7 @@ create schema give_me_time_public;
 -- another schema is so that it can be private.
 create schema give_me_time_private;
 
+grant usage on schema give_me_time_public to give_me_time_user;
 
 create function give_me_time_private.set_created_at() returns trigger as $$
 begin

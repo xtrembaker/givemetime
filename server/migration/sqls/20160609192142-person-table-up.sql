@@ -20,4 +20,6 @@ for each row execute procedure give_me_time_private.set_created_at();
 create trigger updated_at before update on give_me_time_public.person
 for each row execute procedure give_me_time_private.set_updated_at();
 
+grant select on table give_me_time_public.person to give_me_time_user;
+
 COMMIT;

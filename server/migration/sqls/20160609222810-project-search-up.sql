@@ -11,4 +11,6 @@ $$ language sql stable set search_path from current;
 
 comment on function give_me_time_public.project_search(varchar) is 'Returns projects containing a given search term.';
 
+grant execute on function give_me_time_public.project_search(varchar) to give_me_time_user;
+
 COMMIT;

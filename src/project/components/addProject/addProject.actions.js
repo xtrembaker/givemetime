@@ -1,54 +1,48 @@
 import { getGraphQL } from '../../../common/common.actions'
 import * as constants from './addProject.actionTypes'
 
-export function createProject ({ title, estimate, description, authorId }) {
+export function createProject ({ userToken, title, estimate, description }) {
     return dispatch => {
-        dispatch(getGraphQL(`
-            mutation createProject(
-                $title: String!,
-                $estimate: Int!,
-                $acquired: Int!,
-                $description: String,
-                $authorId: Int!
+        dispatch(getGraphQL(userToken, `
+            mutation projectCreate(
+              $title: String!,
+              $estimate: Int!,
+              $description: String
             ){
-                insertProject(input: {
-                    title: $title,
-                    estimate: $estimate,
-                    acquired: $acquired,
-                    description: $description,
-                    authorId: $authorId
-                }) {
-                    project {
-                        id,
-                        rowId,
-                        title,
-                        estimate,
-                        acquired,
-                        description,
-                        personByAuthorId {
-                            id,
-                            fullname,
-                            credit
-                        }
-                    }
-                }
+              projectCreate(input: {
+                  title: $title,
+                  estimate: $estimate,
+                  description: $description
+              }) {
+                   output {
+                      id,
+                      rowId,
+                      title,
+                      estimate,
+                      acquired,
+                      description,
+                      personByAuthorId {
+                          id,
+                          fullname,
+                          credit
+                      }
+                  }
+              }
             }`,
             {
                 title,
                 estimate,
                 description,
-                acquired: 0,
-                authorId,
             },
             response => {
                 dispatch(projectCreated(
-                    response.insertProject.project.id,
-                    response.insertProject.project.rowId,
-                    response.insertProject.project.title,
-                    response.insertProject.project.estimate,
-                    response.insertProject.project.acquired,
-                    response.insertProject.project.description,
-                    response.insertProject.project.personByAuthorId.fullname
+                    response.projectCreate.output.id,
+                    response.projectCreate.output.rowId,
+                    response.projectCreate.output.title,
+                    response.projectCreate.output.estimate,
+                    response.projectCreate.output.acquired,
+                    response.projectCreate.output.description,
+                    response.projectCreate.output.personByAuthorId.fullname
                 ))
             }
         ))

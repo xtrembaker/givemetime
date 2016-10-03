@@ -30,6 +30,11 @@ select has_column('person'::name, 'updated_at'::name);
 select col_type_is('person'::name, 'updated_at'::name, 'timestamp with time zone');
 select col_hasnt_default('person'::name, 'updated_at'::name);
 
+select table_privs_are(
+    'give_me_time_public', 'person', 'give_me_time_user', ARRAY['SELECT']::text[],
+    'User has read only access to this table'
+);
+
 with valid_insert as (
   insert into give_me_time_public.person (id, fullname, credit)
   values (1, 'abc', 12)

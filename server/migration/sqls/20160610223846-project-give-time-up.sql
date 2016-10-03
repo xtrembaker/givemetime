@@ -2,11 +2,15 @@ BEGIN;
 
 
 -- Transfer some credits from a user to a project
-create function give_me_time_public.project_give_time(person_id integer, project_id integer, amount integer) returns give_me_time_public.project as $$
+create function give_me_time_public.project_give_time(project_id integer, amount integer) returns give_me_time_public.project as $$
 declare
   person_row give_me_time_public.person;
   project_row give_me_time_public.project;
+  person_id integer;
 begin
+  -- get logged in user id
+  select current_setting('jwt.claims.user_rowId')::integer into person_id;
+
   -- check if the amount is valid
   if (amount <= 0) then
     raise exception 'Amount % is invalid', amount;
@@ -41,8 +45,12 @@ begin
 
   return project_row;
 end;
-$$ language plpgsql strict set search_path from current;
+$$ language plpgsql strict
+security definer
+set search_path = give_me_time_public, pg_temp;
 
-comment on function give_me_time_public.project_give_time(integer, integer, integer) is 'Transfer credits from a user to a project.';
+comment on function give_me_time_public.project_give_time(integer, integer) is 'Transfer credits from a user to a project.';
+
+grant execute on function give_me_time_public.project_give_time(integer, integer) to give_me_time_user;
 
 COMMIT;

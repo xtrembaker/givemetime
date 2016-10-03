@@ -1,7 +1,32 @@
-import { getGraphQL, apologize } from '../common/common.actions.js'
-import * as constant from './login.actionTypes.js'
+import { getGraphQL, apologize } from '../common/common.actions'
+import * as constant from './login.actionTypes'
+import fetch from 'isomorphic-fetch'
+import * as config from '../config'
 
-const USER_TOKEN_KEY = 'userId'
+const USER_TOKEN_KEY = 'userAuth'
+
+function logUserInWithTokenAndId (dispatch, id, token) {
+    dispatch(getGraphQL(null, `
+            query findPersonById($id: ID!) {
+              person(id: $id) {
+                id,
+                rowId,
+                fullname
+                credit
+                createdAt
+              }
+            }
+        `,
+        { id },
+        ({ person }) => {
+            dispatch(userLoggedIn(token, person.id, person.rowId, person.fullname, person.credit))
+            // TODO: use a middleware to dispatch non-pure functions
+            dispatch(() => {
+                localStorage.setItem(USER_TOKEN_KEY, JSON.stringify({ user_id: id, token }))
+            })
+        }
+    ))
+}
 
 export function failureError (response) {
     return dispatch => {
@@ -10,49 +35,37 @@ export function failureError (response) {
 }
 
 export function createUserIfNotExists (response) {
-    const fullname = response.getBasicProfile().getName()
-    const email = response.getBasicProfile().getEmail()
+    const access_token = response.accessToken
     return dispatch => {
-        dispatch(getGraphQL(`
-            mutation registerPerson(
-                $fullname: String!,
-                $email: String!,
-                $password: String!
-            ) {
-              personRegisterOrRetrieve(input: {
-                fullname: $fullname,
-                email: $email,
-                password: $password
-              }) {
-                output {
-                  id,
-                  rowId,
-                  fullname,
-                  credit
-                }
-              }
+        // auth the user and get a token
+        return fetch(`${config.API_URL}/jwt_auth`, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ access_token }),
+        })
+        .then(response => {
+            if (response.status === 200) {
+                return response.json()
             }
-        `,
-            {
-                fullname: fullname,
-                email: email,
-                password: 'password',
-            },
-            createUserResponse => {
-                if (createUserResponse.personRegisterOrRetrieve) {
-                    const user = createUserResponse.personRegisterOrRetrieve.output
-                    dispatch(userLoggedIn(user.id, user.rowId, user.fullname, user.credit))
-                    // persist userId
-                    dispatch(() => {
-                        localStorage.setItem(USER_TOKEN_KEY, user.id)
-                    })
-                } else {
-                    dispatch(apologize('Cannot create user'))
-                }
+            return Promise.reject(response)
+        })
+        .catch(err => {
+            if (err.json) {
+                return err.json()
             }
-        ))
+            return { errors: [ err ] }
+        })
+        .then(jwtResponse => {
+            if (jwtResponse.errors) {
+                apologize(jwtResponse.errors.map(err => err.message || err).join('. '))
+            } else {
+                logUserInWithTokenAndId(dispatch, jwtResponse.user_id, jwtResponse.token)
+            }
+        })
     }
 }
+
+
 
 export function handleLogout () {
     return dispatch => {
@@ -66,37 +79,16 @@ export function checkLocalUser () {
         // if the user is "google" logged in and an id is present in localstorage,
         // we try to fetch user from graphql and dispatch the userLoggedInAction
 
-        const userId = localStorage.getItem(USER_TOKEN_KEY)
+        const userAuth = JSON.parse(localStorage.getItem(USER_TOKEN_KEY) || 'null')
 
         // we need to wait google auth lib to be loaded
         const waitGoogleAuthLoaded = () => {
 
             if (window.gapi && window.gapi.auth2) {
                 const auth2Instance = window.gapi.auth2.getAuthInstance()
-
                 auth2Instance.isSignedIn.listen(loggedIn => {
-
                     if (loggedIn) {
-                        // fetch user info
-                        dispatch(getGraphQL(`
-                            query findPersonById($id: ID!) {
-                              person(id: $id) {
-                                id,
-                                rowId,
-                                fullname
-                                credit
-                                createdAt
-                              }
-                            }
-                        `,
-                            {
-                                id: userId,
-                            },
-                            userResponse => {
-                                const person = userResponse.person
-                                dispatch(userLoggedIn(person.id, person.rowId, person.fullname, person.credit))
-                            }
-                        ))
+                        logUserInWithTokenAndId(dispatch, userAuth.user_id, userAuth.token)
                     }
                     else {
                         // the user has logged out Google Account stuff, clean local storage
@@ -109,29 +101,21 @@ export function checkLocalUser () {
             }
         }
 
-        if (userId) {
+        if (userAuth) {
             return waitGoogleAuthLoaded()
         }
     }
 }
 
-export const userLoggedIn = (id, rowId, fullname, credit) => {
+export const userLoggedIn = (token, id, rowId, fullname, credit) => {
     return {
         type: constant.USER_LOGGED_IN,
-        id: id,
-        rowId: rowId,
-        fullname: fullname,
-        credit : credit,
+        token, id, rowId, fullname, credit,
     }
 }
 
 export const userLoggedOut = () => {
     return {
         type: constant.USER_LOGGED_OUT,
-        id: null,
-        rowId: null,
-        fullname: null,
-        credit : null,
-        projects : [],
     }
 }

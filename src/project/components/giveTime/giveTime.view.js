@@ -23,8 +23,8 @@ export function GiveTimeComponent ({ handleSubmit, userCredit, loadProject, proj
                     label="Amount"
                 /> out of {userCredit} credits.
                 <br/>
-                <Field id="userRowId" name="userRowId" type="hidden" component="input" />
                 <Field id="projectRowId" name="projectRowId" type="hidden" component="input" />
+                <Field id="userToken" name="userToken" type="hidden" component="input" />
                 <RaisedButton onClick={handleSubmit} label="Give time"/>
             </form>
         </div>

@@ -39,6 +39,10 @@ select col_default_is('project'::name, 'acquired'::name, 0);
 select col_not_null('project'::name, 'acquired'::name);
 select col_has_check('project'::name, 'acquired'::name);
 
+select table_privs_are(
+    'give_me_time_public', 'project', 'give_me_time_user', ARRAY['SELECT']::text[],
+    'User has read only access to this table'
+);
 
 -- author mock
 insert into give_me_time_public.person (id, fullname, credit)
@@ -53,6 +57,26 @@ prepare invalid_insert as
   insert into give_me_time_public.project (author_id, title, estimate, acquired)
     values (1, 'abc', 12, 25);
 select throws_ok('invalid_insert');
+
+-- create_project function
+select has_function('project_create', ARRAY['character varying', 'integer', 'text']);
+
+select function_privs_are(
+    'give_me_time_public', 'project_create', ARRAY['character varying', 'integer', 'text'], 'give_me_time_user', ARRAY['EXECUTE']::text[],
+    'User has access to this function'
+);
+
+prepare do_create as
+  select author_id, title, description, estimate, acquired from project_create('title', 12, 'description');
+
+-- 'Should throw if user is not logged in'
+select throws_ok('do_create');
+
+-- logged in as give_me_time_user
+set role give_me_time_user;
+set local jwt.claims.user_rowId to 1;
+select lives_ok('do_create', 'Should be ok if user is logged in');
+select isnt_empty('do_create');
 
 select finish();
 ROLLBACK;

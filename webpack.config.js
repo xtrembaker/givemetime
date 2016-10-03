@@ -34,7 +34,8 @@ const common = {
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
-                'NODE_ENV': JSON.stringify(process.env.STAGING || 'development')
+                'NODE_ENV': JSON.stringify(process.env.STAGING || 'development'),
+                'GOOGLE_CLIENT_ID': JSON.stringify(process.env.GOOGLE_CLIENT_ID || 'Please set the GOOGLE_CLIENT_ID env var')
             },
         }),
     ],
@@ -74,6 +75,9 @@ if (process.env.STAGING !== 'production') {
                 '/graphql': {
                     target: 'http://localhost:3000',
                     pathRewrite: {'^/graphql' : '/?'},
+                },
+                '/jwt_auth': {
+                    target: 'http://localhost:3000',
                 }
             }
         },

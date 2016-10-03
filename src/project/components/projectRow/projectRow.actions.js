@@ -3,7 +3,7 @@ import * as constants from './projectRow.actionTypes'
 
 export function deleteProject (rowId) {
     return dispatch => {
-        dispatch(getGraphQL(`
+        dispatch(getGraphQL(null, `
             mutation deleteProject(
                 $rowId: Int!
             ) {
