@@ -1,14 +1,13 @@
 import React, { PropTypes } from 'react'
-import AppBar from 'material-ui/AppBar'
-import ProjectsTable from './ProjectsTable.jsx'
-import AddProjectDialog from './AddProjectDialog.jsx'
-import LoginButton from './LoginButton.jsx'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import { AppBar, MenuItem, Drawer } from 'material-ui'
+import ProjectsTable from '../project/project.container'
+import AddProjectDialog from '../project/components/addProject/addProject.js'
+import LoginButton from '../login/login.container'
 import { connect } from 'react-redux'
-import { globalMenuToggle } from '../actions.js'
-import Drawer from 'material-ui/Drawer'
-import MenuItem from 'material-ui/MenuItem'
+import * as actions from './layout.actions'
+import * as actionsDialog from '../project/components/addProject/addProject.actions.js'
+import { bindActionCreators } from 'redux'
+import { Link } from 'react-router'
 
 // Use named export for unconnected component (for tests)
 export class Layout extends React.Component {
@@ -20,13 +19,8 @@ export class Layout extends React.Component {
         const content = this.props.user.id
             ? (
                 <div>
-                    <MuiThemeProvider muiTheme={getMuiTheme()}>
                         <ProjectsTable userRowId={this.props.user.rowId}/>
-                    </MuiThemeProvider>
-
-                    <MuiThemeProvider muiTheme={getMuiTheme()}>
                         <AddProjectDialog initialValues={{ author: this.props.user.rowId }} />
-                    </MuiThemeProvider>
                 </div>
             )
             : (
@@ -35,15 +29,12 @@ export class Layout extends React.Component {
 
         return (
             <div>
-                <MuiThemeProvider muiTheme={getMuiTheme()}>
                     <AppBar
                         title="Give R&D time"
                         onLeftIconButtonTouchTap={() => this.handleMenuClick()}
-                        isInitiallyOpen={true}
                         iconElementRight={<LoginButton />}
                     />
-                </MuiThemeProvider>
-                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                <div>
                     <Drawer
                         docked={false}
                         width={300}
@@ -53,13 +44,15 @@ export class Layout extends React.Component {
                         <AppBar
                             title="Give R&D time"
                             onLeftIconButtonTouchTap={() => this.handleMenuClick()}
-                            isInitiallyOpen={true}
                         />
-                        <MenuItem onTouchTap={this.handleClose}>Projects</MenuItem>
-                        <MenuItem onTouchTap={this.handleClose}>Add project</MenuItem>
-                        <MenuItem onTouchTap={this.handleClose}>My account</MenuItem>
+                        <MenuItem
+                            containerElement={<Link to ="/home" />}>Projects</MenuItem>
+                        <MenuItem
+                            onTouchTap={this.props.openDialog}>Add Project</MenuItem>
+                        <MenuItem
+                            containerElement={<Link to ="/" />}>My account</MenuItem>
                     </Drawer>
-                </MuiThemeProvider>
+                </div>
                 { content }
             </div>
         )
@@ -73,22 +66,20 @@ Layout.propTypes = {
     }).isRequired,
     globalMenuOpen: PropTypes.bool.isRequired,
     globalMenuToggle: PropTypes.func.isRequired,
+    openDialog: PropTypes.func.isRequired,
 }
 
-
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
-        user: state.project.user,
-        globalMenuOpen: state.project.globalMenuOpen,
+        user: state.project.login.user,
+        globalMenuOpen: state.project.layout.globalMenuOpen,
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        globalMenuToggle: (currentState) => {
-            dispatch(globalMenuToggle(!currentState))
-        },
-    }
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        openDialog: actionsDialog.openDialog,
+        globalMenuToggle: actions.globalMenuToggle }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Layout)

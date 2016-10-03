@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react'
-import IconButton from 'material-ui/IconButton'
+import { IconButton, LinearProgress } from 'material-ui'
 import ActionDelete from 'material-ui/svg-icons/action/delete'
-import LinearProgress from 'material-ui/LinearProgress'
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card'
-import ProjectDialog from './ProjectDialog.jsx'
-import GiveTimeDialog from './GiveTimeDialog.jsx'
+import ProjectDialog from '../viewProject/viewProject.js'
+import GiveTimeDialog from '../giveTime/giveTime.js'
 import { connect } from 'react-redux'
-import { getGraphQL, projectDeleted } from '../actions.js'
+import * as actions from './projectResultsRow.actions.js'
+import { bindActionCreators } from 'redux'
 
 
 export class ProjectTableRow extends React.Component {
@@ -63,24 +63,9 @@ ProjectTableRow.propTypes = {
 }
 
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        onDelete: (id) => {
-            dispatch(getGraphQL(`
-                mutation deleteProject(
-                    $id: ID!
-                ) {
-                    deleteProject(input: {
-                        id: $id
-                    }) {
-                        id
-                    }
-                }`,
-                { id: id },
-                (response) => dispatch(projectDeleted(response.deleteProject.id))
-            ))
-        },
-    }
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        onDelete: actions.onDelete }, dispatch)
 }
 
 export default connect(null, mapDispatchToProps)(ProjectTableRow)

@@ -1,10 +1,8 @@
 import React, { PropTypes } from 'react'
-import Dialog from 'material-ui/Dialog'
-import FlatButton from 'material-ui/FlatButton'
-import RaisedButton from 'material-ui/FlatButton'
-import LinearProgress from 'material-ui/LinearProgress'
+import { Dialog, FlatButton, RaisedButton, LinearProgress } from 'material-ui'
 import { connect } from 'react-redux'
-import { closeProjectDialog, openProjectDialog } from '../actions.js'
+import * as actions from './viewProject.actions.js'
+import { bindActionCreators } from 'redux'
 
 export class ViewProjectDialog extends React.Component {
     isOpen () {
@@ -58,20 +56,15 @@ ViewProjectDialog.propTypes = {
 }
 
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
-        openId: state.project.viewProjectDialog.openId,
+        openId: state.project.viewProject.viewProjectDialog.openId,
     }
 }
-const mapDispatchToProps = (dispatch) => {
-    return {
-        closeDialog: () => {
-            dispatch(closeProjectDialog())
-        },
-        onTap: (id) => {
-            dispatch(openProjectDialog(id))
-        },
-    }
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        closeDialog: actions.closeDialog,
+        onTap:actions.onTap }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewProjectDialog)

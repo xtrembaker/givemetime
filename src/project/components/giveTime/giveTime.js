@@ -1,11 +1,9 @@
 import React, { PropTypes } from 'react'
-import Dialog from 'material-ui/Dialog'
-import FlatButton from 'material-ui/FlatButton'
-import TextField from 'material-ui/TextField'
-import RaisedButton from 'material-ui/RaisedButton'
+import { Dialog, FlatButton, TextField, RaisedButton } from 'material-ui'
 import { connect } from 'react-redux'
-import { giveTime, openGiveTimeDialog, getGraphQL, closeGiveTimeDialog } from '../actions.js'
+import * as actions from './giveTime.actions'
 import { reduxForm } from 'redux-form'
+import { bindActionCreators } from 'redux'
 
 export class GiveTimeDialog extends React.Component {
     isOpen () {
@@ -36,7 +34,7 @@ export class GiveTimeDialog extends React.Component {
 
         return (
             <span>
-                <RaisedButton label="GIVE TIME" secondary={true}
+                <RaisedButton label="GIVE TIME2" secondary={true}
                               onTouchTap={() => this.props.openDialog(this.props.id)}/>
                 <Dialog
                     title={title}
@@ -79,54 +77,21 @@ GiveTimeDialog.propTypes = {
     handleSubmit: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
-        openId: state.project.giveTimeDialog.openId,
-        amount: state.project.giveTimeDialog.amount,
-        userCredit: state.project.giveTimeDialog.userCredit,
-        userId: state.project.user.id,
-        userRowId: state.project.user.rowId,
+        openId: state.project.giveTime.giveTimeDialog.openId,
+        amount: state.project.giveTime.giveTimeDialog.amount,
+        userCredit: state.project.login.user.credit,
+        userId: state.project.login.user.id,
+        userRowId: state.project.login.user.rowId,
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        onSubmit: (form) => {
-            dispatch(getGraphQL(`
-                mutation giveTime(
-                    $projectRowId: Int!,
-                    $userRowId: Int!,
-                    $credit: Int!
-                ){
-                    projectGiveTime(input: {
-                        personId: $userRowId,
-                        projectId: $projectRowId,
-                        amount: $credit
-                    }) {
-                        output {
-                            rowId,
-                            acquired
-                        }
-                    }
-                }`,
-                {
-                    credit: form.amount,
-                    userRowId: form.userRowId,
-                    projectRowId: form.projectRowId,
-                },
-                () => {
-                    dispatch(giveTime(form.amount, form.projectRowId))
-                    dispatch(closeGiveTimeDialog())
-                }
-            ))
-        },
-        openDialog: (id) => {
-            dispatch(openGiveTimeDialog(id))
-        },
-        closeDialog: () => {
-            dispatch(closeGiveTimeDialog())
-        },
-    }
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        onSubmit: actions.onSubmit,
+        openDialog: actions.openDialog,
+        closeDialog: actions.closeDialog }, dispatch)
 }
 
 export default reduxForm({
