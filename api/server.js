@@ -4,6 +4,7 @@ const gAuth = require('./auth/google-oauth')
 const pgFetch = require('./auth/db-fetch')
 const pgJwt = require('./auth/pg-jwt')
 const bodyParser = require('body-parser')
+const cors = require('cors');
 
 const app = express()
 const env = process.env
@@ -47,6 +48,8 @@ app.use(function(err, req, res, next) {
     console.error(err.stack);
     res.status(500).send('Something broke!');
 });
+
+app.use(cors())
 
 console.log('Listening to port 3000')
 app.listen(3000)

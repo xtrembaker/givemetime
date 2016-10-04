@@ -5,7 +5,7 @@ const fs = require('fs');
 
 const PATHS = {
     src: path.join(__dirname, 'src'),
-    build: path.join(__dirname, 'build/public'),
+    build: path.join(__dirname, 'build'),
 };
 
 process.env.BABEL_ENV = 'development';
@@ -35,7 +35,8 @@ const common = {
         new webpack.DefinePlugin({
             'process.env': {
                 'NODE_ENV': JSON.stringify(process.env.STAGING || 'development'),
-                'GOOGLE_CLIENT_ID': JSON.stringify(process.env.GOOGLE_CLIENT_ID || 'Please set the GOOGLE_CLIENT_ID env var')
+                'GOOGLE_CLIENT_ID': JSON.stringify(process.env.GOOGLE_CLIENT_ID || 'Please set the GOOGLE_CLIENT_ID env var'),
+                'API_URL': JSON.stringify(process.env.API_URL || null),
             },
         }),
     ],
