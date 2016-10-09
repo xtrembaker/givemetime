@@ -1,14 +1,13 @@
-const merge = require('webpack-merge');
-const path = require('path');
-const webpack = require('webpack');
-const fs = require('fs');
+const merge = require('webpack-merge')
+const path = require('path')
+const webpack = require('webpack')
 
 const PATHS = {
     src: path.join(__dirname, 'src'),
     build: path.join(__dirname, 'build'),
-};
+}
 
-process.env.BABEL_ENV = 'development';
+process.env.BABEL_ENV = 'development'
 
 const common = {
     entry: PATHS.src + '/index.jsx',
@@ -27,9 +26,9 @@ const common = {
                 test: /\.jsx?$/,
                 loader: 'babel?cacheDirectory',
                 include: PATHS.src,
-            }
+            },
         ],
-        noParse: /react\/lib\/ExecutionEnvironment/
+        noParse: /react\/lib\/ExecutionEnvironment/,
     },
     plugins: [
         new webpack.DefinePlugin({
@@ -41,13 +40,13 @@ const common = {
             },
         }),
     ],
-};
+}
 
 // enhance conf with development setup
-let conf = common;
+let conf = common
 if (process.env.STAGING !== 'production') {
     conf = merge(common, {
-        devtool: "#inline-source-map",
+        devtool: '#inline-source-map',
         devServer: {
             contentBase: PATHS.build,
 
@@ -57,8 +56,8 @@ if (process.env.STAGING !== 'production') {
             historyApiFallback: {
                 index: '/',
                 rewrites: [
-                    {from: /.*\/bundle\.js.*/, to: '/bundle.js'},
-                    {from: /.*/, to: '/'},
+                    { from: /.*\/bundle\.js.*/, to: '/bundle.js' },
+                    { from: /.*/, to: '/' },
                 ],
             },
             inline: true,
@@ -76,16 +75,16 @@ if (process.env.STAGING !== 'production') {
             proxy: {
                 '/graphql': {
                     target: 'http://localhost:3000',
-                    pathRewrite: {'^/graphql' : '/?'},
+                    pathRewrite: { '^/graphql' : '/?' },
                 },
                 '/jwt_auth': {
                     target: 'http://localhost:3000',
-                }
-            }
+                },
+            },
         },
-    });
+    })
 }
 
 
-module.exports = conf;
+module.exports = conf
 

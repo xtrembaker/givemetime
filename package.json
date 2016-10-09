@@ -11,7 +11,10 @@
     "db.revert": "npm run --loglevel=silent _db_migrate --name=db.migrate down",
     "db.migration.create": "npm run --loglevel=silent _db_migrate --name=db.migrate --sql-file create",
     "db.test": "./api/db-test.sh",
-    "reset": "docker-compose stop && docker-compose rm --force"
+    "reset": "docker-compose stop && docker-compose rm --force",
+    "test.lint": "npm --prefix ./app --loglevel=silent run test.lint",
+    "test.lint:fix": "npm --prefix ./app --loglevel=silent run test.lint.fix",
+    "test.unit": "npm --prefix ./app --loglevel=silent run test.unit"
   },
   "repository": {
     "type": "git",

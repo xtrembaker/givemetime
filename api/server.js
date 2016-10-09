@@ -21,8 +21,6 @@ app.use(cors())
 // parse json body
 app.use(bodyParser.json())
 
-console.log(process.env.GOOGLE_AUTH_MOCK)
-
 // handle auth requests
 //   - get access_token from parameters
 //   - check it against whatever is relevant
