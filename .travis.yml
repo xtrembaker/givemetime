@@ -10,7 +10,8 @@ node_js:
 - '6'
 script:
 - npm run db.test
-- npm run db.revert -- --count 10000
+# also test down migrations
+- npm run _db_migrate -- down --count 1000
 - npm run db.migrate
 - npm run db.test
 - npm test
