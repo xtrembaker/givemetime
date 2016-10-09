@@ -4,7 +4,7 @@ services:
     image: node
     volumes:
       - ./api:/usr/src/app
-    entrypoint: /usr/src/app/server-dev.sh
+    command: /usr/src/app/server-dev.sh
     ports:
       - 3000:3000
 
@@ -12,7 +12,7 @@ services:
     image: node
     volumes:
       - ./app:/usr/src/app
-    entrypoint: /usr/src/app/server-dev.sh
+    command: /usr/src/app/server-dev.sh
     ports:
       - 4000:4000
 
