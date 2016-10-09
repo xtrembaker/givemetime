@@ -4,7 +4,8 @@
   "description": "Project application server",
   "main": "server.js",
   "scripts": {
-    "start": "./server.sh"
+    "start": "./server.sh",
+    "start-dev": "./server-dev.sh"
   },
   "devDependencies": {
     "nodemon": "^1.10.2"

@@ -37,6 +37,7 @@ const common = {
                 'NODE_ENV': JSON.stringify(process.env.STAGING || 'development'),
                 'GOOGLE_CLIENT_ID': JSON.stringify(process.env.GOOGLE_CLIENT_ID || 'Please set the GOOGLE_CLIENT_ID env var'),
                 'API_URL': JSON.stringify(process.env.API_URL || null),
+                'GOOGLE_AUTH_MOCK': JSON.stringify(process.env.GOOGLE_AUTH_MOCK || null),
             },
         }),
     ],
@@ -69,8 +70,8 @@ if (process.env.STAGING !== 'production') {
             stats: 'errors-only',
 
             // Parse host and port from env so this is easy to customize.
-            host: process.env.HOST,
-            port: process.env.PORT,
+            host: process.env.HOST || '0.0.0.0',
+            port: process.env.PORT || 4000,
 
             proxy: {
                 '/graphql': {

@@ -1,5 +1,5 @@
 {
-  "name": "givemetime",
+  "name": "givemetime-app",
   "version": "0.0.1",
   "description": "Project to give some time to a R&D project suggested by a team member",
   "main": "src/index.jsx",

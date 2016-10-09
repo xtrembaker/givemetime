@@ -1,6 +1,7 @@
 const express = require('express')
 const postgraphql = require('postgraphql').default
 const gAuth = require('./auth/google-oauth')
+const gAuthMock = require('./auth/google-oauth-dev-mock')
 const pgFetch = require('./auth/db-fetch')
 const pgJwt = require('./auth/pg-jwt')
 const bodyParser = require('body-parser')
@@ -20,12 +21,14 @@ app.use(cors())
 // parse json body
 app.use(bodyParser.json())
 
+console.log(process.env.GOOGLE_AUTH_MOCK)
+
 // handle auth requests
 //   - get access_token from parameters
 //   - check it against whatever is relevant
 //   - ask the db to upsert this user
 //   - create a jwt token with the user id
-app.post('/jwt_auth', gAuth)
+app.post('/jwt_auth', process.env.GOOGLE_AUTH_MOCK ? gAuthMock : gAuth)
 app.use(pgFetch)
 app.use(pgJwt(JWT_SECRET))
 

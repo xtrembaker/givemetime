@@ -1,0 +1,20 @@
+{
+  "name": "givemetime",
+  "version": "0.0.1",
+  "description": "Project to give some time to a R&D project suggested by a team member",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "start": "API_URL=http://localhost:3000 PGADMINPASSWORD=postgres PGPASSWORD=give_me_time GOOGLE_AUTH_MOCK=true docker-compose -f docker-compose.yml -f docker-compose.dev.yml up"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inovia-team/givemetime.git"
+  },
+  "author": "inovia-team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/inovia-team/givemetime/issues"
+  },
+  "homepage": "https://github.com/inovia-team/givemetime#readme"
+}

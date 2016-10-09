@@ -29,6 +29,8 @@ services:
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
       - GOOGLE_REDIRECT_URL=${GOOGLE_REDIRECT_URL}
+      # in development only
+      - GOOGLE_AUTH_MOCK=${GOOGLE_AUTH_MOCK}
     depends_on:
       - db
     ports:
@@ -47,6 +49,10 @@ services:
       - PGUSER=give_me_time_owner
       - PGPASSWORD=${PGPASSWORD}
       - PGDATABASE=give_me_time
+      # in development only
+      - GOOGLE_AUTH_MOCK=${GOOGLE_AUTH_MOCK}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - API_URL=${API_URL}
     depends_on:
       - db
     ports:
