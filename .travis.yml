@@ -3,7 +3,9 @@ services:
 - docker
 language: node_js
 before_install:
-- npm run start -- -d
+- docker-compose -f docker-compose.yml up -d db
+- sleep 5 # wait for the database to start @todo: use a better technique
+- npm run db.migrate
 node_js:
 - '6'
 script:
