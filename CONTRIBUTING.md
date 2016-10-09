@@ -1,9 +1,12 @@
 
-    # reset database
-    npm run db:rm
-    
     # add a migration
-    npm run db:migration:create my_migration
+    npm run db.migration.create my_migration
+    # apply migration
+    npm run db.migrate
+    # revert migration
+    npm run db.revert
+    # reset database
+    npm run db.reset
         
     # test deployed migrations
     npm run db:test
