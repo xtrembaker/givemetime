@@ -12,11 +12,11 @@ const middlewares = [thunkMiddleware, routerMiddleware(browserHistory), layoutMi
 
 export default function configureStore (initialState) {
 
-    const enhancer = compose(
+    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+    const enhancer = composeEnhancers(
         // Middleware you want to use in development:
-        applyMiddleware(...middlewares),
-        // enable redux extension
-        window.devToolsExtension ? window.devToolsExtension() : () => {}
+        applyMiddleware(...middlewares)
     )
 
     const store = createStore(combineReducers({
