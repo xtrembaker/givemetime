@@ -48,6 +48,8 @@ export class LayoutComponent extends React.Component {
                             containerElement={<Link to ="/add" />}>Add Project</MenuItem>
                         <MenuItem
                             containerElement={<Link to ="/me" />}>My account</MenuItem>
+                        <MenuItem
+                            containerElement={<Link to ="/stat" />}>Stat</MenuItem>
                     </Drawer>
                 </div>
                 { content }

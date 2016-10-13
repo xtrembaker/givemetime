@@ -1,6 +1,7 @@
 import * as projectActions from './project.actionTypes'
 import * as giveTimeActions from './components/giveTime/giveTime.actionTypes'
 import * as projectRowActions from './components/projectRow/projectRow.actionTypes'
+import * as statActions from './components/stat/stat.actionTypes'
 
 export default function (state = { projects: [] }, action) {
     switch (action.type) {
@@ -21,6 +22,13 @@ export default function (state = { projects: [] }, action) {
                     author: action.author,
                 }]),
         }
+
+    case statActions.STAT_FETCHED:
+        return {
+            ...state,
+            stat: action.stat,
+        }
+
 
     case giveTimeActions.GAVE_TIME:
         return { ...state,

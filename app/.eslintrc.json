@@ -6,6 +6,7 @@
         "mocha": true
     },
     "extends": ["eslint:recommended", "plugin:react/recommended"],
+    "parser" : "babel-eslint",
     "parserOptions": {
         "ecmaFeatures": {
             "experimentalObjectRestSpread": true,
@@ -14,9 +15,11 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react",
+        "async-await"
     ],
     "rules": {
+        "strict" : 0,
         "indent": [
             "error",
             4
@@ -46,6 +49,8 @@
         "space-in-parens": ["error", "never"],
         "space-infix-ops": "error",
         "no-multi-spaces": "error",
-        "arrow-parens": ["error", "as-needed"]
+        "arrow-parens": ["error", "as-needed"],
+        "async-await/space-after-async": 2,
+        "async-await/space-after-await": 2
     }
 }

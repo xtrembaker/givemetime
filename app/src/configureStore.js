@@ -12,7 +12,7 @@ const middlewares = [thunkMiddleware, routerMiddleware(browserHistory), layoutMi
 
 export default function configureStore (initialState) {
 
-    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
     const enhancer = composeEnhancers(
         // Middleware you want to use in development:
