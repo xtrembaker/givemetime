@@ -19,7 +19,7 @@ export function convertCreatedAtToKey (createdAt) {
  * @returns {*}
  */
 export function computeAggregateAcquiredByDate (objectA, objectB) {
-    for(var key in objectB) {
+    for(const key in objectB) {
         if(objectA[key]) {
             objectA[key] = objectA[key] ? objectA[key] + objectB[key] : objectB[key]
         }
@@ -58,7 +58,7 @@ async function loadAggregateAcquiredStat () {
     var aggregateAcquired = 0
 
     // query that will be executed
-    var query = `
+    const query = `
             query($after : Cursor){
                 viewer {
                   projectNodes(first: 10, after: $after) {
@@ -103,7 +103,7 @@ async function loadAggregateAcquiredStat () {
      * @param resolver
      */
     async function trigger (query, variables, resolver) {
-        var response = await fetchQuery(query, variables, resolver)
+        const response = await fetchQuery(query, variables, resolver)
         if(response.viewer.projectNodes.pageInfo.hasNextPage) {
             variables.after = response.viewer.projectNodes.pageInfo.endCursor
             await trigger(query, variables , resolver)
@@ -128,7 +128,7 @@ async function loadAggregateAcquiredByDateStat () {
     var acquiredByDate = {}
 
     // query that will be executed
-    var query = `
+    const query = `
            query($after : Cursor){
                 viewer {
                   projectNodes(first: 10, after: $after) {
@@ -173,7 +173,7 @@ async function loadAggregateAcquiredByDateStat () {
      * @param resolver
      */
     async function trigger (query, variables, resolver) {
-        var response = await fetchQuery(query, variables, resolver)
+        const response = await fetchQuery(query, variables, resolver)
         if(response.viewer.projectNodes.pageInfo.hasNextPage) {
             variables.after = response.viewer.projectNodes.pageInfo.endCursor
             await trigger(query, variables , resolver)

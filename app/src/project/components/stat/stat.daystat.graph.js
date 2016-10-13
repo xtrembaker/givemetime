@@ -21,5 +21,5 @@ export default class DayStatGraph extends Component {
 }
 
 DayStatGraph.propTypes = {
-    data:  PropTypes.func.isRequired,
+    data:  PropTypes.object.isRequired,
 }
